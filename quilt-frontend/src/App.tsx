@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  curveData,
-  makeKeyPair,
-  makePublicKeyFromPrivate,
-} from "./scripts/ECDH";
+import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
 import BN from "bn.js";
+
+const curve = createEllipticCurve("secp256r1");
 
 function App() {
   const [privateKey, setPrivateKey] = useState<String>("");
@@ -21,7 +19,7 @@ function App() {
     //   "90683066454814006968631478597603926296832491423936555157155566137392880311387"
     // );
 
-    const [privateKey, publicKey] = makeKeyPair();
+    const [privateKey, publicKey] = curve.makeKeyPair();
 
     if (!publicKey) return;
 
