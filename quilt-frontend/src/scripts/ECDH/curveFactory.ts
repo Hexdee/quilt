@@ -186,9 +186,9 @@ export const createEllipticCurve = (type: CurveTypes) => {
   const curve = new EllipticCurve(type);
 
   return {
-    makePublicKeyFromPrivate: curve.makePublicKeyFromPrivate,
-    makeKeyPair: curve.makeKeyPair,
-    generateRandomSecret: curve.generateRandomSecret,
+    makePublicKeyFromPrivate: curve.makePublicKeyFromPrivate.bind(curve),
+    makeKeyPair: curve.makeKeyPair.bind(curve),
+    generateRandomSecret: curve.generateRandomSecret.bind(curve),
   };
 };
 
