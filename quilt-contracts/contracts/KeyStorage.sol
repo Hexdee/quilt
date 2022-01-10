@@ -1,22 +1,34 @@
-//SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 
 contract KeyStorage {
-    mapping(address => uint256) public usersToKeys;
-    string private greeting;
+    address private owner;
 
-    constructor(string memory _greeting) {
-        console.log("Deploying a Greeter with greeting:", _greeting);
-        greeting = _greeting;
+    struct Point {
+        uint256 x;
+        uint256 y;
     }
 
-    function setUserKey(uint256 newPublicKey) public {
-        usersToKeys[msg.sender] = newPublicKey;
+    mapping(address => Point) public usersToKeys;
+
+    event KeyPublished(address publisher);
+
+    constructor() {
+        owner = msg.sender;
     }
 
-    function getUserKey(address userAddress) public view returns (uint256) {
+    function setUserKey(uint256 _x, uint256 _y) public {
+        usersToKeys[msg.sender] = Point({x: _x, y: _y});
+        emit KeyPublished(msg.sender);
+    }
+
+    function getUserKey(address userAddress)
+        public
+        view
+        returns (Point memory)
+    {
         require(userAddress != address(0), "wrong address");
 
         return usersToKeys[userAddress];

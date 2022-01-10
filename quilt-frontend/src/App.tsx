@@ -1,66 +1,56 @@
-import React, { useEffect, useState } from "react";
-import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
-import BN from "bn.js";
-
-const curve = createEllipticCurve("secp256r1");
+import { ethers } from "ethers";
+import React, { useCallback, useEffect, useState } from "react";
+import { useProvider } from "./stores/useProvider";
+import ContractData from "@quilt/contracts/artifacts/contracts/KeyStorage.sol/KeyStorage.json";
+import { CONTRACT_ADDRESS } from "./constants/contractConstants";
+import { useContracts } from "./stores/useContracts";
+import { NavBar } from "./components/NavBar";
+import { Mainpage } from "./components/pages/Mainpage";
+import { Route, Routes } from "react-router-dom";
+import { KeyStorage } from "@quilt/contracts/typechain";
 
 function App() {
-  const [privateKey, setPrivateKey] = useState<String>("");
-  const [publicX, setPublicX] = useState<String>("");
-  const [publicY, setPublicY] = useState<String>("");
+  const [error, setError] = useState<String>("");
 
-  const generatePrivateKey = () => {
-    // const privateKey = new BN(
-    //   "90683066454814006968631478597603926296832491423936555157155566137392880311387",
-    //   10
-    // );
-    // const publicKey = makePublicKeyFromPrivate(privateKey, curveData);
-    // setPrivateKey(
-    //   "90683066454814006968631478597603926296832491423936555157155566137392880311387"
-    // );
+  const provider = useProvider((state) => state.provider);
+  const setContract = useContracts((state) => state.setContract);
 
-    const [privateKey, publicKey] = curve.makeKeyPair();
+  const initializeConctractInstance = useCallback(async () => {
+    try {
+      console.log("initializeConctractInstance");
 
-    if (!publicKey) return;
+      if (!(CONTRACT_ADDRESS && provider)) {
+        console.log(provider);
+        throw new Error(
+          "[initializeConctractInstance] game contract address or provider is not specified"
+        );
+      }
 
-    setPrivateKey(privateKey.toString(10));
-    setPublicX(publicKey.x.toString(10));
-    setPublicY(publicKey.y.toString(10));
+      console.log("setting game contract");
+      setContract(
+        new ethers.Contract(
+          CONTRACT_ADDRESS,
+          ContractData.abi,
+          provider.getSigner()
+        ) as KeyStorage
+      );
+    } catch (error: any) {
+      console.log(error.message);
+      setError(error.message);
+    }
+  }, [provider, setContract]);
 
-    console.log("Generated private key -> " + privateKey.toString(10));
-    console.log("Generated public key (X) -> " + publicKey?.x.toString(10));
-    console.log("Generated public key (Y) -> " + publicKey?.y.toString(10));
-  };
-
-  const postData = () => {
-    alert("This function is not implemented, yet");
-  };
+  useEffect(() => {
+    initializeConctractInstance();
+  }, [initializeConctractInstance]);
 
   return (
-    <div className="w-1/2 mx-auto mt-32">
-      <div className="w-full flex flex-row justify-around">
-        <button
-          onClick={() => generatePrivateKey()}
-          className="border-2 border-yellow-500 bg-yellow-300 p-4 block rounded-2xl text-black w-96 h-16"
-        >
-          Generate private key
-        </button>
-        <button
-          onClick={() => postData()}
-          className="border-2 border-yellow-500 bg-yellow-300 p-4 block rounded-2xl text-black w-96 h-16"
-        >
-          Post key to blockchain
-        </button>
-      </div>
-      <div className="mt-10 text-xl">Generated private key</div>
-      {privateKey && <div className="mt-2 text-gray-400">{privateKey}</div>}
-      <div className="mt-10 text-xl">Generated public key X</div>
-      {privateKey && <div className="mt-2 text-gray-400">{publicX}</div>}
-      <div className="mt-10 text-xl">Generated public key Y</div>
-      {privateKey && <div className="mt-2 text-gray-400">{publicY}</div>}
-      <div className="mt-20 text-3xl">Events</div>
-      <div className="mt-5 text-gray-400">Waiting for new events . . .</div>
-    </div>
+    <>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<Mainpage></Mainpage>} />
+      </Routes>
+    </>
   );
 }
 
