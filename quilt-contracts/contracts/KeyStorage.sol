@@ -16,6 +16,7 @@ contract KeyStorage {
 
     mapping(address => Point) public usersToKeys;
     mapping(address => string) public usernames;
+    mapping(bytes32 => bool) public takenUsernames;
 
     event KeyPublished(address publisher);
     event UsernameChanged(address userAddress, string username);
@@ -26,6 +27,12 @@ contract KeyStorage {
     }
 
     function setUsername(string calldata newUsername) public {
+        require(
+            takenUsernames[keccak256(abi.encode(newUsername))] == false,
+            "username already taken"
+        );
+
+        // token payment
         uint256 allowedValue = quiltToken.allowance(msg.sender, address(this));
 
         require(allowedValue >= usernameChangeFee, "not enough tokens");
@@ -33,8 +40,17 @@ contract KeyStorage {
         quiltToken.transferFrom(msg.sender, address(this), usernameChangeFee);
 
         usernames[msg.sender] = newUsername;
+        takenUsernames[keccak256(abi.encode(newUsername))] = true;
 
         emit UsernameChanged(msg.sender, newUsername);
+    }
+
+    function isUsernameAvailable(string calldata username)
+        public
+        view
+        returns (bool)
+    {
+        return takenUsernames[keccak256(abi.encode(username))] == true;
     }
 
     function getUsername(address userAddress)
