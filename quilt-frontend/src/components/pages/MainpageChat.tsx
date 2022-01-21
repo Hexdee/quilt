@@ -5,11 +5,11 @@ import { createEncryptor } from "../../scripts/encryption/encryption";
 import { useContracts } from "../../stores/useContracts";
 import { useProvider } from "../../stores/useProvider";
 
-interface MainpageProps {}
+interface MainpageChatProps {}
 
 const curve = createEllipticCurve("secp256r1");
 
-export const Mainpage: React.FC<MainpageProps> = ({}) => {
+export const MainpageChat: React.FC<MainpageChatProps> = ({}) => {
   const [privateKey, setPrivateKey] = useState<String>("");
   const [publicX, setPublicX] = useState<String>("");
   const [publicY, setPublicY] = useState<String>("");

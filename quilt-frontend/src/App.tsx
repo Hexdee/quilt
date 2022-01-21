@@ -8,6 +8,7 @@ import { NavBar } from "./components/NavBar";
 import { Mainpage } from "./components/pages/Mainpage";
 import { Route, Routes } from "react-router-dom";
 import { KeyStorage } from "@quilt/contracts/typechain";
+import { MainpageChat } from "./components/pages/MainpageChat";
 
 function App() {
   const [error, setError] = useState<String>("");
@@ -48,7 +49,7 @@ function App() {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Mainpage></Mainpage>} />
+        <Route path="/" element={<MainpageChat></MainpageChat>} />
       </Routes>
     </>
   );

@@ -14,9 +14,12 @@
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "axios": "^0.24.0",
+    "crypto-js": "^4.1.1",
     "ethers": "^5.5.2",
     "faker": "^5.5.3",
     "formik": "^2.2.9",
+    "gun": "^0.2020.1235",
+    "immer": "^9.0.12",
     "randombytes": "^2.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -53,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.1.0",
     "autoprefixer": "^10.4.1",
     "postcss": "^8.4.5",
     "tailwindcss": "^3.0.8",
