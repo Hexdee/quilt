@@ -40,23 +40,12 @@ const Auth = (props) => {
   client = gun.user().recall({ sessionStorage: true });
 
   return (
-    <div style={{ padding: 30 }}>
+    <div>
       <form>
         <div className="form-group">
-          <label htmlFor="exampleInputEmail1">username</label>
-          <input
-            type="username"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            id="username"
-            aria-describedby="emailHelp"
-            placeholder="Enter username"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Password</label>
+          <label htmlFor="exampleInputPassword1" className="mt-10 text-xl">
+            Password
+          </label>
           <input
             type="password"
             value={pass}
@@ -65,25 +54,28 @@ const Auth = (props) => {
             }}
             id="pass"
             placeholder="Password"
+            className="ml-5 p-5 w-96 text-black rounded-lg"
           />
         </div>
 
-        <button
-          id="in"
-          type="button"
-          className="btn btn-primary"
-          onClick={signIn}
-        >
-          Sign in
-        </button>
-        <button
-          id="up"
-          type="button"
-          className="btn btn-primary"
-          onClick={signUp}
-        >
-          Sign up
-        </button>
+        <div className="mt-2">
+          <button
+            id="in"
+            type="button"
+            onClick={signIn}
+            className="border-2 border-yellow-500 bg-yellow-300 p-4 rounded-2xl text-black w-60 h-16 m-2 inline-block"
+          >
+            Sign in
+          </button>
+          <button
+            id="up"
+            type="button"
+            onClick={signUp}
+            className="border-2 border-yellow-500 bg-yellow-300 p-4 rounded-2xl text-black w-60 h-16 m-2 inline-block"
+          >
+            Sign up
+          </button>
+        </div>
       </form>
       <div>
         <Chat wallet={walletAddress} user={client} />

@@ -62,6 +62,13 @@ const curvesData: CurvesData = {
   },
 };
 
+export interface EllipticCurveInterface {
+  makePublicKeyFromPrivate: (privateKey: BN) => Point;
+  makeKeyPair: () => [BN, Point];
+  generateRandomSecret: () => BN;
+  generateSharedSecret: (privateKey: BN, publicKey: Point) => BN;
+}
+
 const ZERO = new BN("0");
 const ONE = new BN("1");
 const TWO = new BN("2");
@@ -137,15 +144,18 @@ class EllipticCurve {
     if (!this.isOnCurve(point))
       return new Error("given point is not on the curve");
 
+    console.log("passed");
+    console.log("k -> " + k.toString());
+    console.log("n -> " + this.parameters.n.toString());
+    console.log(k.mod(this.parameters.n).toString());
+
     if (k.mod(this.parameters.n).eq(ZERO) || !point) {
-      console.log("returning");
       return null;
     }
 
     if (k.cmp(ZERO) === -1)
       return this.scalarMult(k.neg(), this.pointNegative(point));
 
-    console.log("passed");
     let result: Point = null;
     let addend: Point = point;
 
@@ -180,15 +190,25 @@ class EllipticCurve {
   makePublicKeyFromPrivate(privateKey: BN): Point {
     return this.scalarMult(privateKey, this.parameters.g);
   }
+
+  generateSharedSecret(privateKey: BN, publicKey: Point): BN {
+    const value = this.scalarMult(privateKey, publicKey).x;
+    console.log(value);
+
+    return this.scalarMult(privateKey, publicKey).x;
+  }
 }
 
-export const createEllipticCurve = (type: CurveTypes) => {
+export const createEllipticCurve = (
+  type: CurveTypes
+): EllipticCurveInterface => {
   const curve = new EllipticCurve(type);
 
   return {
     makePublicKeyFromPrivate: curve.makePublicKeyFromPrivate.bind(curve),
     makeKeyPair: curve.makeKeyPair.bind(curve),
     generateRandomSecret: curve.generateRandomSecret.bind(curve),
+    generateSharedSecret: curve.generateSharedSecret.bind(curve),
   };
 };
 

@@ -2,6 +2,19 @@ import CryptoJS from "crypto-js";
 
 const SHARED_SECRET_STORAGE_PREFIX = "sharedsecret";
 
+export interface EncryptorInterface {
+  getSharedSecret: (userId: string) => string | undefined;
+  setSharedSecret: (userId: string, secret: string) => void;
+  encrypt: (
+    message: string,
+    userId: string
+  ) => CryptoJS.lib.CipherParams | undefined;
+  decrypt: (
+    message: string | CryptoJS.lib.CipherParams,
+    userId: string
+  ) => string | undefined;
+}
+
 const storeToStorageWithPrefix = (key: string, value: string) => {
   localStorage.setItem(SHARED_SECRET_STORAGE_PREFIX + key, value);
 };

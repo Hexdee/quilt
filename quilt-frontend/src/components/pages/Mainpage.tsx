@@ -1,22 +1,30 @@
 import { BigNumber } from "ethers";
 import React, { useEffect, useState } from "react";
+import Auth from "../../scripts/chat/auth";
+import Moralis from "../../scripts/chat/moralis";
 import { createEllipticCurve } from "../../scripts/ECDH/curveFactory";
 import { createEncryptor } from "../../scripts/encryption/encryption";
 import { useContracts } from "../../stores/useContracts";
+import { useEncryption } from "../../stores/useEncryption";
+import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
+import { useUserData } from "../../stores/useUserData";
 
 interface MainpageProps {}
 
-const curve = createEllipticCurve("secp256r1");
-
 export const Mainpage: React.FC<MainpageProps> = ({}) => {
-  const [privateKey, setPrivateKey] = useState<String>("");
+  //const [privateKey, setPrivateKey] = useState<String>("");
+  const privateKey = useEncryption((state) => state.privateKey);
+  const setPrivateKey = useEncryption((state) => state.setPrivateKey);
   const [publicX, setPublicX] = useState<String>("");
   const [publicY, setPublicY] = useState<String>("");
   const keyStorage = useContracts((state) => state.contract);
   const provider = useProvider((state) => state.provider);
+  const address = useUserData((state) => state.address);
+  const curve = useEncryption((state) => state.curve);
 
   const generateKeyPair = () => {
+    if (!curve) return alert("Curve initialization failed");
     const [privateKey, publicKey] = curve.makeKeyPair();
 
     if (!publicKey) return;
@@ -88,7 +96,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
   return (
     <>
-      <div className="w-1/2 mx-auto mt-32">
+      <div className="w-1/2 mx-auto mt-12">
         <div className="w-full flex flex-row justify-around">
           <button
             onClick={() => generateKeyPair()}
@@ -111,12 +119,19 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
         </div>
         <div className="mt-10 text-xl">Generated private key</div>
         {privateKey && <div className="mt-2 text-gray-400">{privateKey}</div>}
-        <div className="mt-10 text-xl">Generated public key X</div>
-        {publicX && <div className="mt-2 text-gray-400">{publicX}</div>}
-        <div className="mt-10 text-xl">Generated public key Y</div>
-        {publicY && <div className="mt-2 text-gray-400">{publicY}</div>}
-        <div className="mt-20 text-3xl">Events</div>
-        <div className="mt-5 text-gray-400">Waiting for new events . . .</div>
+        <div className="mt-10 text-xl">Generated public key</div>
+        {publicX && (
+          <div className="mt-2 text-gray-400">{"X -> " + publicX}</div>
+        )}
+        {publicY && (
+          <div className="mt-2 text-gray-400">{"Y -> " + publicY}</div>
+        )}
+        <div className="mt-10 text-xl">
+          <Moralis></Moralis>
+        </div>
+        <div className="mt-10 text-xl">
+          <Auth wallet={address}></Auth>
+        </div>
       </div>
     </>
   );

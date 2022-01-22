@@ -13,14 +13,19 @@ const Moralis = () => {
   } else {
     const walletAddress = user.get("ethAddress");
 
-    return (
-      <div>
-        <h1>Welcome {walletAddress}</h1>
-        <button onClick={() => logout()} disabled={isAuthenticating}>
-          Disconnect
-        </button>
-      </div>
-    );
+    return null;
+
+    // return (
+    //   <div>
+    //     <button
+    //       onClick={() => logout()}
+    //       disabled={isAuthenticating}
+    //       className="border-2 border-yellow-500 bg-yellow-300 p-4 block rounded-2xl text-black w-60 h-16 m-2"
+    //     >
+    //       Disconnect
+    //     </button>
+    //   </div>
+    // );
   }
 };
 
