@@ -12,6 +12,7 @@ interface useMessagesStore {
   messages: Map<string, Array<MessageType>>;
   storedMessages: Set<string>;
   addMessage: (message: MessageType) => void;
+  addSelf: (message: MessageType, recieverAddress: string) => void;
 }
 
 export const useMessages = create<useMessagesStore>((set, get) => ({
@@ -26,21 +27,11 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
 
       // if message is already stored do not change state
       if (state.storedMessages.has(hashedMessage)) {
-        console.log("not updating store");
-
         return {
           messages: state.messages,
           storedMessages: state.storedMessages,
         };
       }
-
-      // if (message.name === "Vitcos") {
-      //   console.log("storing copied message");
-      //   console.log(message.name);
-      //   console.log(message.message);
-      //   console.log(message.createdAt);
-      //   console.log(hashedMessage);
-      // }
 
       // prepare variables for changing nested state
       let messagesAppended = state.messages;
@@ -48,8 +39,6 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
 
       // if user already has some saved messages append it
       if (messagesAppended.has(username)) {
-        //newUserMessages = messagesAppended.get(username) as MessageType[];
-        //messagesAppended.set(username, [...newUserMessages, message]);
         newUserMessages = [
           message,
           ...(messagesAppended.get(username) as MessageType[]),
@@ -60,8 +49,30 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
 
       const newStoredMessages = state.storedMessages.add(hashedMessage);
       messagesAppended.set(username, newUserMessages);
-      console.log("updating store");
 
       return { messages: messagesAppended, storedMessages: newStoredMessages };
+    }),
+  addSelf: (message: MessageType, recieverAddress: string) =>
+    set((state) => {
+      // here we do not have to check for message duplicates, because they are not fetched from network
+      // TODO: fetch messages from the network instead of using "optimistic messaging"
+
+      // prepare variables for changing nested state
+      let messagesAppended = state.messages;
+      let newUserMessages: Array<MessageType> = [];
+
+      // if user already has some saved messages append it
+      if (messagesAppended.has(recieverAddress)) {
+        newUserMessages = [
+          message,
+          ...(messagesAppended.get(recieverAddress) as MessageType[]),
+        ];
+      } else {
+        newUserMessages = [message];
+      }
+
+      messagesAppended.set(recieverAddress, newUserMessages);
+
+      return { messages: messagesAppended };
     }),
 }));

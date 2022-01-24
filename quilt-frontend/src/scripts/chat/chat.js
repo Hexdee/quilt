@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import Gun from "gun";
 import BN from "bn.js";
 import { useMessages } from "../../stores/useMessages";
@@ -9,16 +9,15 @@ require("gun/sea");
 
 // initialize gun locally
 const gun = Gun({
-  peers: [
-    "http://localhost:3030/gun",
-    "https://gun-manhattan.herokuapp.com/gun",
-  ],
+  peers: ["http://localhost:3030/gun", "https://quilt-chat.herokuapp.com/gun"],
 });
 
 const Chat = (props) => {
   const user = props.user;
   const [message, setMessage] = useState("");
   const addMessages = useMessages((state) => state.addMessage);
+  const addSelf = useMessages((state) => state.addSelf);
+  const [recieverAddressInput, setRecieverAddressInput] = useState("");
   const [recieverAddress, setRecieverAddress] = useState("");
   const messagesStoreUser = useMessages((state) =>
     state.messages.get(recieverAddress)
@@ -35,6 +34,7 @@ const Chat = (props) => {
     if (!privateKey) return alert("private key is not generated");
 
     console.log(`Getting public key of -> ${recieverAddress}`);
+    setRecieverAddress(recieverAddressInput);
     const targetUserPublicKey = await contract.getUserKey(recieverAddress);
 
     if (!targetUserPublicKey) return alert("failed to fetch public key");
@@ -76,6 +76,7 @@ const Chat = (props) => {
         createdAt: Date.now(),
       };
       messages.set(messageData);
+      addSelf(messageData, recieverAddress);
     } else {
       alert("Not logged in");
       setMessage("");
@@ -133,11 +134,11 @@ const Chat = (props) => {
         <input
           id="address"
           onChange={(e) => {
-            setRecieverAddress(e.target.value);
+            setRecieverAddressInput(e.target.value);
           }}
           placeholder="Reciever address"
           name="address"
-          value={recieverAddress}
+          value={recieverAddressInput}
           className="ml-5 p-5 w-96 text-black rounded-lg"
         />
       </div>
@@ -145,10 +146,6 @@ const Chat = (props) => {
       <div>
         {messagesStoreUser &&
           messagesStoreUser.map((message) => {
-            console.log(`Encrypted message: ${message.message}`);
-            console.log(`senderId: ${message.name}`);
-            console.log(`Encrypted message: ${message.message}`);
-
             let decryptedMessage = "";
 
             if (!encryptor) {
@@ -156,7 +153,7 @@ const Chat = (props) => {
             } else {
               decryptedMessage = encryptor.decrypt(
                 message.message,
-                message.name
+                recieverAddress
               );
             }
 

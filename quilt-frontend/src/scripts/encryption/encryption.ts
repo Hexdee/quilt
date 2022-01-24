@@ -59,7 +59,11 @@ export const createEncryptor = () => {
 
     if (!secret) return undefined;
 
-    return CryptoJS.AES.decrypt(message, secret).toString(CryptoJS.enc.Utf8);
+    try {
+      return CryptoJS.AES.decrypt(message, secret).toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+      return "[ ERROR: cannot decrypt ]";
+    }
   };
 
   return {
