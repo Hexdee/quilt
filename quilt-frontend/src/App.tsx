@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useProvider } from "./stores/useProvider";
-import ContractData from "@quilt/contracts/artifacts/contracts/KeyStorage.sol/KeyStorage.json";
+//import ContractData from "@quilt/contracts/artifacts/contracts/KeyStorage.sol/KeyStorage.json";
+import ContractData from "./ABI/KeyStorage.json";
 import { CONTRACT_ADDRESS } from "./constants/contractConstants";
 import { useContracts } from "./stores/useContracts";
 import { NavBar } from "./components/NavBar";
@@ -11,6 +12,10 @@ import { KeyStorage } from "@quilt/contracts/typechain";
 import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
 import { useEncryption } from "./stores/useEncryption";
 import { createEncryptor } from "./scripts/encryption/encryption";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { readAccount } from "./scripts/storage/storeGunAccount";
+import { useGunAccount } from "./stores/useGunAccount";
 
 function App() {
   const [error, setError] = useState<String>("");
@@ -18,19 +23,18 @@ function App() {
   const setContract = useContracts((state) => state.setContract);
   const setEllipticCurve = useEncryption((state) => state.setCurve);
   const setEncryptor = useEncryption((state) => state.setEncryptor);
+  const isGunLogged = useGunAccount((state) => state.isLogged);
+  const setPrivateKey = useEncryption((state) => state.setPrivateKey);
 
   const initializeConctractInstance = useCallback(async () => {
     try {
-      console.log("initializeConctractInstance");
-
       if (!(CONTRACT_ADDRESS && provider)) {
         console.log(provider);
         throw new Error(
-          "[initializeConctractInstance] game contract address or provider is not specified"
+          "[initializeConctractInstance] chat contract address or provider is not specified"
         );
       }
 
-      console.log("setting game contract");
       setContract(
         new ethers.Contract(
           CONTRACT_ADDRESS,
@@ -49,21 +53,50 @@ function App() {
   }, [setEllipticCurve]);
 
   const initializeEncryptor = useCallback(() => {
-    setEncryptor(createEncryptor());
+    const encryptor = createEncryptor();
+
+    setEncryptor(encryptor);
   }, [setEncryptor]);
+
+  const initalizeGunAccount = useCallback(() => {
+    const privateKey = readAccount();
+
+    if (!privateKey) {
+      return;
+    }
+
+    setPrivateKey(privateKey);
+  }, [setPrivateKey]);
 
   useEffect(() => {
     initializeConctractInstance();
     initailizeEllipticCurve();
     initializeEncryptor();
+    initalizeGunAccount();
   }, [
     initializeConctractInstance,
     initailizeEllipticCurve,
     initializeEncryptor,
+    initalizeGunAccount,
   ]);
+
+  useEffect(() => {
+    console.log(isGunLogged);
+  }, [isGunLogged]);
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <NavBar />
       <Routes>
         <Route path="/" element={<Mainpage></Mainpage>} />

@@ -1,5 +1,4 @@
 import create from "zustand";
-import produce from "immer";
 import { SHA256 } from "crypto-js";
 
 interface MessageType {
@@ -11,13 +10,24 @@ interface MessageType {
 interface useMessagesStore {
   messages: Map<string, Array<MessageType>>;
   storedMessages: Set<string>;
+  friendList: Set<string>;
+  recieverAddress: string;
+  setRecieverAddress: (newAddress: string) => void;
   addMessage: (message: MessageType) => void;
+  addFriend: (address: string) => void;
+  removeFriend: (address: string) => void;
   addSelf: (message: MessageType, recieverAddress: string) => void;
 }
 
 export const useMessages = create<useMessagesStore>((set, get) => ({
   messages: new Map(),
   storedMessages: new Set(),
+  friendList: new Set(),
+  recieverAddress: "",
+  setRecieverAddress: (newAddress: string) =>
+    set((state) => ({
+      recieverAddress: newAddress,
+    })),
   addMessage: (message: MessageType) =>
     set((state) => {
       const username = message.name;
@@ -48,6 +58,7 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
       }
 
       const newStoredMessages = state.storedMessages.add(hashedMessage);
+      newUserMessages = newUserMessages.slice(0, 10);
       messagesAppended.set(username, newUserMessages);
 
       return { messages: messagesAppended, storedMessages: newStoredMessages };
@@ -71,8 +82,24 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
         newUserMessages = [message];
       }
 
+      newUserMessages = newUserMessages.slice(0, 10);
       messagesAppended.set(recieverAddress, newUserMessages);
 
       return { messages: messagesAppended };
+    }),
+  addFriend: (address: string) =>
+    set((state) => {
+      const newFriendlist = state.friendList.add(address);
+      return {
+        friendList: newFriendlist,
+      };
+    }),
+  removeFriend: (address: string) =>
+    set((state) => {
+      const newFriendlist = state.friendList;
+      newFriendlist.delete(address);
+      return {
+        friendList: newFriendlist,
+      };
     }),
 }));

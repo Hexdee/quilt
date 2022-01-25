@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import create from "zustand";
 import { EllipticCurveInterface } from "../scripts/ECDH/curveFactory";
 import { EncryptorInterface } from "../scripts/encryption/encryption";

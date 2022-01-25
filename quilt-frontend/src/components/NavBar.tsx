@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useProvider } from "../stores/useProvider";
 import { useUserData } from "../stores/useUserData";
 import { LoadableButton } from "./base/LoadableButton";
+import Logo from "../assets/quilt.png";
 
 interface NavBarProps {}
 
@@ -58,10 +59,10 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   };
 
   return (
-    <div className="h-28 w-full flex flex-row justify-center bg-gray-900">
-      <div className="w-11/12  flex flex-row justify-between align-middle items-center">
+    <div className="h-28 w-full flex flex-row justify-center">
+      <div className="w-5/6  flex flex-row justify-between align-middle items-center">
         <NavLink className="logo-button" to="/">
-          <div className="w-12 h-12"></div>
+          <img src={Logo} alt="" className="w-32" />
         </NavLink>
         <div className="flex flex-row">
           {isLogged ? (
@@ -70,12 +71,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                 isLoading={false}
                 description="disconnect"
                 handleClick={() => handleDisconnectWallet()}
-                className="mr-6 cursor-pointer w-48 h-14 bg-blue-600 transform hover:bg-blue-500 hover:scale-105 transition-all duration-75 rounded-lg text-white flex justify-center flex-col text-xl border-blue-800 border-r-4 border-b-4"
+                className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black w-60 h-16 m-2 text-lg mr-4"
               />
               <LoadableButton
                 isLoading={false}
                 description={`${address.substring(0, 16)}...`}
-                className="w-60 h-14 cursor-pointer bg-transparent transform hover:bg-blue-600 hover:scale-105 transition-all duration-75 rounded-lg text-white flex justify-center flex-col text-xl border-blue-600 border-2"
+                className="border border-yellow-300 p-4 rounded-lg text-white w-60 h-16 m-2 text-xl"
                 navigate="/profile"
               />
             </>
@@ -84,7 +85,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               isLoading={isConnecting}
               description="connect wallet"
               handleClick={() => handleConnectWallet()}
-              alertMessage={error}
+              className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black w-60 h-16 m-2 text-lg mr-4"
             />
           )}
         </div>

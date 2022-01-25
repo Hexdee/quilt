@@ -2,13 +2,15 @@ import { BigNumber } from "ethers";
 import React, { useEffect, useState } from "react";
 import Auth from "../../scripts/chat/auth";
 import Moralis from "../../scripts/chat/moralis";
-import { createEllipticCurve } from "../../scripts/ECDH/curveFactory";
-import { createEncryptor } from "../../scripts/encryption/encryption";
 import { useContracts } from "../../stores/useContracts";
 import { useEncryption } from "../../stores/useEncryption";
 import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
 import { useUserData } from "../../stores/useUserData";
+import { useGunAccount } from "../../stores/useGunAccount";
+import BN from "bn.js";
+import { toast } from "react-toastify";
+import { storeAccount } from "../../scripts/storage/storeGunAccount";
 
 interface MainpageProps {}
 
@@ -18,62 +20,59 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
   const setPrivateKey = useEncryption((state) => state.setPrivateKey);
   const [publicX, setPublicX] = useState<String>("");
   const [publicY, setPublicY] = useState<String>("");
+  const [friendInput, setFriendInput] = useState<string>("");
   const keyStorage = useContracts((state) => state.contract);
   const provider = useProvider((state) => state.provider);
   const address = useUserData((state) => state.address);
   const curve = useEncryption((state) => state.curve);
+  const friendList = useMessages((state) => Array.from(state.friendList));
+  const addFriend = useMessages((state) => state.addFriend);
+  const removeFriend = useMessages((state) => state.removeFriend);
+  const setRecieverAddress = useMessages((state) => state.setRecieverAddress);
+  const contract = useContracts((state) => state.contract);
+  const encryptor = useEncryption((state) => state.encryptor);
+  const isGunLogged = useGunAccount((state) => state.isLogged);
 
-  const generateKeyPair = () => {
-    if (!curve) return alert("Curve initialization failed");
-    const [privateKey, publicKey] = curve.makeKeyPair();
+  const generateKeyPair = async () => {
+    try {
+      if (!curve) throw new Error("Curve initialization failed");
+      if (!(keyStorage && provider))
+        throw new Error("provider or contract is not defined");
 
-    if (!publicKey) return;
+      const [privateKey, publicKey] = curve.makeKeyPair();
 
-    setPrivateKey(privateKey.toString(10));
-    setPublicX(publicKey.x.toString(10));
-    setPublicY(publicKey.y.toString(10));
+      if (!publicKey) return;
 
-    console.log("Generated private key -> " + privateKey.toString(10));
-    console.log("Generated public key (X) -> " + publicKey?.x.toString(10));
-    console.log("Generated public key (Y) -> " + publicKey?.y.toString(10));
-  };
+      await keyStorage.setUserKey(
+        BigNumber.from(publicKey.x.toString(10)),
+        BigNumber.from(publicKey.y.toString(10))
+      );
 
-  const postData = async () => {
-    if (!(keyStorage && provider))
-      return alert("provider or contract is not defined");
+      setPrivateKey(privateKey.toString(10));
+      setPublicX(publicKey.x.toString(10));
+      setPublicY(publicKey.y.toString(10));
+      storeAccount(privateKey.toString(10));
 
-    if (!(publicX && publicY)) return alert("public key is not defined");
-
-    const tx = await keyStorage.setUserKey(
-      BigNumber.from(publicX),
-      BigNumber.from(publicY)
-    );
-
-    console.log("Transaction");
-    console.log(tx);
-  };
-
-  const testEncryption = () => {
-    const encryption = createEncryptor();
-
-    encryption.setSharedSecret("Vitcos", "123");
-    console.log(
-      "Encryption key for Vitcos -> " + encryption.getSharedSecret("Vitcos")
-    );
-    const encryptedToVitocs = encryption.encrypt("Hello world", "Vitcos");
-
-    if (!encryptedToVitocs)
-      return console.log("Error encrpyted message returned undefined");
-    console.log("Encrpyted message -> " + encryptedToVitocs?.toString());
-
-    const decrypted = encryption.decrypt(
-      encryptedToVitocs.toString(),
-      "Vitcos"
-    );
-
-    if (!decrypted)
-      return console.log("Error decrypted message returned undefined");
-    console.log("Decrypted message -> " + decrypted.toString());
+      toast.success("Successfully generated a new key", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (err: any) {
+      toast.error(err.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
 
   useEffect(() => {
@@ -94,45 +93,138 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
     };
   }, [keyStorage, provider]);
 
+  const handleAddFriend = () => {
+    addFriend(friendInput);
+    setFriendInput("");
+  };
+
+  const handleRemoveFriend = (address: string) => {
+    console.log(address);
+
+    removeFriend(address);
+  };
+
+  const handleSetFriend = async (address: string) => {
+    try {
+      if (!privateKey) {
+        throw new Error("Private key is not generated");
+      }
+
+      if (!(curve && privateKey && contract && encryptor))
+        throw new Error("Try restarting application");
+
+      setRecieverAddress(address);
+      const targetUserPublicKey = await contract.getUserKey(address);
+
+      if (targetUserPublicKey.x.isZero()) {
+        throw new Error("User doesn't have an account");
+      }
+      console.log(
+        `fetched public key X -> ${targetUserPublicKey.x.toString()}`
+      );
+      console.log(
+        `fetched public key X -> ${targetUserPublicKey.y.toString()}`
+      );
+
+      const targetUserPublicKeyTrans = {
+        x: new BN(targetUserPublicKey.x.toString(), 10),
+        y: new BN(targetUserPublicKey.y.toString(), 10),
+      };
+
+      const sharedSecret = curve.generateSharedSecret(
+        new BN(privateKey, 10),
+        targetUserPublicKeyTrans
+      );
+      console.log(`generated shared key -> ${sharedSecret.toString()}`);
+      encryptor.setSharedSecret(address, sharedSecret.toString());
+
+      toast.success("Successfully connected", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (err: any) {
+      toast.error(err.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
   return (
-    <>
-      <div className="w-1/2 mx-auto mt-12">
-        <div className="w-full flex flex-row justify-around">
+    <div className="flex flex-row justify-start mt-12">
+      <div className="w-1/4 px-5">
+        <div className="text-2xl text-white mb-2">Friends</div>
+        <div className="flex flex-row items-center mb-6">
+          <input
+            id="friend"
+            onChange={(e) => {
+              setFriendInput(e.target.value);
+            }}
+            placeholder="Reciever address"
+            name="address"
+            value={friendInput}
+            className="p-5 w-96 h-16 text-black rounded-lg"
+          />
           <button
-            onClick={() => generateKeyPair()}
-            className="border-2 border-yellow-500 bg-yellow-300 p-4 block rounded-2xl text-black w-96 h-16 m-2"
+            onClick={() => handleAddFriend()}
+            className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black flex-1 h-16 ml-2 text-lg"
           >
-            Generate private key
-          </button>
-          <button
-            onClick={() => postData()}
-            className="border-2 border-yellow-500 bg-yellow-300 p-4 block rounded-2xl text-black w-96 h-16 m-2"
-          >
-            Post key to blockchain
-          </button>
-          <button
-            onClick={() => testEncryption()}
-            className="border-2 border-yellow-500 bg-yellow-300 p-4 block rounded-2xl text-black w-96 h-16 m-2"
-          >
-            Test encryption
+            Add
           </button>
         </div>
-        <div className="mt-10 text-xl">Generated private key</div>
-        {privateKey && <div className="mt-2 text-gray-400">{privateKey}</div>}
-        <div className="mt-10 text-xl">Generated public key</div>
-        {publicX && (
-          <div className="mt-2 text-gray-400">{"X -> " + publicX}</div>
-        )}
-        {publicY && (
-          <div className="mt-2 text-gray-400">{"Y -> " + publicY}</div>
-        )}
-        <div className="mt-10 text-xl">
-          <Moralis></Moralis>
+        <div>
+          {friendList &&
+            friendList.map((element: any) => {
+              return (
+                <div
+                  className="w-full bg-white rounded-lg h-16 text-black flex flex-row justify-between items-center text-xl my-2 cursor-pointer hover:scale-105 transition-all duration-100"
+                  onClick={() => handleSetFriend(element)}
+                >
+                  <div className="ml-5 overflow-hidden">{`${element.substring(
+                    0,
+                    25
+                  )}...`}</div>
+                  <div>
+                    <button
+                      onClick={() => handleRemoveFriend(element)}
+                      className="bg-red-500 w-24 h-12 mr-3 rounded-md font-bold text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
         </div>
-        <div className="mt-10 text-xl">
+      </div>
+      <div className="w-2/3 ml-10">
+        {isGunLogged && (
+          <div className="mt-10">
+            <button
+              onClick={() => generateKeyPair()}
+              className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black h-[70px] text-lg w-60"
+            >
+              Generate new private key
+            </button>
+            <div className="text-xl">
+              <Moralis></Moralis>
+            </div>
+          </div>
+        )}
+        <div className="text-xl">
           <Auth wallet={address}></Auth>
         </div>
       </div>
-    </>
+    </div>
   );
 };
