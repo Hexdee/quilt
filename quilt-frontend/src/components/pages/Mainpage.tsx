@@ -15,7 +15,6 @@ import { storePrivateKey } from "../../scripts/storage/storeAccount";
 interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = ({}) => {
-  //const [privateKey, setPrivateKey] = useState<String>("");
   const privateKey = useEncryption((state) => state.privateKey);
   const setPrivateKey = useEncryption((state) => state.setPrivateKey);
   const [publicX, setPublicX] = useState<String>("");
@@ -61,14 +60,11 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
   useEffect(() => {
     if (!(keyStorage && provider)) {
-      console.log("gameContract or provider is undefined");
       return;
     }
 
-    console.log("setting up listener");
-
     keyStorage.on("KeyPublished", (...args) => {
-      console.log("New key was published");
+      console.log("new public key was published");
       console.log(args);
     });
 
@@ -78,11 +74,13 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
   }, [keyStorage, provider]);
 
   const handleAddFriend = () => {
+    toast.info(`Added new friend: ${friendInput}`);
     addFriend(friendInput);
     setFriendInput("");
   };
 
   const handleRemoveFriend = (address: string) => {
+    toast.info(`Removed a friend: ${address}`);
     console.log(address);
     removeFriend(address);
   };
@@ -93,7 +91,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
         throw new Error("Private key is not generated");
       }
 
-      if (!(curve && privateKey && contract && encryptor))
+      if (!(curve && contract && encryptor))
         throw new Error("Try restarting application");
 
       setRecieverAddress(address);

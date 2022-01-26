@@ -5,11 +5,11 @@ import { useProvider } from "../stores/useProvider";
 import { useUserData } from "../stores/useUserData";
 import { LoadableButton } from "./base/LoadableButton";
 import Logo from "../assets/quilt.png";
+import { toast } from "react-toastify";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
-  const [error, setError] = useState<string>("");
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
   const login = useUserData((state) => state.login);
@@ -34,19 +34,15 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       const signer = provider.getSigner();
       const address = await signer.getAddress();
 
-      console.log(provider);
-
-      if (!signer) return setError("Metamask is not connected");
+      if (!signer) return new Error("Metamask is not connected");
 
       login(address);
       setBalance((await provider.getSigner().getBalance()).toString());
       setProvider(provider);
       setIsConnecting(false);
-      console.log("handleConnectWallet");
     } catch (error: any) {
-      console.log(error.message);
+      toast.error(error.message);
       setIsConnecting(false);
-      setError(error.message);
     }
   }, [login, setProvider, setBalance]);
 

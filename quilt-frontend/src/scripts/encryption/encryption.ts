@@ -62,7 +62,7 @@ export const createEncryptor = () => {
     try {
       return CryptoJS.AES.decrypt(message, secret).toString(CryptoJS.enc.Utf8);
     } catch (error) {
-      return "[ ERROR: cannot decrypt ]";
+      return "[ ERROR: cannot decrypt ] user possibly generated a new public key or is being impersonated";
     }
   };
 

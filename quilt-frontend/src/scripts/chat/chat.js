@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import Gun from "gun";
-import BN from "bn.js";
 import { useMessages } from "../../stores/useMessages";
 import { useUserData } from "../../stores/useUserData";
 import { useEncryption } from "../../stores/useEncryption";
-import { useContracts } from "../../stores/useContracts";
+import { toast } from "react-toastify";
 require("gun/sea");
 
 // initialize gun locally
@@ -17,17 +16,12 @@ const Chat = (props) => {
   const [message, setMessage] = useState("");
   const addMessages = useMessages((state) => state.addMessage);
   const addSelf = useMessages((state) => state.addSelf);
-  const [recieverAddressInput, setRecieverAddressInput] = useState("");
   const recieverAddress = useMessages((state) => state.recieverAddress);
   const messagesStoreUser = useMessages((state) =>
     state.messages.get(recieverAddress)
   );
   const userAddress = useUserData((state) => state.address);
-  const curve = useEncryption((state) => state.curve);
   const encryptor = useEncryption((state) => state.encryptor);
-  const privateKey = useEncryption((state) => state.privateKey);
-  const contract = useContracts((state) => state.contract);
-  const [sharedSecret, setSharedSecret] = useState("");
 
   // Sending messages
   const saveMessage = () => {
@@ -47,7 +41,7 @@ const Chat = (props) => {
       addSelf(messageData, recieverAddress);
       setMessage("");
     } else {
-      alert("Not logged in");
+      toast.error("Not logged in");
       return;
     }
   };

@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import { useProvider } from "./stores/useProvider";
-//import ContractData from "@quilt/contracts/artifacts/contracts/KeyStorage.sol/KeyStorage.json";
 import ContractData from "./ABI/KeyStorage.json";
 import { CONTRACT_ADDRESS } from "./constants/contractConstants";
 import { useContracts } from "./stores/useContracts";
@@ -12,13 +11,12 @@ import { KeyStorage } from "@quilt/contracts/typechain";
 import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
 import { useEncryption } from "./stores/useEncryption";
 import { createEncryptor } from "./scripts/encryption/encryption";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
 import { useGunAccount } from "./stores/useGunAccount";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [error, setError] = useState<String>("");
   const provider = useProvider((state) => state.provider);
   const setContract = useContracts((state) => state.setContract);
   const setEllipticCurve = useEncryption((state) => state.setCurve);
@@ -41,8 +39,7 @@ function App() {
         ) as KeyStorage
       );
     } catch (error: any) {
-      console.log(error.message);
-      setError(error.message);
+      toast.error(error.message);
     }
   }, [provider, setContract]);
 
