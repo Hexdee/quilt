@@ -1,6 +1,7 @@
 {
   "name": "@quilt/frontend",
   "version": "0.1.0",
+  "homepage": "./",
   "dependencies": {
     "@quilt/contracts": "1.0.0",
     "@testing-library/jest-dom": "^5.16.1",
