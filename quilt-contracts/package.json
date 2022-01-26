@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "node": "npx hardhat node",
-    "deploy-local": "npx hardhat run --network localhost scripts/deploy.ts"
+    "deploy-local": "npx hardhat run --network localhost scripts/deployLocal.ts",
+    "deploy-mumbai": "npx hardhat run --network mumbai scripts/deploy.ts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",

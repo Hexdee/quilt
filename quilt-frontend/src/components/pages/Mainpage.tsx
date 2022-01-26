@@ -10,7 +10,7 @@ import { useUserData } from "../../stores/useUserData";
 import { useGunAccount } from "../../stores/useGunAccount";
 import BN from "bn.js";
 import { toast } from "react-toastify";
-import { storeAccount } from "../../scripts/storage/storeGunAccount";
+import { storePrivateKey } from "../../scripts/storage/storeAccount";
 
 interface MainpageProps {}
 
@@ -35,9 +35,9 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
   const generateKeyPair = async () => {
     try {
-      if (!curve) throw new Error("Curve initialization failed");
+      if (!curve) throw new Error("Encryption initialization failed");
       if (!(keyStorage && provider))
-        throw new Error("provider or contract is not defined");
+        throw new Error("Failed to connect with contract");
 
       const [privateKey, publicKey] = curve.makeKeyPair();
 
@@ -49,29 +49,13 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
       );
 
       setPrivateKey(privateKey.toString(10));
+      storePrivateKey(privateKey.toString(10));
       setPublicX(publicKey.x.toString(10));
       setPublicY(publicKey.y.toString(10));
-      storeAccount(privateKey.toString(10));
 
-      toast.success("Successfully generated a new key", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Successfully generated a new key");
     } catch (err: any) {
-      toast.error(err.message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     }
   };
 
@@ -84,7 +68,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
     console.log("setting up listener");
 
     keyStorage.on("KeyPublished", (...args) => {
-      console.log("Event was caught");
+      console.log("New key was published");
       console.log(args);
     });
 
@@ -100,7 +84,6 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
   const handleRemoveFriend = (address: string) => {
     console.log(address);
-
     removeFriend(address);
   };
 
@@ -138,25 +121,9 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
       console.log(`generated shared key -> ${sharedSecret.toString()}`);
       encryptor.setSharedSecret(address, sharedSecret.toString());
 
-      toast.success("Successfully connected", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.success("Successfully connected");
     } catch (err: any) {
-      toast.error(err.message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      toast.error(err.message);
     }
   };
 

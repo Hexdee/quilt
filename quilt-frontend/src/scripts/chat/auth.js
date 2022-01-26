@@ -3,6 +3,7 @@ import Gun from "gun";
 import Chat from "./chat";
 import { toast } from "react-toastify";
 import { useGunAccount } from "../../stores/useGunAccount";
+import { readUsername, storeUsername } from "../storage/storeAccount";
 require("gun/sea");
 
 // initialize gun locally
@@ -20,57 +21,34 @@ const Auth = (props) => {
   let client = gun.user();
   const [pass, setPass] = useState("");
 
+  const genRanHex = (size) =>
+    [...Array(size)]
+      .map(() => Math.floor(Math.random() * 16).toString(16))
+      .join("");
+
   const signUp = () => {
-    client.create(walletAddress, pass, ({ err }) => {
-      if (err) {
-        toast.error(err, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } else {
-        toast.success("Successfully signed up", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
+    const generatedUsername = genRanHex(30);
+
+    client.create(generatedUsername, pass, ({ err }) => {
+      if (err) return toast.error(err);
+
+      storeUsername(generatedUsername);
+      setGunUsername(generatedUsername);
+      toast.success("Successfully signed up!");
     });
   };
 
   const signIn = () => {
-    client.auth(walletAddress, pass, ({ err }) => {
-      if (err) {
-        toast.error(err, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } else {
-        setGunLogged(true);
-        setGunUsername(walletAddress);
-        toast.success("Sign in successful!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
+    const username = readUsername();
+    if (!username) return toast.error("Please create your account");
+
+    client.auth(username, pass, ({ err }) => {
+      if (err) return toast.error(err);
+
+      setGunLogged(true);
+      storeUsername(username);
+      setGunUsername(username);
+      toast.success("Sign in successful!");
     });
   };
 

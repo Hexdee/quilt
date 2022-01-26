@@ -14,7 +14,7 @@ import { useEncryption } from "./stores/useEncryption";
 import { createEncryptor } from "./scripts/encryption/encryption";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { readAccount } from "./scripts/storage/storeGunAccount";
+import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
 import { useGunAccount } from "./stores/useGunAccount";
 
 function App() {
@@ -30,9 +30,7 @@ function App() {
     try {
       if (!(CONTRACT_ADDRESS && provider)) {
         console.log(provider);
-        throw new Error(
-          "[initializeConctractInstance] chat contract address or provider is not specified"
-        );
+        throw new Error("Failed to connect to the contract");
       }
 
       setContract(
@@ -58,10 +56,11 @@ function App() {
     setEncryptor(encryptor);
   }, [setEncryptor]);
 
-  const initalizeGunAccount = useCallback(() => {
-    const privateKey = readAccount();
+  const initalizeAccount = useCallback(() => {
+    const privateKey = readPrivateKey();
+    const username = readUsername();
 
-    if (!privateKey) {
+    if (!privateKey || !username) {
       return;
     }
 
@@ -72,12 +71,12 @@ function App() {
     initializeConctractInstance();
     initailizeEllipticCurve();
     initializeEncryptor();
-    initalizeGunAccount();
+    initalizeAccount();
   }, [
     initializeConctractInstance,
     initailizeEllipticCurve,
     initializeEncryptor,
-    initalizeGunAccount,
+    initalizeAccount,
   ]);
 
   useEffect(() => {

@@ -37,6 +37,13 @@ const config: HardhatUserConfig = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
+    mumbai: {
+      url: process.env.ALCHEMY_URL_MUMBAI,
+      accounts:
+        process.env.PRIVATE_KEY_MUMBAI !== undefined
+          ? [process.env.PRIVATE_KEY_MUMBAI]
+          : [],
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
