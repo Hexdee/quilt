@@ -63,7 +63,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
       return;
     }
 
-    keyStorage.on("KeyPublished", (...args) => {
+    keyStorage.on("KeyPublished", (...args: any[]) => {
       console.log("new public key was published");
       console.log(args);
     });
