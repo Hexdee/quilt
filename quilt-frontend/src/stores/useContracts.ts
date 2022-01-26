@@ -1,5 +1,5 @@
 import create from "zustand";
-import { KeyStorage } from "@quilt/contracts/typechain";
+import { KeyStorage } from "../ABI/typechain/KeyStorage";
 
 interface ContractStore {
   contract: KeyStorage | null;

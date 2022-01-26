@@ -7,7 +7,7 @@ import { useContracts } from "./stores/useContracts";
 import { NavBar } from "./components/NavBar";
 import { Mainpage } from "./components/pages/Mainpage";
 import { Route, Routes } from "react-router-dom";
-import { KeyStorage } from "@quilt/contracts/typechain";
+import { KeyStorage } from "./ABI/typechain/KeyStorage";
 import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
 import { useEncryption } from "./stores/useEncryption";
 import { createEncryptor } from "./scripts/encryption/encryption";
