@@ -81,9 +81,9 @@ function App() {
   useEffect(() => {
     if (!isGunLogged) return;
 
-    const friendsList = readFriendsList();
+    const friendsList: undefined | Array<string> = readFriendsList();
 
-    if (!friendsList.length) return;
+    if (!friendsList?.length) return;
 
     setFriendsList(friendsList);
   }, [isGunLogged, setFriendsList]);
