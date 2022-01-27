@@ -8,9 +8,9 @@ import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
 import { useUserData } from "../../stores/useUserData";
 import { useGunAccount } from "../../stores/useGunAccount";
-import BN from "bn.js";
-import { toast } from "react-toastify";
 import { storePrivateKey } from "../../scripts/storage/storeAccount";
+import { toast } from "react-toastify";
+import BN from "bn.js";
 
 interface MainpageProps {}
 
@@ -75,6 +75,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
   const handleAddFriend = () => {
     toast.info(`Added new friend: ${friendInput}`);
+
     addFriend(friendInput);
     setFriendInput("");
   };

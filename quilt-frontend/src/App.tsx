@@ -15,6 +15,8 @@ import { toast, ToastContainer } from "react-toastify";
 import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
 import { useGunAccount } from "./stores/useGunAccount";
 import "react-toastify/dist/ReactToastify.css";
+import { readFriendsList } from "./scripts/storage/storeFriendsList";
+import { useMessages } from "./stores/useMessages";
 
 function App() {
   const provider = useProvider((state) => state.provider);
@@ -23,11 +25,11 @@ function App() {
   const setEncryptor = useEncryption((state) => state.setEncryptor);
   const isGunLogged = useGunAccount((state) => state.isLogged);
   const setPrivateKey = useEncryption((state) => state.setPrivateKey);
+  const setFriendsList = useMessages((state) => state.setFriends);
 
   const initializeConctractInstance = useCallback(async () => {
     try {
       if (!(CONTRACT_ADDRESS && provider)) {
-        console.log(provider);
         throw new Error("Failed to connect to the contract");
       }
 
@@ -39,7 +41,7 @@ function App() {
         ) as KeyStorage
       );
     } catch (error: any) {
-      toast.error(error.message);
+      return;
     }
   }, [provider, setContract]);
 
@@ -77,8 +79,14 @@ function App() {
   ]);
 
   useEffect(() => {
-    console.log(isGunLogged);
-  }, [isGunLogged]);
+    if (!isGunLogged) return;
+
+    const friendsList = readFriendsList();
+
+    if (!friendsList.length) return;
+
+    setFriendsList(friendsList);
+  }, [isGunLogged, setFriendsList]);
 
   return (
     <>

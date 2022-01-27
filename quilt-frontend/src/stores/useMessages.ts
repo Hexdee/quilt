@@ -1,5 +1,6 @@
 import create from "zustand";
 import { SHA256 } from "crypto-js";
+import { storeFriendsList } from "../scripts/storage/storeFriendsList";
 
 interface MessageType {
   name: string;
@@ -16,6 +17,7 @@ interface useMessagesStore {
   addMessage: (message: MessageType) => void;
   addFriend: (address: string) => void;
   removeFriend: (address: string) => void;
+  setFriends: (address: Array<string>) => void;
   addSelf: (message: MessageType, recieverAddress: string) => void;
 }
 
@@ -90,6 +92,8 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
   addFriend: (address: string) =>
     set((state) => {
       const newFriendlist = state.friendList.add(address);
+      storeFriendsList(Array.from(newFriendlist));
+
       return {
         friendList: newFriendlist,
       };
@@ -98,8 +102,16 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
     set((state) => {
       const newFriendlist = state.friendList;
       newFriendlist.delete(address);
+
+      console.log(newFriendlist);
+      console.log(Array.from(newFriendlist));
+      storeFriendsList(Array.from(newFriendlist));
       return {
         friendList: newFriendlist,
       };
     }),
+  setFriends: (friendsList: Array<string>) =>
+    set((state) => ({
+      friendList: new Set(friendsList),
+    })),
 }));

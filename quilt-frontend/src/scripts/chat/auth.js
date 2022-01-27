@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Gun from "gun";
 import Chat from "./chat";
 import { toast } from "react-toastify";

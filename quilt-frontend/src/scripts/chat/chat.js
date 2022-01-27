@@ -22,9 +22,13 @@ const Chat = (props) => {
   );
   const userAddress = useUserData((state) => state.address);
   const encryptor = useEncryption((state) => state.encryptor);
+  const privateKey = useEncryption((state) => state.privateKey);
 
   // Sending messages
   const saveMessage = () => {
+    if (!privateKey)
+      return toast.error("Generate a private key before sending the message.");
+
     if (user.is) {
       const encryptedMessage = encryptor
         .encrypt(message, recieverAddress)
