@@ -67,8 +67,19 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
     }),
   addSelf: (message: MessageType, recieverAddress: string) =>
     set((state) => {
-      // here we do not have to check for message duplicates, because they are not fetched from network
-      // TODO: fetch messages from the network instead of using "optimistic messaging"
+      const username = message.name;
+      const hashedMessage = SHA256(
+        username + message.createdAt.toString()
+      ).toString();
+
+      // if message is already stored do not change state
+      if (state.storedMessages.has(hashedMessage)) {
+        console.log("message is already stored");
+        return {
+          messages: state.messages,
+          storedMessages: state.storedMessages,
+        };
+      }
 
       // prepare variables for changing nested state
       let messagesAppended = state.messages;
@@ -84,10 +95,11 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
         newUserMessages = [message];
       }
 
+      const newStoredMessages = state.storedMessages.add(hashedMessage);
       newUserMessages = newUserMessages.slice(0, 10);
       messagesAppended.set(recieverAddress, newUserMessages);
 
-      return { messages: messagesAppended };
+      return { messages: messagesAppended, storedMessages: newStoredMessages };
     }),
   addFriend: (address: string) =>
     set((state) => {

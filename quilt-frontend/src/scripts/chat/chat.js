@@ -64,6 +64,26 @@ const Chat = (props) => {
     };
   }, [userAddress, addMessages]);
 
+  // Listening on user messages
+  useEffect(() => {
+    if (!recieverAddress) return;
+
+    const messages = gun.get(recieverAddress);
+    console.log("listening for user messages on topic -> " + recieverAddress);
+    messages.map().on((...props) => {
+      const m = props[0];
+
+      if (props[0].name === userAddress) {
+        console.log("adding user message");
+        addSelf(m, recieverAddress);
+      }
+    });
+
+    return () => {
+      messages.off();
+    };
+  }, [recieverAddress, addSelf]);
+
   return (
     <div className="mt-5 w-2/3">
       <div className="mt-4 flex flex-row items-stretch">

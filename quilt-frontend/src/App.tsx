@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useProvider } from "./stores/useProvider";
 import ContractData from "./ABI/KeyStorage.json";
 import { CONTRACT_ADDRESS } from "./constants/contractConstants";
@@ -11,12 +11,12 @@ import { KeyStorage } from "./ABI/typechain/KeyStorage";
 import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
 import { useEncryption } from "./stores/useEncryption";
 import { createEncryptor } from "./scripts/encryption/encryption";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
 import { useGunAccount } from "./stores/useGunAccount";
-import "react-toastify/dist/ReactToastify.css";
 import { readFriendsList } from "./scripts/storage/storeFriendsList";
 import { useMessages } from "./stores/useMessages";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const provider = useProvider((state) => state.provider);

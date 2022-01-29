@@ -76,7 +76,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
   const handleAddFriend = () => {
     toast.info(`Added new friend: ${friendInput}`);
 
-    addFriend(friendInput);
+    addFriend(friendInput.replace(/\s/g, ""));
     setFriendInput("");
   };
 
