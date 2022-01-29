@@ -55,7 +55,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   };
 
   return (
-    <div className="h-28 w-full flex flex-row justify-center">
+    <div className="h-[12vh] w-full flex flex-row justify-center border-b border-gray-700">
       <div className="w-5/6  flex flex-row justify-between align-middle items-center">
         <NavLink className="logo-button" to="/">
           <img src={Logo} alt="" className="w-32" />
@@ -67,12 +67,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                 isLoading={false}
                 description="disconnect"
                 handleClick={() => handleDisconnectWallet()}
-                className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black w-60 h-16 m-2 text-lg mr-4"
+                className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg w-60 h-16 m-2 text-lg mr-4"
               />
               <LoadableButton
                 isLoading={false}
                 description={`${address.substring(0, 16)}...`}
-                className="border border-yellow-300 p-4 rounded-lg text-white w-60 h-16 m-2 text-xl"
+                className="border-2 border-sky-600 p-4 rounded-lg text-white w-60 h-16 m-2 text-xl hover:scale-95 transition-all duration-75"
                 navigate="/profile"
               />
             </>
@@ -81,7 +81,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               isLoading={isConnecting}
               description="connect wallet"
               handleClick={() => handleConnectWallet()}
-              className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black w-60 h-16 m-2 text-lg mr-4"
+              className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 rounded-lg text-white w-60 h-16 m-2 text-lg mr-4"
             />
           )}
         </div>

@@ -66,7 +66,7 @@ const Auth = (props) => {
           <div className="form-group flex flex-col w-2/3">
             <label
               htmlFor="exampleInputPassword1"
-              className="text-xl block mb-2 ml-3"
+              className="text-xl block mb-2 ml-3 pt-6"
             >
               Password
             </label>
@@ -85,7 +85,7 @@ const Auth = (props) => {
                 id="in"
                 type="button"
                 onClick={signIn}
-                className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black h-16 text-lg mr-2 w-full"
+                className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg h-16 text-lg mr-2 w-full"
               >
                 Sign in
               </button>
@@ -93,7 +93,7 @@ const Auth = (props) => {
                 id="up"
                 type="button"
                 onClick={signUp}
-                className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black h-16 text-lg ml-2 w-full"
+                className="bg-gradient-to-tl to-sky-600 from-blue-700 text-white p-4 rounded-lg h-16 text-lg ml-2 w-full"
               >
                 Sign up
               </button>

@@ -4,6 +4,7 @@ import { useMessages } from "../../stores/useMessages";
 import { useUserData } from "../../stores/useUserData";
 import { useEncryption } from "../../stores/useEncryption";
 import { toast } from "react-toastify";
+import { IoSend } from "react-icons/io5";
 require("gun/sea");
 
 // initialize gun locally
@@ -82,31 +83,15 @@ const Chat = (props) => {
     return () => {
       messages.off();
     };
-  }, [recieverAddress, addSelf]);
+  }, [recieverAddress, userAddress, addSelf]);
 
   return (
-    <div className="mt-5 w-2/3">
-      <div className="mt-4 flex flex-row items-stretch">
-        <button
-          type="button"
-          onClick={saveMessage}
-          className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black w-60 h-[70px] text-lg"
-        >
-          Send Message
-        </button>
-        <input
-          id="message"
-          onChange={(e) => {
-            setMessage(e.target.value);
-          }}
-          placeholder="Message"
-          name="message"
-          value={message}
-          className="ml-5 p-5 text-black rounded-lg h-[70px] flex-1"
-        />
+    <div className="w-2/3 border-x border-gray-700 overflow-hidden h-[88vh] relative px-10 flex flex-col">
+      <div className="text-base text-gray-400 pt-6">Chatting with:</div>
+      <div className="text-4xl font-bold">
+        {recieverAddress ? `${recieverAddress.substring(0, 26)} . . .` : "-"}
       </div>
-      <div className="mt-10 text-xl">Messages</div>
-      <div>
+      <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
         {messagesStoreUser &&
           messagesStoreUser.map((message) => {
             let decryptedMessage = "";
@@ -122,38 +107,51 @@ const Chat = (props) => {
 
             if (message && message.name === recieverAddress) {
               return (
-                <div className="flex flex-row justify-start">
-                  <div className="w-4/5 bg-white p-5 my-3 rounded-xl border-gray-300 border-r-4 border-b-4">
-                    <div className="text-base text-gray-500 mb-2">
-                      {message.name}
-                    </div>
-                    <div className="mb-4 text-xl ml-3 text-black">
+                <div className="flex flex-col items-start mt-2">
+                  <div className="max-w-[320px] min-w-[40px] bg-gradient-to-bl from-slate-800 to-slate-800 mb-1 mt-3 rounded-3xl rounded-bl-none">
+                    <div className="text-base px-6 py-3 text-gray-200">
                       {decryptedMessage}
                     </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(message.createdAt).toLocaleString()}
-                    </div>
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {new Date(message.createdAt).toLocaleString()}
                   </div>
                 </div>
               );
             }
 
             return (
-              <div className="flex flex-row justify-end">
-                <div className="w-4/5 bg-white p-5 pb-2 my-3 rounded-xl border-gray-300 border-r-4 border-b-4">
-                  <div className="text-base text-gray-500 mb-2">
-                    {message.name}
-                  </div>
-                  <div className="mb-6 text-xl ml-3 text-black">
+              <div className="flex flex-col items-end mt-2">
+                <div className="max-w-[320px] min-w-[40px] bg-gradient-to-bl from-sky-500 to-blue-600 mb-1 mt-3 rounded-3xl rounded-br-none">
+                  <div className="text-base px-6 py-3 text-white">
                     {decryptedMessage}
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {new Date(message.createdAt).toLocaleString()}
-                  </div>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {new Date(message.createdAt).toLocaleString()}
                 </div>
               </div>
             );
           })}
+      </div>
+      <div className="mt-4 flex flex-row items-stretch absolute bottom-5 w-[90%]">
+        <input
+          id="message"
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
+          placeholder="Write a message..."
+          name="message"
+          value={message}
+          className="p-5 text-gray-200 rounded-2xl h-[70px] flex-1 mr-4 bg-transparent border border-gray-600"
+        />
+        <button
+          type="button"
+          onClick={saveMessage}
+          className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-xl w-24 h-[70px] text-lg flex items-center justify-center transition-all hover:border-4 duration-200"
+        >
+          <IoSend></IoSend>
+        </button>
       </div>
     </div>
   );

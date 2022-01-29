@@ -11,6 +11,8 @@ import { useGunAccount } from "../../stores/useGunAccount";
 import { storePrivateKey } from "../../scripts/storage/storeAccount";
 import { toast } from "react-toastify";
 import BN from "bn.js";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { IoPersonAdd } from "react-icons/io5";
 
 interface MainpageProps {}
 
@@ -127,10 +129,10 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
   };
 
   return (
-    <div className="flex flex-row justify-start mt-12">
+    <div className="flex flex-row justify-start h-[82vh] relative">
       <div className="w-1/4 px-5">
-        <div className="text-2xl text-white mb-2">Friends</div>
-        <div className="flex flex-row items-center mb-6">
+        <div className="text-2xl text-white mb-2 pt-6">Friends</div>
+        <div className="flex flex-row items-center mb-4">
           <input
             id="friend"
             onChange={(e) => {
@@ -139,13 +141,13 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
             placeholder="Reciever address"
             name="address"
             value={friendInput}
-            className="p-5 w-96 h-16 text-black rounded-lg"
+            className="p-5 w-4/5 h-16 text-black rounded-lg"
           />
           <button
             onClick={() => handleAddFriend()}
-            className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black flex-1 h-16 ml-2 text-lg"
+            className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg flex-1 h-16 w-16 ml-2 text-lg flex items-center justify-center"
           >
-            Add
+            <IoPersonAdd></IoPersonAdd>
           </button>
         </div>
         <div>
@@ -153,19 +155,20 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
             friendList.map((element: any) => {
               return (
                 <div
-                  className="w-full bg-white rounded-lg h-16 text-black flex flex-row justify-between items-center text-xl my-2 cursor-pointer hover:scale-105 transition-all duration-100"
+                  className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-105 border border-gray-800"
                   onClick={() => handleSetFriend(element)}
                 >
-                  <div className="ml-5 overflow-hidden">{`${element.substring(
+                  <div className="h-12 w-12 rounded-full bg-slate-800"></div>
+                  <div className="overflow-hidden">{`${element.substring(
                     0,
-                    25
+                    22
                   )}...`}</div>
                   <div>
                     <button
                       onClick={() => handleRemoveFriend(element)}
-                      className="bg-red-500 w-24 h-12 mr-3 rounded-md font-bold text-sm"
+                      className="bg-red-500 w-12 h-12 rounded-md font-bold text-sm flex items-center justify-center"
                     >
-                      Delete
+                      <FaRegTrashAlt></FaRegTrashAlt>
                     </button>
                   </div>
                 </div>
@@ -175,21 +178,21 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
       </div>
       <div className="w-2/3 ml-10">
         {isGunLogged && (
-          <div className="mt-10">
-            <button
-              onClick={() => generateKeyPair()}
-              className="border-[3px] border-yellow-500 bg-yellow-300 p-4 rounded-lg text-black h-[70px] text-lg w-60"
-            >
-              Generate new private key
-            </button>
+          <div>
+            {!privateKey && (
+              <button
+                onClick={() => generateKeyPair()}
+                className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 text-white h-[70px] text-lg w-2/3"
+              >
+                Generate new private key
+              </button>
+            )}
             <div className="text-xl">
               <Moralis></Moralis>
             </div>
           </div>
         )}
-        <div className="text-xl">
-          <Auth wallet={address}></Auth>
-        </div>
+        <Auth wallet={address}></Auth>
       </div>
     </div>
   );
