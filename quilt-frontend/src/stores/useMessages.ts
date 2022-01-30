@@ -74,7 +74,6 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
 
       // if message is already stored do not change state
       if (state.storedMessages.has(hashedMessage)) {
-        console.log("message is already stored");
         return {
           messages: state.messages,
           storedMessages: state.storedMessages,
@@ -115,8 +114,6 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
       const newFriendlist = state.friendList;
       newFriendlist.delete(address);
 
-      console.log(newFriendlist);
-      console.log(Array.from(newFriendlist));
       storeFriendsList(Array.from(newFriendlist));
       return {
         friendList: newFriendlist,

@@ -44,6 +44,13 @@ const config: HardhatUserConfig = {
           ? [process.env.PRIVATE_KEY_MUMBAI]
           : [],
     },
+    fuji: {
+      url: process.env.FUJI_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY_MUMBAI !== undefined
+          ? [process.env.PRIVATE_KEY_MUMBAI]
+          : [],
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,

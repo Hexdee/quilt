@@ -6,6 +6,7 @@ import { useUserData } from "../stores/useUserData";
 import { LoadableButton } from "./base/LoadableButton";
 import Logo from "../assets/quilt.png";
 import { toast } from "react-toastify";
+import { networks } from "../constants/networks";
 
 interface NavBarProps {}
 
@@ -22,10 +23,20 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
   const handleConnectWallet = useCallback(async () => {
     try {
-      console.log("handleConnectWallet");
       setIsConnecting(true);
       if (!window.ethereum) throw new Error("Cannot find MetaMask");
 
+      // Switch networks
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            ...networks["fuji"],
+          },
+        ],
+      });
+
+      // Set up wallet
       const provider = new ethers.providers.Web3Provider(
         window.ethereum,
         "any"

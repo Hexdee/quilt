@@ -42,7 +42,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
       const [privateKey, publicKey] = curve.makeKeyPair();
 
-      if (!publicKey) return;
+      if (!publicKey || !privateKey) return;
 
       await keyStorage.setUserKey(
         BigNumber.from(publicKey.x.toString(10)),
@@ -84,11 +84,10 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
   const handleRemoveFriend = (address: string) => {
     toast.info(`Removed a friend: ${address}`);
-    console.log(address);
     removeFriend(address);
   };
 
-  const handleSetFriend = async (address: string) => {
+  const handleSetFriend = async (friendAddress: string) => {
     try {
       if (!privateKey) {
         throw new Error("Private key is not generated");
@@ -97,18 +96,12 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
       if (!(curve && contract && encryptor))
         throw new Error("Try restarting application");
 
-      setRecieverAddress(address);
-      const targetUserPublicKey = await contract.getUserKey(address);
+      setRecieverAddress(friendAddress);
+      const targetUserPublicKey = await contract.getUserKey(friendAddress);
 
       if (targetUserPublicKey.x.isZero()) {
         throw new Error("User doesn't have an account");
       }
-      console.log(
-        `fetched public key X -> ${targetUserPublicKey.x.toString()}`
-      );
-      console.log(
-        `fetched public key X -> ${targetUserPublicKey.y.toString()}`
-      );
 
       const targetUserPublicKeyTrans = {
         x: new BN(targetUserPublicKey.x.toString(), 10),
@@ -119,9 +112,8 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
         new BN(privateKey, 10),
         targetUserPublicKeyTrans
       );
-      console.log(`generated shared key -> ${sharedSecret.toString()}`);
-      encryptor.setSharedSecret(address, sharedSecret.toString());
 
+      encryptor.setSharedSecret(friendAddress, sharedSecret.toString());
       toast.success("Successfully connected");
     } catch (err: any) {
       toast.error(err.message);

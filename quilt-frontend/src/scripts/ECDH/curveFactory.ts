@@ -144,11 +144,6 @@ class EllipticCurve {
     if (!this.isOnCurve(point))
       return new Error("given point is not on the curve");
 
-    console.log("passed");
-    console.log("k -> " + k.toString());
-    console.log("n -> " + this.parameters.n.toString());
-    console.log(k.mod(this.parameters.n).toString());
-
     if (k.mod(this.parameters.n).eq(ZERO) || !point) {
       return null;
     }
@@ -167,8 +162,6 @@ class EllipticCurve {
       addend = this.pointAdd(addend, addend);
       k = k.shrn(1);
     }
-
-    console.log(result);
 
     if (!this.isOnCurve(result))
       return new Error("Calulated point is not on the curve");
@@ -192,9 +185,6 @@ class EllipticCurve {
   }
 
   generateSharedSecret(privateKey: BN, publicKey: Point): BN {
-    const value = this.scalarMult(privateKey, publicKey).x;
-    console.log(value);
-
     return this.scalarMult(privateKey, publicKey).x;
   }
 }

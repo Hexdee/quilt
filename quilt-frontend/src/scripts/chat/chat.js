@@ -35,7 +35,6 @@ const Chat = (props) => {
         .encrypt(message, recieverAddress)
         .toString();
 
-      console.log("message (encrypted) -> " + encryptedMessage);
       const messages = gun.get(recieverAddress);
       const messageData = {
         name: userAddress,
@@ -54,7 +53,6 @@ const Chat = (props) => {
   // Listening
   useEffect(() => {
     const messages = gun.get(userAddress);
-    console.log("listening on topic -> " + userAddress);
     messages.map().on((...props) => {
       const m = props[0];
       addMessages(m);
@@ -70,12 +68,10 @@ const Chat = (props) => {
     if (!recieverAddress) return;
 
     const messages = gun.get(recieverAddress);
-    console.log("listening for user messages on topic -> " + recieverAddress);
     messages.map().on((...props) => {
       const m = props[0];
 
       if (props[0].name === userAddress) {
-        console.log("adding user message");
         addSelf(m, recieverAddress);
       }
     });

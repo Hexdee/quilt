@@ -66,7 +66,7 @@ const Auth = (props) => {
           <div className="form-group flex flex-col w-2/3">
             <label
               htmlFor="exampleInputPassword1"
-              className="text-xl block mb-2 ml-3 pt-6"
+              className="text-xl block mb-2 ml-3 pt-7"
             >
               Password
             </label>

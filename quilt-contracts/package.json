@@ -7,7 +7,8 @@
   "scripts": {
     "node": "npx hardhat node",
     "deploy-local": "npx hardhat run --network localhost scripts/deployLocal.ts",
-    "deploy-mumbai": "npx hardhat run --network mumbai scripts/deploy.ts"
+    "deploy-mumbai": "npx hardhat run --network mumbai scripts/deploy.ts",
+    "deploy-fuji": "npx hardhat run --network fuji scripts/deploy.ts"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
