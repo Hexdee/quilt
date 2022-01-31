@@ -2,7 +2,7 @@ import create from "zustand";
 import { SHA256 } from "crypto-js";
 import { storeFriendsList } from "../scripts/storage/storeFriendsList";
 
-interface MessageType {
+export interface MessageType {
   name: string;
   message: string;
   createdAt: number;
@@ -59,8 +59,10 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
         newUserMessages = [message];
       }
 
+      newUserMessages.sort((a, b) => b.createdAt - a.createdAt);
+      //newUserMessages = newUserMessages.slice(0, 20);
+
       const newStoredMessages = state.storedMessages.add(hashedMessage);
-      newUserMessages = newUserMessages.slice(0, 10);
       messagesAppended.set(username, newUserMessages);
 
       return { messages: messagesAppended, storedMessages: newStoredMessages };
@@ -94,8 +96,10 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
         newUserMessages = [message];
       }
 
+      newUserMessages.sort((a, b) => b.createdAt - a.createdAt);
+      //newUserMessages = newUserMessages.slice(0, 20);
+
       const newStoredMessages = state.storedMessages.add(hashedMessage);
-      newUserMessages = newUserMessages.slice(0, 10);
       messagesAppended.set(recieverAddress, newUserMessages);
 
       return { messages: messagesAppended, storedMessages: newStoredMessages };

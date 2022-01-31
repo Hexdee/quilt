@@ -101,6 +101,8 @@ const Chat = (props) => {
               );
             }
 
+            //if (!decryptedMessage) return () => null;
+
             if (message && message.name === recieverAddress) {
               return (
                 <div className="flex flex-col items-start mt-2">

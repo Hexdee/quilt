@@ -7,11 +7,13 @@ import { LoadableButton } from "./base/LoadableButton";
 import Logo from "../assets/quilt.png";
 import { toast } from "react-toastify";
 import { networks } from "../constants/networks";
+import { useMoralis } from "react-moralis";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
+  const { authenticate, isAuthenticated, isAuthenticating } = useMoralis();
 
   const login = useUserData((state) => state.login);
   const logout = useUserData((state) => state.logout);
@@ -47,6 +49,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
       if (!signer) return new Error("Metamask is not connected");
 
+      authenticate();
+
       login(address);
       setBalance((await provider.getSigner().getBalance()).toString());
       setProvider(provider);
@@ -55,7 +59,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       toast.error(error.message);
       setIsConnecting(false);
     }
-  }, [login, setProvider, setBalance]);
+  }, [login, setProvider, setBalance, authenticate]);
 
   useEffect(() => {
     handleConnectWallet();
@@ -72,7 +76,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           <img src={Logo} alt="" className="w-32" />
         </NavLink>
         <div className="flex flex-row">
-          {isLogged ? (
+          {isLogged && isAuthenticated ? (
             <>
               <LoadableButton
                 isLoading={false}
@@ -89,7 +93,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             </>
           ) : (
             <LoadableButton
-              isLoading={isConnecting}
+              isLoading={isConnecting || isAuthenticating}
               description="connect wallet"
               handleClick={() => handleConnectWallet()}
               className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 rounded-lg text-white w-60 h-16 m-2 text-lg mr-4"
