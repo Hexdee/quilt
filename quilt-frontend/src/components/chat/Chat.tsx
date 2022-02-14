@@ -1,19 +1,27 @@
-import { useState, useEffect } from "react";
-import Gun from "gun";
+import { useEncryption } from "../../stores/useEncryption";
 import { useMessages } from "../../stores/useMessages";
 import { useUserData } from "../../stores/useUserData";
-import { useEncryption } from "../../stores/useEncryption";
-import { toast } from "react-toastify";
+import { gunDbAddress } from "../../constants/gundb";
+import { useState, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
-require("gun/sea");
+import { toast } from "react-toastify";
+import Gun from "gun";
+import "gun/sea";
+import { IGunChainReference } from "gun/types/chain";
 
-// initialize gun locally
+// initialize gun
 const gun = Gun({
-  peers: ["https://quilt-chat.herokuapp.com/gun"],
+  peers: [gunDbAddress],
 });
 
-const Chat = (props) => {
-  const user = props.user;
+type GunUser = IGunChainReference<Record<string, any>, any, false>;
+
+interface ChatProps {
+  wallet: string;
+  user: GunUser;
+}
+
+export const Chat: React.FC<ChatProps> = ({ user }) => {
   const [message, setMessage] = useState("");
   const addMessages = useMessages((state) => state.addMessage);
   const addSelf = useMessages((state) => state.addSelf);
@@ -30,24 +38,32 @@ const Chat = (props) => {
     if (!privateKey)
       return toast.error("Generate a private key before sending the message.");
 
-    if (user.is) {
-      const encryptedMessage = encryptor
-        .encrypt(message, recieverAddress)
-        .toString();
-
-      const messages = gun.get(recieverAddress);
-      const messageData = {
-        name: userAddress,
-        message: encryptedMessage,
-        createdAt: Date.now(),
-      };
-      messages.set(messageData);
-      addSelf(messageData, recieverAddress);
-      setMessage("");
-    } else {
+    if (!user.user) {
       toast.error("Not logged in");
       return;
     }
+
+    if (!encryptor) {
+      toast.error("Error while initalizing encryption");
+      return;
+    }
+
+    const encryptedMessage = encryptor.encrypt(message, recieverAddress);
+
+    if (!encryptedMessage) {
+      toast.error("Cannot encrypt the message!");
+      return;
+    }
+
+    const messages = gun.get(recieverAddress);
+    const messageData = {
+      name: userAddress,
+      message: encryptedMessage.toString(),
+      createdAt: Date.now(),
+    };
+    messages.set(messageData);
+    addSelf(messageData, recieverAddress);
+    setMessage("");
   };
 
   // Listening
@@ -63,7 +79,7 @@ const Chat = (props) => {
     };
   }, [userAddress, addMessages]);
 
-  // Listening on user messages
+  // Listening to user messages
   useEffect(() => {
     if (!recieverAddress) return;
 
@@ -90,19 +106,14 @@ const Chat = (props) => {
       <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
         {messagesStoreUser &&
           messagesStoreUser.map((message) => {
-            let decryptedMessage = "";
-
-            if (!encryptor) {
-              decryptedMessage = message.message;
-            } else {
-              decryptedMessage = encryptor.decrypt(
-                message.message,
-                recieverAddress
-              );
-            }
+            // check if encryptor is initialized
+            if (!encryptor) return null;
+            const decryptedMessage =
+              encryptor.decrypt(message.message, recieverAddress) ?? "";
 
             //if (!decryptedMessage) return () => null;
 
+            // receiver messages
             if (message && message.name === recieverAddress) {
               return (
                 <div className="flex flex-col items-start mt-2">
@@ -118,6 +129,7 @@ const Chat = (props) => {
               );
             }
 
+            // user messages
             return (
               <div className="flex flex-col items-end mt-2">
                 <div className="max-w-[320px] min-w-[40px] bg-gradient-to-bl from-sky-500 to-blue-600 mb-1 mt-3 rounded-3xl rounded-br-none">
@@ -145,7 +157,7 @@ const Chat = (props) => {
         />
         <button
           type="button"
-          onClick={saveMessage}
+          onClick={() => saveMessage()}
           className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-xl w-24 h-[70px] text-lg flex items-center justify-center transition-all hover:border-4 duration-200"
         >
           <IoSend></IoSend>
@@ -154,5 +166,3 @@ const Chat = (props) => {
     </div>
   );
 };
-
-export default Chat;

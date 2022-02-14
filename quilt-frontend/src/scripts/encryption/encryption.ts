@@ -1,5 +1,4 @@
 import CryptoJS from "crypto-js";
-
 const SHARED_SECRET_STORAGE_PREFIX = "sharedsecret";
 
 export interface EncryptorInterface {
@@ -16,11 +15,12 @@ export interface EncryptorInterface {
 }
 
 const storeToStorageWithPrefix = (key: string, value: string) => {
-  localStorage.setItem(SHARED_SECRET_STORAGE_PREFIX + key, value);
+  // localStorage.setItem(SHARED_SECRET_STORAGE_PREFIX + key, value);
 };
 
 const readStorageWithPrefix = (key: string) => {
-  return localStorage.getItem(SHARED_SECRET_STORAGE_PREFIX + key);
+  return null;
+  // return localStorage.getItem(SHARED_SECRET_STORAGE_PREFIX + key);
 };
 
 export const createEncryptor = () => {
@@ -62,7 +62,6 @@ export const createEncryptor = () => {
     try {
       return CryptoJS.AES.decrypt(message, secret).toString(CryptoJS.enc.Utf8);
     } catch (error) {
-      //return "[ ERROR: cannot decrypt ] user possibly generated a new public key or is being impersonated";
       return "";
     }
   };

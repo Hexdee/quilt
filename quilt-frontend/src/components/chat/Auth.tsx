@@ -1,36 +1,39 @@
 import { useState } from "react";
 import Gun from "gun";
-import Chat from "./chat";
+import { Chat } from "./Chat";
 import { toast } from "react-toastify";
 import { useGunAccount } from "../../stores/useGunAccount";
-import { readUsername, storeUsername } from "../storage/storeAccount";
+import {
+  readUsername,
+  storeUsername,
+} from "../../scripts/storage/storeAccount";
+import { gunDbAddress } from "../../constants/gundb";
+import { generateRandomHex } from "../../scripts/randomizaiton/generateRandom";
 require("gun/sea");
 
-// initialize gun locally
+// initialize gun
 const gun = Gun({
-  peers: ["https://quilt-chat.herokuapp.com/gun"],
+  peers: [gunDbAddress],
 });
 
-const Auth = (props) => {
-  const walletAddress = props.wallet;
+interface AuthProps {
+  wallet: string;
+}
+
+export const Auth: React.FC<AuthProps> = ({ wallet: walletAddress }) => {
   const isGunLogged = useGunAccount((state) => state.isLogged);
   const setGunLogged = useGunAccount((state) => state.setIsLogged);
   const setGunUsername = useGunAccount((state) => state.setUsername);
-
-  //Database
-  let client = gun.user();
   const [pass, setPass] = useState("");
 
-  const genRanHex = (size) =>
-    [...Array(size)]
-      .map(() => Math.floor(Math.random() * 16).toString(16))
-      .join("");
+  let client = gun.user().recall({ sessionStorage: true });
 
-  const signUp = () => {
-    const generatedUsername = genRanHex(30);
+  const register = () => {
+    const generatedUsername = generateRandomHex(30);
 
-    client.create(generatedUsername, pass, ({ err }) => {
-      if (err) return toast.error(err);
+    // TODO: solve this TS error. Not sure how to handle this union
+    client.create(generatedUsername, pass, (args: any) => {
+      if (args.err) return toast.error(args.err);
 
       storeUsername(generatedUsername);
       setGunUsername(generatedUsername);
@@ -38,22 +41,20 @@ const Auth = (props) => {
     });
   };
 
-  const signIn = () => {
+  const login = () => {
     const username = readUsername();
     if (!username) return toast.error("Please create your account");
 
-    client.auth(username, pass, ({ err }) => {
-      if (err) return toast.error(err);
+    // TODO: solve this TS error. Not sure how to handle this union
+    client.auth(username, pass, (args: any) => {
+      if (args.err) return toast.error(args.err);
 
       setGunLogged(true);
       storeUsername(username);
       setGunUsername(username);
-      toast.success("Sign in successful!");
+      toast.success("Signed in successfully!");
     });
   };
-
-  //Gun User
-  client = gun.user().recall({ sessionStorage: true });
 
   return (
     <div>
@@ -84,7 +85,7 @@ const Auth = (props) => {
               <button
                 id="in"
                 type="button"
-                onClick={signIn}
+                onClick={login}
                 className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg h-16 text-lg mr-2 w-full"
               >
                 Sign in
@@ -92,7 +93,7 @@ const Auth = (props) => {
               <button
                 id="up"
                 type="button"
-                onClick={signUp}
+                onClick={register}
                 className="bg-gradient-to-tl to-sky-600 from-blue-700 text-white p-4 rounded-lg h-16 text-lg ml-2 w-full"
               >
                 Sign up
@@ -104,5 +105,3 @@ const Auth = (props) => {
     </div>
   );
 };
-
-export default Auth;

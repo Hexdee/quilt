@@ -1,38 +1,38 @@
-import { BigNumber } from "ethers";
-import React, { useEffect, useState } from "react";
-import Auth from "../../scripts/chat/auth";
-import Moralis from "../../scripts/chat/moralis";
-import { useContracts } from "../../stores/useContracts";
+import { storePrivateKey } from "../../scripts/storage/storeAccount";
+import { useGunAccount } from "../../stores/useGunAccount";
 import { useEncryption } from "../../stores/useEncryption";
+import { useContracts } from "../../stores/useContracts";
 import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
 import { useUserData } from "../../stores/useUserData";
-import { useGunAccount } from "../../stores/useGunAccount";
-import { storePrivateKey } from "../../scripts/storage/storeAccount";
-import { toast } from "react-toastify";
-import BN from "bn.js";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FriendListItem } from "../FriendListItem";
+import React, { useEffect, useState } from "react";
+import { Auth } from "../chat/Auth";
 import { IoPersonAdd } from "react-icons/io5";
+import { toast } from "react-toastify";
+import { BigNumber } from "ethers";
+import BN from "bn.js";
 
 interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = ({}) => {
-  const privateKey = useEncryption((state) => state.privateKey);
-  const setPrivateKey = useEncryption((state) => state.setPrivateKey);
-  const [publicX, setPublicX] = useState<String>("");
-  const [publicY, setPublicY] = useState<String>("");
   const [friendInput, setFriendInput] = useState<string>("");
-  const keyStorage = useContracts((state) => state.contract);
   const provider = useProvider((state) => state.provider);
   const address = useUserData((state) => state.address);
+  const isGunLogged = useGunAccount((state) => state.isLogged);
+
+  const setPrivateKey = useEncryption((state) => state.setPrivateKey);
+  const privateKey = useEncryption((state) => state.privateKey);
+  const encryptor = useEncryption((state) => state.encryptor);
   const curve = useEncryption((state) => state.curve);
+
   const friendList = useMessages((state) => Array.from(state.friendList));
   const addFriend = useMessages((state) => state.addFriend);
   const removeFriend = useMessages((state) => state.removeFriend);
   const setRecieverAddress = useMessages((state) => state.setRecieverAddress);
+
+  const keyStorage = useContracts((state) => state.contract);
   const contract = useContracts((state) => state.contract);
-  const encryptor = useEncryption((state) => state.encryptor);
-  const isGunLogged = useGunAccount((state) => state.isLogged);
 
   const generateKeyPair = async () => {
     try {
@@ -51,8 +51,6 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
 
       setPrivateKey(privateKey.toString(10));
       storePrivateKey(privateKey.toString(10));
-      setPublicX(publicKey.x.toString(10));
-      setPublicY(publicKey.y.toString(10));
 
       toast.success("Successfully generated a new key");
     } catch (err: any) {
@@ -144,45 +142,24 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
         </div>
         <div>
           {friendList &&
-            friendList.map((element: any) => {
-              return (
-                <div
-                  className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-105 border border-gray-800"
-                  onClick={() => handleSetFriend(element)}
-                >
-                  <div className="h-12 w-12 rounded-full bg-slate-800"></div>
-                  <div className="overflow-hidden">{`${element.substring(
-                    0,
-                    22
-                  )}...`}</div>
-                  <div>
-                    <button
-                      onClick={() => handleRemoveFriend(element)}
-                      className="bg-red-500 w-12 h-12 rounded-md font-bold text-sm flex items-center justify-center"
-                    >
-                      <FaRegTrashAlt></FaRegTrashAlt>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+            friendList.map((element) => (
+              <FriendListItem
+                key={element}
+                address={element}
+                handleRemoveFriend={handleRemoveFriend}
+                handleSetFriend={handleSetFriend}
+              ></FriendListItem>
+            ))}
         </div>
       </div>
       <div className="w-2/3 ml-10">
-        {isGunLogged && (
-          <div>
-            {!privateKey && (
-              <button
-                onClick={() => generateKeyPair()}
-                className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 text-white h-[70px] text-lg w-2/3"
-              >
-                Generate new private key
-              </button>
-            )}
-            <div className="text-xl">
-              <Moralis></Moralis>
-            </div>
-          </div>
+        {isGunLogged && !privateKey && (
+          <button
+            onClick={() => generateKeyPair()}
+            className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 text-white h-[70px] text-lg w-2/3 block"
+          >
+            Generate new private key
+          </button>
         )}
         <Auth wallet={address}></Auth>
       </div>
