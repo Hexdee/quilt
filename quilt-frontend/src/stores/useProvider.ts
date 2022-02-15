@@ -9,5 +9,5 @@ interface ProviderStore {
 export const useProvider = create<ProviderStore>((set) => ({
   provider: null,
   setProvider: (newProvider: ethers.providers.Web3Provider) =>
-    set(() => ({ provider: newProvider })),
+    set({ provider: newProvider }),
 }));

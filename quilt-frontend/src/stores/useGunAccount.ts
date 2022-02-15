@@ -10,6 +10,6 @@ interface useGunAccountStore {
 export const useGunAccount = create<useGunAccountStore>((set) => ({
   username: "",
   isLogged: false,
-  setUsername: (newUsername: string) => set(() => ({ username: newUsername })),
-  setIsLogged: (isLogged: boolean) => set(() => ({ isLogged })),
+  setUsername: (newUsername: string) => set({ username: newUsername }),
+  setIsLogged: (isLogged: boolean) => set({ isLogged }),
 }));

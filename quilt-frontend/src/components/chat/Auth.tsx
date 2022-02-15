@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Gun from "gun";
-import { Chat } from "./Chat";
 import { toast } from "react-toastify";
+
+import { Chat } from "./Chat";
 import { useGunAccount } from "../../stores/useGunAccount";
 import {
   readUsername,

@@ -1,17 +1,19 @@
-import { storePrivateKey } from "../../scripts/storage/storeAccount";
+import React, { useEffect, useState } from "react";
+import { IoPersonAdd } from "react-icons/io5";
+import { toast } from "react-toastify";
+import { BigNumber } from "ethers";
+import BN from "bn.js";
+
 import { useGunAccount } from "../../stores/useGunAccount";
 import { useEncryption } from "../../stores/useEncryption";
 import { useContracts } from "../../stores/useContracts";
 import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
 import { useUserData } from "../../stores/useUserData";
+
+import { storePrivateKey } from "../../scripts/storage/storeAccount";
 import { FriendListItem } from "../FriendListItem";
-import React, { useEffect, useState } from "react";
 import { Auth } from "../chat/Auth";
-import { IoPersonAdd } from "react-icons/io5";
-import { toast } from "react-toastify";
-import { BigNumber } from "ethers";
-import BN from "bn.js";
 
 interface MainpageProps {}
 

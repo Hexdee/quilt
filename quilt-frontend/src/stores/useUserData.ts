@@ -13,7 +13,7 @@ export const useUserData = create<UserDataStore>((set) => ({
   isLogged: false,
   address: "",
   balance: "",
-  setBalance: (newBalance: string) => set(() => ({ balance: newBalance })),
-  login: (address: string) => set(() => ({ address, isLogged: true })),
-  logout: () => set(() => ({ address: "", isLogged: false })),
+  setBalance: (newBalance: string) => set({ balance: newBalance }),
+  login: (address: string) => set({ address, isLogged: true }),
+  logout: () => set({ address: "", isLogged: false }),
 }));

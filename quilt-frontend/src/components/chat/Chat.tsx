@@ -1,20 +1,20 @@
-import { useEncryption } from "../../stores/useEncryption";
-import { useMessages } from "../../stores/useMessages";
-import { useUserData } from "../../stores/useUserData";
-import { gunDbAddress } from "../../constants/gundb";
 import { useState, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
 import { toast } from "react-toastify";
 import Gun from "gun";
 import "gun/sea";
-import { IGunChainReference } from "gun/types/chain";
+
+import { useEncryption } from "../../stores/useEncryption";
+import { useMessages } from "../../stores/useMessages";
+import { useUserData } from "../../stores/useUserData";
+
+import { gunDbAddress } from "../../constants/gundb";
+import { GunUser } from "../../types/GunTypes";
 
 // initialize gun
 const gun = Gun({
   peers: [gunDbAddress],
 });
-
-type GunUser = IGunChainReference<Record<string, any>, any, false>;
 
 interface ChatProps {
   wallet: string;

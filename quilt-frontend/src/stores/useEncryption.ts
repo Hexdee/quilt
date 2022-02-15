@@ -3,8 +3,8 @@ import { EllipticCurveInterface } from "../scripts/ECDH/curveFactory";
 import { EncryptorInterface } from "../scripts/encryption/encryption";
 
 interface EncryptionStore {
-  curve: EllipticCurveInterface | null;
-  encryptor: EncryptorInterface | null;
+  curve: EllipticCurveInterface | undefined;
+  encryptor: EncryptorInterface | undefined;
   privateKey: string;
   setPrivateKey: (newKey: string) => void;
   setCurve: (newCurve: EllipticCurveInterface) => void;
@@ -12,12 +12,11 @@ interface EncryptionStore {
 }
 
 export const useEncryption = create<EncryptionStore>((set) => ({
-  curve: null,
-  encryptor: null,
+  curve: undefined,
+  encryptor: undefined,
   privateKey: "",
-  setPrivateKey: (newKey: string) => set(() => ({ privateKey: newKey })),
-  setCurve: (newCurve: EllipticCurveInterface) =>
-    set(() => ({ curve: newCurve })),
+  setPrivateKey: (newKey: string) => set({ privateKey: newKey }),
+  setCurve: (newCurve: EllipticCurveInterface) => set({ curve: newCurve }),
   setEncryptor: (newEncryptor: EncryptorInterface) =>
-    set(() => ({ encryptor: newEncryptor })),
+    set({ encryptor: newEncryptor }),
 }));

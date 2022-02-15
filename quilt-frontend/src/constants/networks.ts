@@ -1,4 +1,16 @@
-export const networks = {
+interface NetworkDetails {
+  chainId: string;
+  chainName: string;
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number;
+  };
+  rpcUrls: string[];
+  blockExplorerUrls: string[];
+}
+
+export const networks: { [name: string]: NetworkDetails } = {
   fuji: {
     chainId: `0x${Number(43113).toString(16)}`,
     chainName: "Avalanche Fuji Testnet",

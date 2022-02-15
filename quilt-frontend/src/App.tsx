@@ -1,3 +1,8 @@
+import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { useCallback, useEffect } from "react";
+import { ethers } from "ethers";
+
 import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
 import { CONTRACT_ADDRESS_FUJI } from "./constants/contractConstants";
 import { readFriendsList } from "./scripts/storage/storeFriendsList";
@@ -6,16 +11,14 @@ import { createEncryptor } from "./scripts/encryption/encryption";
 import { KeyStorage } from "./ABI/typechain/KeyStorage";
 import { useGunAccount } from "./stores/useGunAccount";
 import { Mainpage } from "./components/pages/Mainpage";
+
 import { useEncryption } from "./stores/useEncryption";
 import { useContracts } from "./stores/useContracts";
 import { useMessages } from "./stores/useMessages";
 import { useProvider } from "./stores/useProvider";
+
 import ContractData from "./ABI/KeyStorage.json";
-import { Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { useCallback, useEffect } from "react";
 import { NavBar } from "./components/NavBar";
-import { ethers } from "ethers";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -30,7 +33,7 @@ function App() {
 
   const initializeConctractInstance = useCallback(() => {
     if (!(CONTRACT_ADDRESS_FUJI && provider)) {
-      throw new Error("Failed to connect to the contract");
+      return new Error("Failed to connect to the contract");
     }
 
     setContract(
@@ -56,7 +59,7 @@ function App() {
     const privateKey = readPrivateKey();
     const username = readUsername();
 
-    if (!privateKey || !username) {
+    if (!(privateKey && username)) {
       return;
     }
 
@@ -77,11 +80,9 @@ function App() {
 
   useEffect(() => {
     if (!isGunLogged) return;
-
-    const friendsList: undefined | Array<string> = readFriendsList();
+    const friendsList: string[] | undefined = readFriendsList();
 
     if (!friendsList?.length) return;
-
     setFriendsList(friendsList);
   }, [isGunLogged, setFriendsList]);
 
@@ -100,7 +101,7 @@ function App() {
       />
       <NavBar />
       <Routes>
-        <Route path="/" element={<Mainpage></Mainpage>} />
+        <Route path="/" element={<Mainpage />} />
       </Routes>
     </>
   );

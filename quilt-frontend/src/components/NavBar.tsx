@@ -1,19 +1,20 @@
-import { ethers } from "ethers";
 import React, { useCallback, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ethers } from "ethers";
+
 import { useProvider } from "../stores/useProvider";
 import { useUserData } from "../stores/useUserData";
+
 import { LoadableButton } from "./base/LoadableButton";
-import Logo from "../assets/quilt.png";
-import { toast } from "react-toastify";
 import { networks } from "../constants/networks";
-import { useMoralis } from "react-moralis";
+
+import Logo from "../assets/quilt.png";
 
 interface NavBarProps {}
 
-export const NavBar: React.FC<NavBarProps> = ({}) => {
+export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
-  const { authenticate, isAuthenticated, isAuthenticating } = useMoralis();
 
   const login = useUserData((state) => state.login);
   const logout = useUserData((state) => state.logout);
@@ -47,9 +48,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       const signer = provider.getSigner();
       const address = await signer.getAddress();
 
-      if (!signer) return new Error("Metamask is not connected");
-
-      authenticate();
+      if (!signer) throw new Error("Metamask is not connected");
 
       login(address);
       setBalance((await provider.getSigner().getBalance()).toString());
@@ -59,7 +58,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       toast.error(error.message);
       setIsConnecting(false);
     }
-  }, [login, setProvider, setBalance, authenticate]);
+  }, [login, setProvider, setBalance]);
 
   useEffect(() => {
     handleConnectWallet();
@@ -76,7 +75,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           <img src={Logo} alt="" className="w-32" />
         </NavLink>
         <div className="flex flex-row">
-          {isLogged && isAuthenticated ? (
+          {isLogged ? (
             <>
               <LoadableButton
                 isLoading={false}
@@ -93,7 +92,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
             </>
           ) : (
             <LoadableButton
-              isLoading={isConnecting || isAuthenticating}
+              isLoading={isConnecting}
               description="connect wallet"
               handleClick={() => handleConnectWallet()}
               className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 rounded-lg text-white w-60 h-16 m-2 text-lg mr-4"
