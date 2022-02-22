@@ -7,9 +7,10 @@ import { useProvider } from "../stores/useProvider";
 import { useUserData } from "../stores/useUserData";
 
 import { LoadableButton } from "./base/LoadableButton";
-import { networks } from "../constants/networks";
+import { AvailableNetworks, networks } from "../constants/networks";
 
 import Logo from "../assets/quilt.png";
+import { trimEthereumAddress } from "../scripts/utils/trimEthereumAddress";
 
 interface NavBarProps {}
 
@@ -22,7 +23,6 @@ export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
 
   const address = useUserData((state) => state.address);
   const setProvider = useProvider((state) => state.setProvider);
-  const setBalance = useUserData((state) => state.setBalance);
 
   const handleConnectWallet = useCallback(async () => {
     try {
@@ -34,7 +34,7 @@ export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
         method: "wallet_addEthereumChain",
         params: [
           {
-            ...networks["fuji"],
+            ...networks[AvailableNetworks.FUJI],
           },
         ],
       });
@@ -51,14 +51,14 @@ export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
       if (!signer) throw new Error("Metamask is not connected");
 
       login(address);
-      setBalance((await provider.getSigner().getBalance()).toString());
+      //setBalance((await provider.getSigner().getBalance()).toString());
       setProvider(provider);
       setIsConnecting(false);
     } catch (error: any) {
       toast.error(error.message);
       setIsConnecting(false);
     }
-  }, [login, setProvider, setBalance]);
+  }, [login, setProvider]);
 
   useEffect(() => {
     handleConnectWallet();
@@ -85,7 +85,7 @@ export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
               />
               <LoadableButton
                 isLoading={false}
-                description={`${address.substring(0, 16)}...`}
+                description={trimEthereumAddress(address, 16)}
                 className="border-2 border-sky-600 p-4 rounded-lg text-white w-60 h-16 m-2 text-xl hover:scale-95 transition-all duration-75"
                 navigate="/profile"
               />

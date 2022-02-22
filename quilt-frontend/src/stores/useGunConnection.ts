@@ -1,12 +1,18 @@
+import { IGunChainReference } from "gun/types/chain";
 import create from "zustand";
 import { GunConnectionType } from "../types/GunTypes";
 
 interface useGunConnectionStore {
-  gun: GunConnectionType | null;
+  gun: GunConnectionType | undefined;
+  gunUser: IGunChainReference<Record<string, any>, any, false> | undefined;
   setGunConnection: (connection: GunConnectionType) => void;
 }
 
 export const useGunConnection = create<useGunConnectionStore>((set) => ({
-  gun: null,
-  setGunConnection: (connection: GunConnectionType) => set({ gun: connection }),
+  gun: undefined,
+  gunUser: undefined,
+  setGunConnection: (connection: GunConnectionType) => {
+    const user = connection.user().recall({ sessionStorage: true });
+    set({ gun: connection, gunUser: user });
+  },
 }));

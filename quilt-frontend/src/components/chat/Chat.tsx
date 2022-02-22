@@ -1,29 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoSend } from "react-icons/io5";
 import { toast } from "react-toastify";
-import Gun from "gun";
-import "gun/sea";
+import { BigNumber } from "ethers";
 
 import { useEncryption } from "../../stores/useEncryption";
 import { useMessages } from "../../stores/useMessages";
 import { useUserData } from "../../stores/useUserData";
 
-import { gunDbAddress } from "../../constants/gundb";
-import { GunUser } from "../../types/GunTypes";
+import { storePrivateKey } from "../../scripts/storage/storeAccount";
+import { trimEthereumAddress } from "../../scripts/utils/trimEthereumAddress";
+import { useContracts } from "../../stores/useContracts";
+import { useProvider } from "../../stores/useProvider";
+import { useMessagingChannel } from "../../hooks/useMessagingChannel";
+import { useGunConnection } from "../../stores/useGunConnection";
 
-// initialize gun
-const gun = Gun({
-  peers: [gunDbAddress],
-});
+interface ChatProps {}
 
-interface ChatProps {
-  wallet: string;
-  user: GunUser;
-}
-
-export const Chat: React.FC<ChatProps> = ({ user }) => {
+export const Chat: React.FC<ChatProps> = () => {
   const [message, setMessage] = useState("");
-  const addMessages = useMessages((state) => state.addMessage);
   const addSelf = useMessages((state) => state.addSelf);
   const recieverAddress = useMessages((state) => state.recieverAddress);
   const messagesStoreUser = useMessages((state) =>
@@ -32,19 +26,56 @@ export const Chat: React.FC<ChatProps> = ({ user }) => {
   const userAddress = useUserData((state) => state.address);
   const encryptor = useEncryption((state) => state.encryptor);
   const privateKey = useEncryption((state) => state.privateKey);
+  const curve = useEncryption((state) => state.curve);
+  const keyStorage = useContracts((state) => state.contract);
+  const provider = useProvider((state) => state.provider);
+  const setPrivateKey = useEncryption((state) => state.setPrivateKey);
+  const gun = useGunConnection((state) => state.gun);
+  const user = useGunConnection((state) => state.gunUser);
+
+  useMessagingChannel(recieverAddress);
+
+  const generateKeyPair = async () => {
+    try {
+      if (!curve) throw new Error("Encryption initialization failed");
+      if (!(keyStorage && provider))
+        throw new Error("Failed to connect with contract");
+
+      const [privateKey, publicKey] = curve.makeKeyPair();
+
+      if (!publicKey || !privateKey) return;
+
+      await keyStorage.setUserKey(
+        BigNumber.from(publicKey.x.toString(10)),
+        BigNumber.from(publicKey.y.toString(10))
+      );
+
+      setPrivateKey(privateKey.toString(10));
+      storePrivateKey(privateKey.toString(10));
+
+      toast.success("Successfully generated a new key");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
 
   // Sending messages
   const saveMessage = () => {
     if (!privateKey)
       return toast.error("Generate a private key before sending the message.");
 
-    if (!user.user) {
+    if (!(user && user.user)) {
       toast.error("Not logged in");
       return;
     }
 
     if (!encryptor) {
       toast.error("Error while initalizing encryption");
+      return;
+    }
+
+    if (!gun) {
+      toast.error("Cannot connect with gunDB");
       return;
     }
 
@@ -66,42 +97,22 @@ export const Chat: React.FC<ChatProps> = ({ user }) => {
     setMessage("");
   };
 
-  // Listening
-  useEffect(() => {
-    const messages = gun.get(userAddress);
-    messages.map().on((...props) => {
-      const m = props[0];
-      addMessages(m);
-    });
-
-    return () => {
-      messages.off();
-    };
-  }, [userAddress, addMessages]);
-
-  // Listening to user messages
-  useEffect(() => {
-    if (!recieverAddress) return;
-
-    const messages = gun.get(recieverAddress);
-    messages.map().on((...props) => {
-      const m = props[0];
-
-      if (props[0].name === userAddress) {
-        addSelf(m, recieverAddress);
-      }
-    });
-
-    return () => {
-      messages.off();
-    };
-  }, [recieverAddress, userAddress, addSelf]);
+  if (!privateKey) {
+    return (
+      <button
+        onClick={() => generateKeyPair()}
+        className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 text-white h-[70px] text-lg w-2/3 block mt-16 rounded-lg"
+      >
+        Generate new private key
+      </button>
+    );
+  }
 
   return (
     <div className="w-2/3 border-x border-gray-700 overflow-hidden h-[88vh] relative px-10 flex flex-col">
       <div className="text-base text-gray-400 pt-6">Chatting with:</div>
       <div className="text-4xl font-bold">
-        {recieverAddress ? `${recieverAddress.substring(0, 26)} . . .` : "-"}
+        {recieverAddress ? trimEthereumAddress(recieverAddress, 26) : "-"}
       </div>
       <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
         {messagesStoreUser &&
@@ -160,7 +171,7 @@ export const Chat: React.FC<ChatProps> = ({ user }) => {
           onClick={() => saveMessage()}
           className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-xl w-24 h-[70px] text-lg flex items-center justify-center transition-all hover:border-4 duration-200"
         >
-          <IoSend></IoSend>
+          <IoSend />
         </button>
       </div>
     </div>

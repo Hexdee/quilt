@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { IoPersonAdd } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { BigNumber } from "ethers";
 import BN from "bn.js";
 
 import { useGunAccount } from "../../stores/useGunAccount";
@@ -11,54 +10,30 @@ import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
 import { useUserData } from "../../stores/useUserData";
 
-import { storePrivateKey } from "../../scripts/storage/storeAccount";
 import { FriendListItem } from "../FriendListItem";
 import { Auth } from "../chat/Auth";
+import { Chat } from "../chat/Chat";
+import { useFriendsList } from "../../stores/useFriendsList";
+import { storeFriendsList } from "../../scripts/storage/storeFriendsList";
 
 interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = ({}) => {
   const [friendInput, setFriendInput] = useState<string>("");
   const provider = useProvider((state) => state.provider);
-  const address = useUserData((state) => state.address);
   const isGunLogged = useGunAccount((state) => state.isLogged);
 
-  const setPrivateKey = useEncryption((state) => state.setPrivateKey);
   const privateKey = useEncryption((state) => state.privateKey);
   const encryptor = useEncryption((state) => state.encryptor);
   const curve = useEncryption((state) => state.curve);
 
-  const friendList = useMessages((state) => Array.from(state.friendList));
-  const addFriend = useMessages((state) => state.addFriend);
-  const removeFriend = useMessages((state) => state.removeFriend);
+  const friends = useFriendsList((state) => state.friends);
+  const addFriend = useFriendsList((state) => state.addFriend);
+  const removeFriend = useFriendsList((state) => state.removeFriend);
   const setRecieverAddress = useMessages((state) => state.setRecieverAddress);
 
   const keyStorage = useContracts((state) => state.contract);
   const contract = useContracts((state) => state.contract);
-
-  const generateKeyPair = async () => {
-    try {
-      if (!curve) throw new Error("Encryption initialization failed");
-      if (!(keyStorage && provider))
-        throw new Error("Failed to connect with contract");
-
-      const [privateKey, publicKey] = curve.makeKeyPair();
-
-      if (!publicKey || !privateKey) return;
-
-      await keyStorage.setUserKey(
-        BigNumber.from(publicKey.x.toString(10)),
-        BigNumber.from(publicKey.y.toString(10))
-      );
-
-      setPrivateKey(privateKey.toString(10));
-      storePrivateKey(privateKey.toString(10));
-
-      toast.success("Successfully generated a new key");
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-  };
 
   useEffect(() => {
     if (!(keyStorage && provider)) {
@@ -75,17 +50,20 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
     };
   }, [keyStorage, provider]);
 
-  const handleAddFriend = () => {
+  const handleAddFriend = useCallback(() => {
     toast.info(`Added new friend: ${friendInput}`);
 
-    addFriend(friendInput.replace(/\s/g, ""));
+    addFriend(friendInput.replace(/\s/g, ""), {});
     setFriendInput("");
-  };
+  }, [addFriend, setFriendInput, friendInput]);
 
-  const handleRemoveFriend = (address: string) => {
-    toast.info(`Removed a friend: ${address}`);
-    removeFriend(address);
-  };
+  const handleRemoveFriend = useCallback(
+    (address: string) => {
+      toast.info(`Removed a friend: ${address}`);
+      removeFriend(address);
+    },
+    [removeFriend]
+  );
 
   const handleSetFriend = async (friendAddress: string) => {
     try {
@@ -120,6 +98,12 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
     }
   };
 
+  useEffect(() => {
+    if (!Object.keys(friends).length) return;
+
+    storeFriendsList(friends);
+  }, [friends]);
+
   return (
     <div className="flex flex-row justify-start h-[82vh] relative">
       <div className="w-1/4 px-5">
@@ -143,8 +127,8 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
           </button>
         </div>
         <div>
-          {friendList &&
-            friendList.map((element) => (
+          {friends &&
+            Object.keys(friends).map((element) => (
               <FriendListItem
                 key={element}
                 address={element}
@@ -154,17 +138,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
             ))}
         </div>
       </div>
-      <div className="w-2/3 ml-10">
-        {isGunLogged && !privateKey && (
-          <button
-            onClick={() => generateKeyPair()}
-            className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 text-white h-[70px] text-lg w-2/3 block"
-          >
-            Generate new private key
-          </button>
-        )}
-        <Auth wallet={address}></Auth>
-      </div>
+      <div className="w-2/3 ml-10">{isGunLogged ? <Chat /> : <Auth />}</div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import create from "zustand";
 import { SHA256 } from "crypto-js";
-import { storeFriendsList } from "../scripts/storage/storeFriendsList";
 
 export interface MessageType {
   name: string;
@@ -11,25 +10,20 @@ export interface MessageType {
 interface useMessagesStore {
   messages: Map<string, Array<MessageType>>;
   storedMessages: Set<string>;
-  friendList: Set<string>;
   recieverAddress: string;
-  setRecieverAddress: (newAddress: string) => void;
+  setRecieverAddress: (address: string) => void;
   addMessage: (message: MessageType) => void;
-  addFriend: (address: string) => void;
-  removeFriend: (address: string) => void;
-  setFriends: (address: Array<string>) => void;
   addSelf: (message: MessageType, recieverAddress: string) => void;
 }
 
 export const useMessages = create<useMessagesStore>((set, get) => ({
   messages: new Map(),
   storedMessages: new Set(),
-  friendList: new Set(),
   recieverAddress: "",
-  setRecieverAddress: (newAddress: string) =>
-    set((state) => ({
-      recieverAddress: newAddress,
-    })),
+  setRecieverAddress: (address: string) =>
+    set({
+      recieverAddress: address,
+    }),
   addMessage: (message: MessageType) =>
     set((state) => {
       const username = message.name;
@@ -104,27 +98,4 @@ export const useMessages = create<useMessagesStore>((set, get) => ({
 
       return { messages: messagesAppended, storedMessages: newStoredMessages };
     }),
-  addFriend: (address: string) =>
-    set((state) => {
-      const newFriendlist = state.friendList.add(address);
-      storeFriendsList(Array.from(newFriendlist));
-
-      return {
-        friendList: newFriendlist,
-      };
-    }),
-  removeFriend: (address: string) =>
-    set((state) => {
-      const newFriendlist = state.friendList;
-      newFriendlist.delete(address);
-
-      storeFriendsList(Array.from(newFriendlist));
-      return {
-        friendList: newFriendlist,
-      };
-    }),
-  setFriends: (friendsList: Array<string>) =>
-    set((state) => ({
-      friendList: new Set(friendsList),
-    })),
 }));

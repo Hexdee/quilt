@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useCallback, useEffect } from "react";
 import { ethers } from "ethers";
+import Gun from "gun";
 
 import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
 import { CONTRACT_ADDRESS_FUJI } from "./constants/contractConstants";
@@ -14,18 +15,21 @@ import { Mainpage } from "./components/pages/Mainpage";
 
 import { useEncryption } from "./stores/useEncryption";
 import { useContracts } from "./stores/useContracts";
-import { useMessages } from "./stores/useMessages";
 import { useProvider } from "./stores/useProvider";
+import { useFriendsList } from "./stores/useFriendsList";
+import { useGunConnection } from "./stores/useGunConnection";
 
 import ContractData from "./ABI/KeyStorage.json";
 import { NavBar } from "./components/NavBar";
+import { gunDbAddress } from "./constants/gundb";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const provider = useProvider((state) => state.provider);
   const setContract = useContracts((state) => state.setContract);
   const isGunLogged = useGunAccount((state) => state.isLogged);
-  const setFriendsList = useMessages((state) => state.setFriends);
+  const setFriendsList = useFriendsList((state) => state.setFriends);
+  const setGunConnection = useGunConnection((state) => state.setGunConnection);
 
   const setPrivateKey = useEncryption((state) => state.setPrivateKey);
   const setEncryptor = useEncryption((state) => state.setEncryptor);
@@ -66,24 +70,37 @@ function App() {
     setPrivateKey(privateKey);
   }, [setPrivateKey]);
 
+  const initializeGunConnection = useCallback(() => {
+    require("gun/sea");
+
+    const gun = Gun({
+      peers: [gunDbAddress],
+    });
+
+    setGunConnection(gun);
+  }, [setGunConnection]);
+
   useEffect(() => {
     initializeConctractInstance();
     initailizeEllipticCurve();
     initializeEncryptor();
     initalizeAccount();
+    initializeGunConnection();
   }, [
     initializeConctractInstance,
     initailizeEllipticCurve,
     initializeEncryptor,
     initalizeAccount,
+    initializeGunConnection,
   ]);
 
   useEffect(() => {
     if (!isGunLogged) return;
-    const friendsList: string[] | undefined = readFriendsList();
+    const friendsObject = readFriendsList();
 
-    if (!friendsList?.length) return;
-    setFriendsList(friendsList);
+    if (!friendsObject || Object.keys(friendsObject).length === 0) return;
+
+    setFriendsList(friendsObject);
   }, [isGunLogged, setFriendsList]);
 
   return (

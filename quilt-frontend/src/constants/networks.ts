@@ -10,7 +10,11 @@ interface NetworkDetails {
   blockExplorerUrls: string[];
 }
 
-export const networks: { [name: string]: NetworkDetails } = {
+export enum AvailableNetworks {
+  FUJI = "fuji",
+}
+
+export const networks: { [name in AvailableNetworks]: NetworkDetails } = {
   fuji: {
     chainId: `0x${Number(43113).toString(16)}`,
     chainName: "Avalanche Fuji Testnet",
