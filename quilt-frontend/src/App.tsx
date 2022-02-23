@@ -4,11 +4,11 @@ import { useCallback, useEffect } from "react";
 import { ethers } from "ethers";
 import Gun from "gun";
 
-import { readPrivateKey, readUsername } from "./scripts/storage/storeAccount";
+import { readPrivateKey, readUsername } from "./modules/storage/storeAccount";
 import { CONTRACT_ADDRESS_FUJI } from "./constants/contractConstants";
-import { readFriendsList } from "./scripts/storage/storeFriendsList";
-import { createEllipticCurve } from "./scripts/ECDH/curveFactory";
-import { createEncryptor } from "./scripts/encryption/encryption";
+import { readFriendsList } from "./modules/storage/storeFriendsList";
+import { createEllipticCurve } from "./modules/ECDH/curveFactory";
+import { createEncryptor } from "./modules/encryption/encryption";
 import { KeyStorage } from "./ABI/typechain/KeyStorage";
 import { useGunAccount } from "./stores/useGunAccount";
 import { Mainpage } from "./components/pages/Mainpage";

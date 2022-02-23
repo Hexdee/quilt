@@ -8,13 +8,12 @@ import { useEncryption } from "../../stores/useEncryption";
 import { useContracts } from "../../stores/useContracts";
 import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
-import { useUserData } from "../../stores/useUserData";
 
 import { FriendListItem } from "../FriendListItem";
 import { Auth } from "../chat/Auth";
 import { Chat } from "../chat/Chat";
 import { useFriendsList } from "../../stores/useFriendsList";
-import { storeFriendsList } from "../../scripts/storage/storeFriendsList";
+import { storeFriendsList } from "../../modules/storage/storeFriendsList";
 
 interface MainpageProps {}
 
@@ -53,7 +52,7 @@ export const Mainpage: React.FC<MainpageProps> = ({}) => {
   const handleAddFriend = useCallback(() => {
     toast.info(`Added new friend: ${friendInput}`);
 
-    addFriend(friendInput.replace(/\s/g, ""), {});
+    addFriend(friendInput.replace(/\s/g, ""), { username: "" });
     setFriendInput("");
   }, [addFriend, setFriendInput, friendInput]);
 

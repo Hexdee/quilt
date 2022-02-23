@@ -1,6 +1,6 @@
 import { IGunChainReference } from "gun/types/chain";
 import create from "zustand";
-import { GunConnectionType } from "../types/GunTypes";
+import { GunConnectionType } from "../types/gun/GunTypes";
 
 interface useGunConnectionStore {
   gun: GunConnectionType | undefined;

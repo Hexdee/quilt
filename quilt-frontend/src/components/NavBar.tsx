@@ -10,7 +10,7 @@ import { LoadableButton } from "./base/LoadableButton";
 import { AvailableNetworks, networks } from "../constants/networks";
 
 import Logo from "../assets/quilt.png";
-import { trimEthereumAddress } from "../scripts/utils/trimEthereumAddress";
+import { trimEthereumAddress } from "../helpers/trimEthereumAddress";
 
 interface NavBarProps {}
 
@@ -51,7 +51,6 @@ export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
       if (!signer) throw new Error("Metamask is not connected");
 
       login(address);
-      //setBalance((await provider.getSigner().getBalance()).toString());
       setProvider(provider);
       setIsConnecting(false);
     } catch (error: any) {

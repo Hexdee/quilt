@@ -6,9 +6,9 @@ import { useGunAccount } from "../../stores/useGunAccount";
 import {
   readUsername,
   storeUsername,
-} from "../../scripts/storage/storeAccount";
+} from "../../modules/storage/storeAccount";
 import { gunDbAddress } from "../../constants/gundb";
-import { generateRandomHex } from "../../scripts/randomization/generateRandom";
+import { generateRandomHex } from "../../helpers/generateRandomHex";
 require("gun/sea");
 
 // initialize gun

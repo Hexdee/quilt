@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { trimEthereumAddress } from "../scripts/utils/trimEthereumAddress";
+import { trimEthereumAddress } from "../helpers/trimEthereumAddress";
 
 interface FriendListItemProps {
   handleSetFriend: (address: string) => void;

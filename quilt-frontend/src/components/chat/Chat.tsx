@@ -7,8 +7,8 @@ import { useEncryption } from "../../stores/useEncryption";
 import { useMessages } from "../../stores/useMessages";
 import { useUserData } from "../../stores/useUserData";
 
-import { storePrivateKey } from "../../scripts/storage/storeAccount";
-import { trimEthereumAddress } from "../../scripts/utils/trimEthereumAddress";
+import { storePrivateKey } from "../../modules/storage/storeAccount";
+import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { useContracts } from "../../stores/useContracts";
 import { useProvider } from "../../stores/useProvider";
 import { useMessagingChannel } from "../../hooks/useMessagingChannel";

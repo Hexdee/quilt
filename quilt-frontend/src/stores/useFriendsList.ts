@@ -2,7 +2,7 @@ import create from "zustand";
 import produce from "immer";
 
 interface FriendDetails {
-  username?: string;
+  username: string;
 }
 
 export type FriendsType = { [address: string]: FriendDetails };
@@ -29,4 +29,10 @@ export const useFriendsList = create<useFriendsListStore>((set) => ({
       })
     ),
   setFriends: (newFriends: FriendsType) => set({ friends: newFriends }),
+  setUsername: (address: string, username: string) =>
+    set(
+      produce<useFriendsListStore>((state) => {
+        state.friends[address].username = username;
+      })
+    ),
 }));

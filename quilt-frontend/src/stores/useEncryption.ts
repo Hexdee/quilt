@@ -1,6 +1,6 @@
 import create from "zustand";
-import { EllipticCurveInterface } from "../scripts/ECDH/curveFactory";
-import { EncryptorInterface } from "../scripts/encryption/encryption";
+import { EllipticCurveInterface } from "../modules/ECDH/curveFactory";
+import { EncryptorInterface } from "../modules/encryption/encryption";
 
 interface EncryptionStore {
   curve: EllipticCurveInterface | undefined;

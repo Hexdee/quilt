@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { CurveData, Point } from "../../types/ECDHTypes";
+import { CurveData, Point } from "../../types/ECDH/ECDHTypes";
 import randomBytes from "randombytes";
 
 type CurvesData = {
