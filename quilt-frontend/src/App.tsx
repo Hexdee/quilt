@@ -12,17 +12,16 @@ import { createEncryptor } from "./modules/encryption/encryption";
 import { KeyStorage } from "./ABI/typechain/KeyStorage";
 import { useGunAccount } from "./stores/useGunAccount";
 import { Mainpage } from "./components/pages/Mainpage";
+import ContractData from "./ABI/KeyStorage.json";
+import { NavBar } from "./components/NavBar";
+import { gunDbAddress } from "./constants/gundb";
+import "react-toastify/dist/ReactToastify.css";
 
 import { useEncryption } from "./stores/useEncryption";
 import { useContracts } from "./stores/useContracts";
 import { useProvider } from "./stores/useProvider";
 import { useFriendsList } from "./stores/useFriendsList";
 import { useGunConnection } from "./stores/useGunConnection";
-
-import ContractData from "./ABI/KeyStorage.json";
-import { NavBar } from "./components/NavBar";
-import { gunDbAddress } from "./constants/gundb";
-import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const provider = useProvider((state) => state.provider);
@@ -95,7 +94,6 @@ function App() {
   ]);
 
   useEffect(() => {
-    if (!isGunLogged) return;
     const friendsObject = readFriendsList();
 
     if (!friendsObject || Object.keys(friendsObject).length === 0) return;

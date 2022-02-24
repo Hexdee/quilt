@@ -1,96 +1,119 @@
-import { useState } from "react";
-import Gun from "gun";
+import { memo, useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import { useGunAccount } from "../../stores/useGunAccount";
-import {
-  readUsername,
-  storeUsername,
-} from "../../modules/storage/storeAccount";
-import { gunDbAddress } from "../../constants/gundb";
 import { generateRandomHex } from "../../helpers/generateRandomHex";
-require("gun/sea");
-
-// initialize gun
-const gun = Gun({
-  peers: [gunDbAddress],
-});
+import { useGunConnection } from "../../stores/useGunConnection";
+import { HashLoader } from "react-spinners";
+import {
+  readGunCredentials,
+  storeGunCredentials,
+} from "../../modules/storage/storeGunCredentials";
+import { GunCredentials } from "../../types/gun/gunCredentials";
+import { GunUser } from "../../types/gun/GunTypes";
 
 interface AuthProps {}
 
-export const Auth: React.FC<AuthProps> = () => {
+export const Auth: React.FC<AuthProps> = memo(() => {
   const setGunLogged = useGunAccount((state) => state.setIsLogged);
-  const setGunUsername = useGunAccount((state) => state.setUsername);
-  const [pass, setPass] = useState("");
+  const isGunLogged = useGunAccount((state) => state.isLogged);
+  const client = useGunConnection((state) => state.gunUser);
+  const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
-  let client = gun.user().recall({ sessionStorage: true });
+  const generateGunCredentials = useCallback((): GunCredentials => {
+    return {
+      username: generateRandomHex(30),
+      password: generateRandomHex(30),
+    };
+  }, []);
 
-  const register = () => {
-    const generatedUsername = generateRandomHex(30);
+  const createGunAccount = useCallback(
+    (client: GunUser): Promise<GunCredentials> =>
+      new Promise((resolve, reject) => {
+        const credentials = generateGunCredentials();
+        client.create(
+          credentials.username,
+          credentials.password,
+          (args: any) => {
+            if (args.err) {
+              return reject(new Error(args.err));
+            }
 
-    // TODO: solve this TS error. Not sure how to handle this union
-    client.create(generatedUsername, pass, (args: any) => {
-      if (args.err) return toast.error(args.err);
+            toast.success("Successfully signed up!");
+            resolve(credentials);
+          }
+        );
+      }),
+    [generateGunCredentials]
+  );
 
-      storeUsername(generatedUsername);
-      setGunUsername(generatedUsername);
-      toast.success("Successfully signed up!");
-    });
-  };
+  const loginToGunAccount = useCallback(
+    (client: GunUser, credentials: GunCredentials): Promise<boolean> =>
+      new Promise((resolve, reject) => {
+        client.auth(credentials.username, credentials.password, (args: any) => {
+          if (args.err) {
+            return reject(args.err);
+          }
 
-  const login = () => {
-    const username = readUsername();
-    if (!username) return toast.error("Please create your account");
+          setGunLogged(true);
+          storeGunCredentials(credentials);
+          toast.success("Signed in successfully!");
+          resolve(true);
+        });
+      }),
+    [setGunLogged]
+  );
 
-    // TODO: solve this TS error. Not sure how to handle this union
-    client.auth(username, pass, (args: any) => {
-      if (args.err) return toast.error(args.err);
+  useEffect(() => {
+    if (!client) return;
+    if (isConnecting) return;
 
-      setGunLogged(true);
-      storeUsername(username);
-      setGunUsername(username);
-      toast.success("Signed in successfully!");
-    });
-  };
+    const initializeGunAccount = async () => {
+      setIsConnecting(true);
+      try {
+        console.log("Starting");
+        // Check if there are saved gun account credentials
+        let gunCredentials = readGunCredentials();
+
+        // Create gun account
+        if (!gunCredentials) {
+          gunCredentials = await createGunAccount(client);
+        }
+
+        // Check if account has been created
+        if (!gunCredentials) {
+          throw new Error("Cannot create gun account, try again!");
+        }
+
+        console.log(gunCredentials);
+
+        // Login to account
+        await loginToGunAccount(client, gunCredentials);
+        console.log("Ending");
+      } catch (error: any) {
+        toast.error(error.message);
+        console.log(error);
+      }
+      setIsConnecting(false);
+    };
+
+    initializeGunAccount();
+  }, [
+    isConnecting,
+    isGunLogged,
+    client,
+    setGunLogged,
+    generateGunCredentials,
+    createGunAccount,
+    loginToGunAccount,
+  ]);
 
   return (
     <form>
-      <div className="form-group flex flex-col w-2/3">
-        <label
-          htmlFor="exampleInputPassword1"
-          className="text-xl block mb-2 ml-3 pt-7"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          value={pass}
-          onChange={(e) => {
-            setPass(e.target.value);
-          }}
-          id="pass"
-          placeholder="Password"
-          className="p-5 text-black rounded-lg"
-        />
-        <div className="mt-4 flex flex-row items-stretch">
-          <button
-            id="in"
-            type="button"
-            onClick={login}
-            className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg h-16 text-lg mr-2 w-full"
-          >
-            Sign in
-          </button>
-          <button
-            id="up"
-            type="button"
-            onClick={register}
-            className="bg-gradient-to-tl to-sky-600 from-blue-700 text-white p-4 rounded-lg h-16 text-lg ml-2 w-full"
-          >
-            Sign up
-          </button>
-        </div>
+      <div className="form-group flex flex-col items-center justify-center w-2/3 mt-12">
+        <div className="mb-10">Connecting...</div>
+        <HashLoader color="white"></HashLoader>
       </div>
     </form>
   );
-};
+});

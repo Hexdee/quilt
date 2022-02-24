@@ -5,13 +5,13 @@ interface FriendDetails {
   username: string;
 }
 
-export type FriendsType = { [address: string]: FriendDetails };
+export type FriendsList = { [address: string]: FriendDetails };
 
 interface useFriendsListStore {
-  friends: FriendsType;
+  friends: FriendsList;
   addFriend: (address: string, details: FriendDetails) => void;
   removeFriend: (address: string) => void;
-  setFriends: (newFriends: FriendsType) => void;
+  setFriends: (newFriends: FriendsList) => void;
 }
 
 export const useFriendsList = create<useFriendsListStore>((set) => ({
@@ -28,7 +28,7 @@ export const useFriendsList = create<useFriendsListStore>((set) => ({
         delete state.friends[address];
       })
     ),
-  setFriends: (newFriends: FriendsType) => set({ friends: newFriends }),
+  setFriends: (newFriends: FriendsList) => set({ friends: newFriends }),
   setUsername: (address: string, username: string) =>
     set(
       produce<useFriendsListStore>((state) => {

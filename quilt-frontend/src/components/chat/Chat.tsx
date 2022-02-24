@@ -18,10 +18,10 @@ interface ChatProps {}
 
 export const Chat: React.FC<ChatProps> = () => {
   const [message, setMessage] = useState("");
-  const addSelf = useMessages((state) => state.addSelf);
+  const addMessage = useMessages((state) => state.addMessage);
   const recieverAddress = useMessages((state) => state.recieverAddress);
-  const messagesStoreUser = useMessages((state) =>
-    state.messages.get(recieverAddress)
+  const messagesStoreUser = useMessages(
+    (state) => state.messages[recieverAddress]
   );
   const userAddress = useUserData((state) => state.address);
   const encryptor = useEncryption((state) => state.encryptor);
@@ -93,7 +93,7 @@ export const Chat: React.FC<ChatProps> = () => {
       createdAt: Date.now(),
     };
     messages.set(messageData);
-    addSelf(messageData, recieverAddress);
+    addMessage(messageData, recieverAddress);
     setMessage("");
   };
 

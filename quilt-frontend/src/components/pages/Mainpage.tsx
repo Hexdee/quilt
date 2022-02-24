@@ -8,16 +8,16 @@ import { useEncryption } from "../../stores/useEncryption";
 import { useContracts } from "../../stores/useContracts";
 import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
+import { useFriendsList } from "../../stores/useFriendsList";
 
+import { storeFriendsList } from "../../modules/storage/storeFriendsList";
 import { FriendListItem } from "../FriendListItem";
 import { Auth } from "../chat/Auth";
 import { Chat } from "../chat/Chat";
-import { useFriendsList } from "../../stores/useFriendsList";
-import { storeFriendsList } from "../../modules/storage/storeFriendsList";
 
 interface MainpageProps {}
 
-export const Mainpage: React.FC<MainpageProps> = ({}) => {
+export const Mainpage: React.FC<MainpageProps> = () => {
   const [friendInput, setFriendInput] = useState<string>("");
   const provider = useProvider((state) => state.provider);
   const isGunLogged = useGunAccount((state) => state.isLogged);

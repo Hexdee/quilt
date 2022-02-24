@@ -5,9 +5,8 @@ import { useUserData } from "../stores/useUserData";
 
 export const useMessagingChannel = (recieverAddress: string) => {
   const gun = useGunConnection((state) => state.gun);
-  const addMessages = useMessages((state) => state.addMessage);
-  const addSelf = useMessages((state) => state.addSelf);
   const userAddress = useUserData((state) => state.address);
+  const addMessage = useMessages((state) => state.addMessage);
 
   // Listening
   useEffect(() => {
@@ -16,13 +15,13 @@ export const useMessagingChannel = (recieverAddress: string) => {
     const messages = gun.get(userAddress);
     messages.map().on((...props) => {
       const m = props[0];
-      addMessages(m);
+      addMessage(m, undefined);
     });
 
     return () => {
       messages.off();
     };
-  }, [gun, userAddress, addMessages]);
+  }, [gun, userAddress, addMessage]);
 
   // Listening to user messages
   useEffect(() => {
@@ -31,15 +30,15 @@ export const useMessagingChannel = (recieverAddress: string) => {
 
     const messages = gun.get(recieverAddress);
     messages.map().on((...props) => {
-      const m = props[0];
+      const messages = props[0];
 
       if (props[0].name === userAddress) {
-        addSelf(m, recieverAddress);
+        addMessage(messages, recieverAddress);
       }
     });
 
     return () => {
       messages.off();
     };
-  }, [gun, recieverAddress, userAddress, addSelf]);
+  }, [gun, recieverAddress, userAddress, addMessage]);
 };

@@ -1,17 +1,15 @@
-import { FriendsType } from "../../stores/useFriendsList";
+import { FriendsList } from "../../stores/useFriendsList";
 
 const FRIENDS_LIST_KEY = "friendList";
 
-export const storeFriendsList = (friendsList: FriendsType) => {
+export const storeFriendsList = (friendsList: FriendsList) => {
   const serializedObject = JSON.stringify(friendsList);
 
   localStorage.setItem(FRIENDS_LIST_KEY, serializedObject);
 };
-export const readFriendsList = (): FriendsType | undefined => {
+export const readFriendsList = (): FriendsList | undefined => {
   const serializedObject = localStorage.getItem(FRIENDS_LIST_KEY);
   if (!serializedObject) return;
-
-  console.log(JSON.parse(serializedObject));
 
   return JSON.parse(serializedObject);
 };

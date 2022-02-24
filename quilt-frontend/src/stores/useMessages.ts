@@ -1,6 +1,8 @@
 import create from "zustand";
 import { SHA256 } from "crypto-js";
-import produce from "immer";
+import produce, { enableMapSet } from "immer";
+
+enableMapSet();
 
 export interface MessageType {
   name: string;
