@@ -19,6 +19,8 @@ interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = () => {
   const [friendInput, setFriendInput] = useState<string>("");
+  const [isGeneratingSharedKey, setIsGeneratingSharedKey] =
+    useState<boolean>(false);
   const provider = useProvider((state) => state.provider);
   const isGunLogged = useGunAccount((state) => state.isLogged);
 
@@ -65,6 +67,7 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   );
 
   const handleSetFriend = async (friendAddress: string) => {
+    setIsGeneratingSharedKey(true);
     try {
       if (!privateKey) {
         throw new Error("Private key is not generated");
@@ -91,10 +94,10 @@ export const Mainpage: React.FC<MainpageProps> = () => {
       );
 
       encryptor.setSharedSecret(friendAddress, sharedSecret.toString());
-      toast.success("Successfully connected");
     } catch (err: any) {
       toast.error(err.message);
     }
+    setIsGeneratingSharedKey(false);
   };
 
   useEffect(() => {
@@ -137,7 +140,13 @@ export const Mainpage: React.FC<MainpageProps> = () => {
             ))}
         </div>
       </div>
-      <div className="w-2/3 ml-10">{isGunLogged ? <Chat /> : <Auth />}</div>
+      <div className="w-2/3 ml-10">
+        {isGunLogged ? (
+          <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
+        ) : (
+          <Auth />
+        )}
+      </div>
     </div>
   );
 };

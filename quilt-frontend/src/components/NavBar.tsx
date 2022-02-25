@@ -14,7 +14,7 @@ import { trimEthereumAddress } from "../helpers/trimEthereumAddress";
 
 interface NavBarProps {}
 
-export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
+export const NavBar: React.FC<NavBarProps> = () => {
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
 
   const login = useUserData((state) => state.login);
@@ -68,10 +68,10 @@ export const NavBar: React.FC<NavBarProps> = ({ ...props }) => {
   };
 
   return (
-    <div className="h-[12vh] w-full flex flex-row justify-center border-b border-gray-700">
+    <div className="h-[11vh] w-full flex flex-row justify-center border-b border-gray-700">
       <div className="w-5/6  flex flex-row justify-between align-middle items-center">
         <NavLink className="logo-button" to="/">
-          <img src={Logo} alt="" className="w-32" />
+          <img src={Logo} alt="logo" className="w-28" />
         </NavLink>
         <div className="flex flex-row">
           {isLogged ? (

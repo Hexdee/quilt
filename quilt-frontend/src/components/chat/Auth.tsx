@@ -39,7 +39,6 @@ export const Auth: React.FC<AuthProps> = memo(() => {
               return reject(new Error(args.err));
             }
 
-            toast.success("Successfully signed up!");
             resolve(credentials);
           }
         );
@@ -57,7 +56,7 @@ export const Auth: React.FC<AuthProps> = memo(() => {
 
           setGunLogged(true);
           storeGunCredentials(credentials);
-          toast.success("Signed in successfully!");
+          toast.success("Connected successfully!");
           resolve(true);
         });
       }),
