@@ -28,6 +28,7 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   const encryptor = useEncryption((state) => state.encryptor);
   const curve = useEncryption((state) => state.curve);
 
+  const initializedFriendsList = useFriendsList((state) => state.initialized);
   const friends = useFriendsList((state) => state.friends);
   const addFriend = useFriendsList((state) => state.addFriend);
   const removeFriend = useFriendsList((state) => state.removeFriend);
@@ -83,14 +84,14 @@ export const Mainpage: React.FC<MainpageProps> = () => {
         throw new Error("User doesn't have an account");
       }
 
-      const targetUserPublicKeyTrans = {
+      const targetUserPublicKeyTransformed = {
         x: new BN(targetUserPublicKey.x.toString(), 10),
         y: new BN(targetUserPublicKey.y.toString(), 10),
       };
 
       const sharedSecret = curve.generateSharedSecret(
         new BN(privateKey, 10),
-        targetUserPublicKeyTrans
+        targetUserPublicKeyTransformed
       );
 
       encryptor.setSharedSecret(friendAddress, sharedSecret.toString());
@@ -101,10 +102,10 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   };
 
   useEffect(() => {
-    if (!Object.keys(friends).length) return;
+    if (!Object.keys(friends).length && !initializedFriendsList) return;
 
     storeFriendsList(friends);
-  }, [friends]);
+  }, [friends, initializedFriendsList]);
 
   return (
     <div className="flex flex-row justify-start h-[82vh] relative">

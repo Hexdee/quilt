@@ -8,14 +8,18 @@ interface FriendDetails {
 export type FriendsList = { [address: string]: FriendDetails };
 
 interface useFriendsListStore {
+  initialized: boolean;
   friends: FriendsList;
+  setInitialized: (initialized: boolean) => void;
   addFriend: (address: string, details: FriendDetails) => void;
   removeFriend: (address: string) => void;
   setFriends: (newFriends: FriendsList) => void;
 }
 
 export const useFriendsList = create<useFriendsListStore>((set) => ({
+  initialized: false,
   friends: {},
+  setInitialized: (initialized: boolean) => set({ initialized }),
   addFriend: (address: string, details: FriendDetails) =>
     set(
       produce<useFriendsListStore>((state) => {

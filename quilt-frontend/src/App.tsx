@@ -95,6 +95,7 @@ function App() {
 
   useEffect(() => {
     const friendsObject = readFriendsList();
+    useFriendsList.getState().setInitialized(true);
 
     if (!friendsObject || Object.keys(friendsObject).length === 0) return;
 
