@@ -1,71 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { toast } from "react-toastify";
-import { ethers } from "ethers";
 
-import { useProvider } from "../stores/useProvider";
 import { useUserData } from "../stores/useUserData";
-
 import { LoadableButton } from "./base/LoadableButton";
-import { AvailableNetworks, networks } from "../constants/networks";
 
 import Logo from "../assets/quilt.png";
 import { trimEthereumAddress } from "../helpers/trimEthereumAddress";
+import { useWallet } from "../hooks/useWallet";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = () => {
-  const [isConnecting, setIsConnecting] = useState<boolean>(false);
-
-  const login = useUserData((state) => state.login);
-  const logout = useUserData((state) => state.logout);
   const isLogged = useUserData((state) => state.isLogged);
-
   const address = useUserData((state) => state.address);
-  const setProvider = useProvider((state) => state.setProvider);
-
-  const handleConnectWallet = useCallback(async () => {
-    try {
-      setIsConnecting(true);
-      if (!window.ethereum) throw new Error("Cannot find MetaMask");
-
-      // Switch networks
-      await window.ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            ...networks[AvailableNetworks.FUJI],
-          },
-        ],
-      });
-
-      // Set up wallet
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum,
-        "any"
-      );
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-
-      if (!signer) throw new Error("Metamask is not connected");
-
-      login(address);
-      setProvider(provider);
-      setIsConnecting(false);
-    } catch (error: any) {
-      toast.error(error.message);
-      setIsConnecting(false);
-    }
-  }, [login, setProvider]);
+  const [isConnecting, connectWallet, disconnectWallet] = useWallet();
 
   useEffect(() => {
-    handleConnectWallet();
-  }, [handleConnectWallet]);
-
-  const handleDisconnectWallet = () => {
-    logout();
-  };
+    connectWallet();
+  }, [connectWallet]);
 
   return (
     <div className="h-[11vh] w-full flex flex-row justify-center border-b border-gray-700">
@@ -79,7 +31,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
               <LoadableButton
                 isLoading={false}
                 description="disconnect"
-                handleClick={() => handleDisconnectWallet()}
+                handleClick={() => disconnectWallet()}
                 className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg w-60 h-16 m-2 text-lg mr-4"
               />
               <LoadableButton
@@ -93,7 +45,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
             <LoadableButton
               isLoading={isConnecting}
               description="connect wallet"
-              handleClick={() => handleConnectWallet()}
+              handleClick={() => connectWallet()}
               className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 rounded-lg text-white w-60 h-16 m-2 text-lg mr-4"
             />
           )}
