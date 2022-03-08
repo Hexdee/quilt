@@ -14,6 +14,8 @@ import { storeFriendsList } from "../../modules/storage/storeFriendsList";
 import { FriendListItem } from "../FriendListItem";
 import { Auth } from "../chat/Auth";
 import { Chat } from "../chat/Chat";
+import { useMessagesRequests } from "../../stores/useMessagesRequests";
+import { RequestListItem } from "../RequestListItem";
 
 interface MainpageProps {}
 
@@ -33,6 +35,8 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   const addFriend = useFriendsList((state) => state.addFriend);
   const removeFriend = useFriendsList((state) => state.removeFriend);
   const setRecieverAddress = useMessages((state) => state.setRecieverAddress);
+
+  const requests = useMessagesRequests((state) => state.requestList);
 
   const keyStorage = useContracts((state) => state.contract);
   const contract = useContracts((state) => state.contract);
@@ -109,7 +113,7 @@ export const Mainpage: React.FC<MainpageProps> = () => {
 
   return (
     <div className="flex flex-row justify-start h-[82vh] relative">
-      <div className="w-1/4 px-5">
+      <div className="w-1/4 px-5 flex flex-col">
         <div className="text-2xl text-white mb-2 pt-6">Friends</div>
         <div className="flex flex-row items-center mb-4">
           <input
@@ -138,6 +142,18 @@ export const Mainpage: React.FC<MainpageProps> = () => {
                 handleRemoveFriend={handleRemoveFriend}
                 handleSetFriend={handleSetFriend}
               ></FriendListItem>
+            ))}
+        </div>
+        <div className="text-2xl text-white mb-2 pt-6">Requests</div>
+        <div className="overflow-y-scroll scrollbar-hide flex-1">
+          {requests &&
+            Array.from(requests).map((element) => (
+              <RequestListItem
+                key={element}
+                address={element}
+                handleAddFriend={handleAddFriend}
+                handleSetFriend={handleSetFriend}
+              ></RequestListItem>
             ))}
         </div>
       </div>
