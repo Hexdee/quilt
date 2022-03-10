@@ -70,7 +70,6 @@ export const Auth: React.FC<AuthProps> = memo(() => {
     const initializeGunAccount = async () => {
       setIsConnecting(true);
       try {
-        console.log("Starting");
         // Check if there are saved gun account credentials
         let gunCredentials = readGunCredentials();
 
@@ -84,16 +83,14 @@ export const Auth: React.FC<AuthProps> = memo(() => {
           throw new Error("Cannot create gun account, try again!");
         }
 
-        console.log(gunCredentials);
-
         // Login to account
         await loginToGunAccount(client, gunCredentials);
-        console.log("Ending");
+        setIsConnecting(false);
       } catch (error: any) {
+        setIsConnecting(false);
         toast.error(error.message);
         console.log(error);
       }
-      setIsConnecting(false);
     };
 
     initializeGunAccount();

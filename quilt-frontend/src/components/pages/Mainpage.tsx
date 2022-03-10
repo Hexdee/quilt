@@ -151,7 +151,6 @@ export const Mainpage: React.FC<MainpageProps> = () => {
               <RequestListItem
                 key={element}
                 address={element}
-                handleAddFriend={handleAddFriend}
                 handleSetFriend={handleSetFriend}
               ></RequestListItem>
             ))}

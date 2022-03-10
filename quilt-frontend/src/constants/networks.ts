@@ -14,7 +14,7 @@ export enum AvailableNetworks {
   FUJI = "fuji",
 }
 
-export const networks: { [name in AvailableNetworks]: NetworkDetails } = {
+export const networks: { [network in AvailableNetworks]: NetworkDetails } = {
   fuji: {
     chainId: `0x${Number(43113).toString(16)}`,
     chainName: "Avalanche Fuji Testnet",

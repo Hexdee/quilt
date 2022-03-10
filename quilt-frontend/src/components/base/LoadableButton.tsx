@@ -27,8 +27,6 @@ export const LoadableButton: React.FC<LoadableButtonProps> = ({ ...props }) => {
     spinnerColor,
     disabled = false,
     handleClick = () => {
-      console.log("handling click");
-
       if (!navigate)
         return alert(
           "function is not implemented and navigation route not defined"

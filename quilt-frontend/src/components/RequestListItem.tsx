@@ -5,12 +5,11 @@ import { useFriendsList } from "../stores/useFriendsList";
 
 interface RequestListItemProps {
   handleSetFriend: (address: string) => void;
-  handleAddFriend: (address: string) => void;
   address: string;
 }
 
 export const RequestListItem: React.FC<RequestListItemProps> = memo(
-  ({ handleSetFriend, handleAddFriend, address }) => {
+  ({ handleSetFriend, address }) => {
     return (
       <div
         className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-95 border border-gray-700"

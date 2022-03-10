@@ -8,12 +8,12 @@ import { useMessages } from "../../stores/useMessages";
 import { useUserData } from "../../stores/useUserData";
 
 import { storePrivateKey } from "../../modules/storage/storeAccount";
-import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { useContracts } from "../../stores/useContracts";
 import { useProvider } from "../../stores/useProvider";
 import { useMessagingChannel } from "../../hooks/useMessagingChannel";
 import { useGunConnection } from "../../stores/useGunConnection";
 import { HashLoader } from "react-spinners";
+import { MessageItem } from "./MessageItem";
 
 interface ChatProps {
   isGeneratingSharedKey: boolean;
@@ -58,6 +58,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
 
       toast.success("Successfully generated a new key");
     } catch (err: any) {
+      console.log(err);
       toast.error(err.message);
     }
   };
@@ -117,61 +118,29 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
       <div className="text-2xl font-bold">{recieverAddress}</div>
       {isGeneratingSharedKey ? (
         <div className="mx-auto h-auto mt-28">
-          <HashLoader color="white"></HashLoader>
+          <HashLoader color="white" />
         </div>
       ) : (
         <>
           <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
-            {messagesStoreUser &&
-              messagesStoreUser.map((message) => {
-                // check if encryptor is initialized
-                if (!encryptor) return null;
-                const decryptedMessage =
-                  encryptor.decrypt(message.message, recieverAddress) ?? "";
-
-                //if (!decryptedMessage) return () => null;
-
-                // receiver messages
-                if (message && message.name === recieverAddress) {
-                  return (
-                    <div className="flex flex-col items-start mt-2">
-                      <div className="max-w-[320px] min-w-[40px] bg-gradient-to-bl from-slate-800 to-slate-800 mb-1 mt-3 rounded-3xl rounded-bl-none">
-                        <div className="text-base px-6 py-3 text-gray-200">
-                          {decryptedMessage}
-                        </div>
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {new Date(message.createdAt).toLocaleString()}
-                      </div>
-                    </div>
-                  );
-                }
-
-                // user messages
-                return (
-                  <div className="flex flex-col items-end mt-2">
-                    <div className="max-w-[320px] min-w-[40px] bg-gradient-to-bl from-sky-500 to-blue-600 mb-1 mt-3 rounded-3xl rounded-br-none">
-                      <div className="text-base px-6 py-3 text-white">
-                        {decryptedMessage}
-                      </div>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {new Date(message.createdAt).toLocaleString()}
-                    </div>
-                  </div>
-                );
-              })}
+            {messagesStoreUser?.map((message, index) => (
+              <MessageItem
+                key={index}
+                message={message}
+                recieverAddress={recieverAddress}
+              />
+            ))}
           </div>
           <div className="mt-4 flex flex-row items-stretch absolute bottom-5 w-[90%]">
             <input
               id="message"
+              className="p-5 text-gray-200 rounded-2xl h-[70px] flex-1 mr-4 bg-transparent border border-gray-600"
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
               placeholder="Write a message..."
               name="message"
               value={message}
-              className="p-5 text-gray-200 rounded-2xl h-[70px] flex-1 mr-4 bg-transparent border border-gray-600"
             />
             <button
               type="button"
