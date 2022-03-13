@@ -25,7 +25,6 @@ export const MetamaskAccessObject: WalletAccessObject = {
       );
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      const address = await signer.getAddress();
 
       if (!signer) throw new Error("Metamask is not connected");
 
