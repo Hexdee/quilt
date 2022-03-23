@@ -9,7 +9,7 @@ import { useProvider } from "../stores/useProvider";
 
 import { readPrivateKey, readUsername } from "../modules/storage/storeAccount";
 import { gunDbAddress } from "../constants/gundb";
-import { CONTRACT_ADDRESS_FUJI } from "../constants/contractConstants";
+import { CONTRACT_ADDRESS_POLYGON } from "../constants/contractConstants";
 import { KeyStorage } from "../ABI/typechain/KeyStorage";
 import ContractData from "../ABI/KeyStorage.json";
 
@@ -20,13 +20,13 @@ export const useInitializeModules = () => {
   const setPrivateKey = useEncryption((state) => state.setPrivateKey);
 
   const initializeConctractInstance = useCallback(() => {
-    if (!(CONTRACT_ADDRESS_FUJI && provider)) {
+    if (!(CONTRACT_ADDRESS_POLYGON && provider)) {
       return new Error("Failed to connect to the contract");
     }
 
     setContract(
       new ethers.Contract(
-        CONTRACT_ADDRESS_FUJI,
+        CONTRACT_ADDRESS_POLYGON,
         ContractData.abi,
         provider.getSigner()
       ) as KeyStorage

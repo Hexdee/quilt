@@ -21,7 +21,7 @@ export const useWallet = (): [boolean, () => void, () => void] => {
         method: "wallet_addEthereumChain",
         params: [
           {
-            ...networks[AvailableNetworks.FUJI],
+            ...networks[AvailableNetworks.POLYGON],
           },
         ],
       });

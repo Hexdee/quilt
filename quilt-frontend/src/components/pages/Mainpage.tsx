@@ -16,6 +16,8 @@ import { Auth } from "../chat/Auth";
 import { Chat } from "../chat/Chat";
 import { useMessagesRequests } from "../../stores/useMessagesRequests";
 import { RequestListItem } from "../RequestListItem";
+import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
+import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 
 interface MainpageProps {}
 
@@ -41,20 +43,28 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   const keyStorage = useContracts((state) => state.contract);
   const contract = useContracts((state) => state.contract);
 
-  useEffect(() => {
-    if (!(keyStorage && provider)) {
-      return;
-    }
+  const fetchPublicKey = useCallback(
+    async (contract: KeyStorage, address: string): Promise<string> => {
+      const targetUserPublicKey = await contract.getUserKey(address);
 
-    keyStorage.on("KeyPublished", (...args: any[]) => {
-      console.log("new public key was published");
-      console.log(args);
-    });
+      if (targetUserPublicKey.x.isZero()) {
+        throw new Error("User doesn't have an account");
+      }
 
-    return () => {
-      keyStorage.removeAllListeners();
-    };
-  }, [keyStorage, provider]);
+      const targetUserPublicKeyTransformed = {
+        x: new BN(targetUserPublicKey.x.toString(), 10),
+        y: new BN(targetUserPublicKey.y.toString(), 10),
+      };
+
+      const sharedSecret = curve.generateSharedSecret(
+        new BN(privateKey, 10),
+        targetUserPublicKeyTransformed
+      );
+
+      return sharedSecret.toString();
+    },
+    [curve, privateKey]
+  );
 
   const handleAddFriend = useCallback(() => {
     toast.info(`Added new friend: ${friendInput}`);
@@ -82,28 +92,49 @@ export const Mainpage: React.FC<MainpageProps> = () => {
         throw new Error("Try restarting application");
 
       setRecieverAddress(friendAddress);
-      const targetUserPublicKey = await contract.getUserKey(friendAddress);
 
-      if (targetUserPublicKey.x.isZero()) {
-        throw new Error("User doesn't have an account");
+      const sharedSecret = await fetchPublicKey(contract, friendAddress);
+
+      encryptor.setSharedSecret(friendAddress, sharedSecret);
+    } catch (error: any) {
+      if (error instanceof Error) {
+        console.log(error);
+        toast.error("Failed to get public key");
       }
-
-      const targetUserPublicKeyTransformed = {
-        x: new BN(targetUserPublicKey.x.toString(), 10),
-        y: new BN(targetUserPublicKey.y.toString(), 10),
-      };
-
-      const sharedSecret = curve.generateSharedSecret(
-        new BN(privateKey, 10),
-        targetUserPublicKeyTransformed
-      );
-
-      encryptor.setSharedSecret(friendAddress, sharedSecret.toString());
-    } catch (err: any) {
-      toast.error(err.message);
     }
     setIsGeneratingSharedKey(false);
   };
+
+  useEffect(() => {
+    if (!(keyStorage && provider)) {
+      return;
+    }
+
+    keyStorage.on("KeyPublished", async (publisher: string) => {
+      if (!friends[publisher]) return;
+      if (!contract) return;
+
+      toast.info(
+        `${trimEthereumAddress(publisher, 15)} changed his public key`
+      );
+
+      try {
+        const sharedSecret = await fetchPublicKey(contract, publisher);
+
+        encryptor.setSharedSecret(publisher, sharedSecret);
+        toast.success("Successfully updated friends public key");
+      } catch (error: any) {
+        if (error instanceof Error) {
+          console.log(error);
+          toast.error("Failed to update friends public key");
+        }
+      }
+    });
+
+    return () => {
+      keyStorage.removeAllListeners();
+    };
+  }, [keyStorage, provider, friends, contract, fetchPublicKey, encryptor]);
 
   useEffect(() => {
     if (!Object.keys(friends).length && !initializedFriendsList) return;
