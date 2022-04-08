@@ -2,8 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --main-green: #00E467;
+  --main-black: #212121;
+}
 body {
-  background-color: rgb(7, 15, 63);
-  background-image: url("./assets/aurora4.jpg");
-  color: white;
+  background-color: var(--main-black);
+}
+.connectWallet-btn {
+  background: var(--main-green);
+  border-radius: 20px;
+  color: var(--color-black);
+  text-align: center;
+  align-items: center;
+  justify-content: justify-center;
+  padding: 5px 10px;
+
+}
+.dapp-bg {
+  background-image: url("./assets/Glass.png");
+}
+.secondary-button {
+  border: 1px solid var(--main-green);
+  color: var(--main-green);
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+.input-friends {
+  background: rgba(242, 242, 242, 0.25);
+  border-radius: 22px;
+  padding: 5px 10px;
+}
+.side-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 15px;
+}
+.side-menu img {
+  width: 65px;
+  height: 65px;
+}
+.side-menu li {
+  list-style: none;
+  padding: 50px 0px;
+}
+.side-menu li :active {
+  list-style: none;
+  padding: 10px 0px;
+}
+.messages-btn, .addfriend-btn, .settings-btn, .group-btn {
+
+}
+.messages-btn {
+  background: url("./assets/messages.svg") no-repeat center center;
+}
+.messages-btn:hover {
+  background: url("./assets/messages2.svg") no-repeat center center;
+}
+.addfriend-btn {
+  background: url("./assets/addFriend.svg") no-repeat center center;
+}
+.addfriend-btn:hover, .addfriend-btn:active {
+  background: url("./assets/addFriend2.svg") no-repeat center center;
+}
+.settings-btn {
+  background: url("./assets/settings.svg") no-repeat center center;
+}
+.settings-btn:hover {
+  background: url("./assets/settings2.svg") no-repeat center center; 
+}
+.group-btn {
+  background: url("./assets/group.svg") no-repeat center center;
+}
+.group-btn:hover {
+  background: url("./assets/group2.svg") no-repeat center center;
 }

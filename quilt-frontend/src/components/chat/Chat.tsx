@@ -105,9 +105,9 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
     return (
       <button
         onClick={() => generateKeyPair()}
-        className="bg-gradient-to-bl from-sky-600 to-blue-700 p-4 text-white h-[70px] text-lg w-2/3 block mt-16 rounded-lg"
+        className="secondary-button w-1/3 block mt-16"
       >
-        Generate new private key
+        Generate New Private Key
       </button>
     );
   }
@@ -145,7 +145,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
             <button
               type="button"
               onClick={() => saveMessage()}
-              className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-xl w-24 h-[70px] text-lg flex items-center justify-center transition-all hover:border-4 duration-200"
+              className="connectWallet-btn text-white p-4 rounded-xl w-24 h-[70px] text-lg flex items-center justify-center transition-all hover:border-4 duration-200"
             >
               <IoSend />
             </button>

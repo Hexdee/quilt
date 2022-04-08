@@ -143,25 +143,36 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   }, [friends, initializedFriendsList]);
 
   return (
-    <div className="flex flex-row justify-start h-[82vh] relative">
+    <div className="flex dapp-bg flex-row justify-start h-[82vh] relative">
+        <nav className="side-menu"> 
+        <li className="messages-btn w-28"> </li>
+        <li className="addfriend-btn w-28"> </li>
+        <li className="group-btn w-28"></li>
+        <li className="settings-btn w-28"> </li>
+
+        </nav>
       <div className="w-1/4 px-5 flex flex-col">
-        <div className="text-2xl text-white mb-2 pt-6">Friends</div>
-        <div className="flex flex-row items-center mb-4">
+        {/* <div className="text-2xl text-white mb-2 pt-6">Friends</div> */}
+        <div className="text-2xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
+
+        <div className="flex-column items-center mb-4 items-center justify-center">
           <input
             id="friend"
             onChange={(e) => {
               setFriendInput(e.target.value);
             }}
-            placeholder="Reciever address"
+            placeholder="Receiver address"
             name="address"
             value={friendInput}
-            className="p-5 w-4/5 h-16 text-black rounded-lg"
+            className="p-5 w-4/5 input-friends"
           />
+          <br />
+
           <button
             onClick={() => handleAddFriend()}
-            className="bg-gradient-to-bl from-sky-600 to-blue-700 text-white p-4 rounded-lg flex-1 h-16 w-16 ml-2 text-lg flex items-center justify-center"
+            className="secondary-button p-4 items-center  flex-1 ali ml-2 mt-4 "
           >
-            <IoPersonAdd></IoPersonAdd>
+          Add Friend
           </button>
         </div>
         <div>

@@ -12,7 +12,7 @@ export const FriendListItem: React.FC<FriendListItemProps> = memo(
   ({ handleSetFriend, handleRemoveFriend, address }) => {
     return (
       <div
-        className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-105 border border-gray-800"
+        className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-105"
         onClick={() => handleSetFriend(address)}
       >
         <div className="h-12 w-12 rounded-full bg-slate-800"></div>
