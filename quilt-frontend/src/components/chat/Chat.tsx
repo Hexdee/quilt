@@ -122,7 +122,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
         </div>
       ) : (
         <>
-          <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
+          <div className="mt-4 connectWallet-btn  overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
             {messagesStoreUser?.map((message, index) => (
               <MessageItem
                 key={index}
