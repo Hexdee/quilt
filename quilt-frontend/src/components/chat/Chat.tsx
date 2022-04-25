@@ -115,14 +115,14 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
   return (
     <div className="w-2/3 border-x border-gray-700 overflow-hidden h-[88vh] relative px-10 flex flex-col">
       <div className="text-base text-gray-400 pt-6">Chatting with:</div>
-      <div className="text-2xl font-bold">{recieverAddress}</div>
+      <div className="text-2xl text-white font-bold">{recieverAddress}</div>
       {isGeneratingSharedKey ? (
         <div className="mx-auto h-auto mt-28">
           <HashLoader color="white" />
         </div>
       ) : (
         <>
-          <div className="mt-4 connectWallet-btn  overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
+          <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
             {messagesStoreUser?.map((message, index) => (
               <MessageItem
                 key={index}

@@ -18,11 +18,11 @@ import { useMessagesRequests } from "../../stores/useMessagesRequests";
 import { RequestListItem } from "../RequestListItem";
 import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
+import NavMenu from "../base/NavMenu";
 
 interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = () => {
-  const [friendInput, setFriendInput] = useState<string>("");
   const [isGeneratingSharedKey, setIsGeneratingSharedKey] =
     useState<boolean>(false);
   const provider = useProvider((state) => state.provider);
@@ -31,14 +31,6 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   const privateKey = useEncryption((state) => state.privateKey);
   const encryptor = useEncryption((state) => state.encryptor);
   const curve = useEncryption((state) => state.curve);
-
-  const initializedFriendsList = useFriendsList((state) => state.initialized);
-  const friends = useFriendsList((state) => state.friends);
-  const addFriend = useFriendsList((state) => state.addFriend);
-  const removeFriend = useFriendsList((state) => state.removeFriend);
-  const setRecieverAddress = useMessages((state) => state.setRecieverAddress);
-
-  const requests = useMessagesRequests((state) => state.requestList);
 
   const keyStorage = useContracts((state) => state.contract);
   const contract = useContracts((state) => state.contract);
@@ -66,138 +58,12 @@ export const Mainpage: React.FC<MainpageProps> = () => {
     [curve, privateKey]
   );
 
-  const handleAddFriend = useCallback(() => {
-    toast.info(`Added new friend: ${friendInput}`);
 
-    addFriend(friendInput.replace(/\s/g, ""), { username: "" });
-    setFriendInput("");
-  }, [addFriend, setFriendInput, friendInput]);
-
-  const handleRemoveFriend = useCallback(
-    (address: string) => {
-      toast.info(`Removed a friend: ${address}`);
-      removeFriend(address);
-    },
-    [removeFriend]
-  );
-
-  const handleSetFriend = async (friendAddress: string) => {
-    setIsGeneratingSharedKey(true);
-    try {
-      if (!privateKey) {
-        throw new Error("Private key is not generated");
-      }
-
-      if (!(curve && contract && encryptor))
-        throw new Error("Try restarting application");
-
-      setRecieverAddress(friendAddress);
-
-      const sharedSecret = await fetchPublicKey(contract, friendAddress);
-
-      encryptor.setSharedSecret(friendAddress, sharedSecret);
-    } catch (error: any) {
-      if (error instanceof Error) {
-        console.log(error);
-        toast.error("Failed to get public key");
-      }
-    }
-    setIsGeneratingSharedKey(false);
-  };
-
-  useEffect(() => {
-    if (!(keyStorage && provider)) {
-      return;
-    }
-
-    keyStorage.on("KeyPublished", async (publisher: string) => {
-      if (!friends[publisher]) return;
-      if (!contract) return;
-
-      toast.info(
-        `${trimEthereumAddress(publisher, 15)} changed his public key`
-      );
-
-      try {
-        const sharedSecret = await fetchPublicKey(contract, publisher);
-
-        encryptor.setSharedSecret(publisher, sharedSecret);
-        toast.success("Successfully updated friends public key");
-      } catch (error: any) {
-        if (error instanceof Error) {
-          console.log(error);
-          toast.error("Failed to update friends public key");
-        }
-      }
-    });
-
-    return () => {
-      keyStorage.removeAllListeners();
-    };
-  }, [keyStorage, provider, friends, contract, fetchPublicKey, encryptor]);
-
-  useEffect(() => {
-    if (!Object.keys(friends).length && !initializedFriendsList) return;
-
-    storeFriendsList(friends);
-  }, [friends, initializedFriendsList]);
 
   return (
     <div className="flex dapp-bg flex-row justify-start h-[82vh] relative">
-        <nav className="side-menu"> 
-        <li className="messages-btn w-28"> </li>
-        <li className="addfriend-btn w-28"> </li>
-        <li className="group-btn w-28"></li>
-        <li className="settings-btn w-28"> </li>
+        <NavMenu/>
 
-        </nav>
-      <div className="w-1/4 px-5 flex flex-col">
-        {/* <div className="text-2xl text-white mb-2 pt-6">Friends</div> */}
-        <div className="text-2xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
-
-        <div className="flex-column items-center mb-4 items-center justify-center">
-          <input
-            id="friend"
-            onChange={(e) => {
-              setFriendInput(e.target.value);
-            }}
-            placeholder="Receiver address"
-            name="address"
-            value={friendInput}
-            className="p-5 w-4/5 input-friends"
-          />
-          <br />
-
-          <button
-            onClick={() => handleAddFriend()}
-            className="secondary-button p-4 items-center  flex-1 ali ml-2 mt-4 "
-          >
-          Add Friend
-          </button>
-        </div>
-        <div>
-          {friends &&
-            Object.keys(friends).map((element) => (
-              <FriendListItem
-                key={element}
-                address={element}
-                handleRemoveFriend={handleRemoveFriend}
-                handleSetFriend={handleSetFriend}
-              ></FriendListItem>
-            ))}
-        </div>
-        <div className="text-2xl text-white mb-2 pt-6">Requests</div>
-        <div className="overflow-y-scroll scrollbar-hide flex-1">
-          {requests &&
-            Array.from(requests).map((element) => (
-              <RequestListItem
-                key={element}
-                address={element}
-                handleSetFriend={handleSetFriend}
-              ></RequestListItem>
-            ))}
-        </div>
-      </div>
       <div className="w-2/3 ml-10">
         {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />

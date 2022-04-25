@@ -9,6 +9,9 @@
 body {
   background-color: var(--main-black);
 }
+.bg-slate-800 {
+  background-color: #8ADDB0;
+}
 .connectWallet-btn {
   background: var(--main-green);
   border-radius: 20px;
@@ -17,7 +20,6 @@ body {
   align-items: center;
   justify-content: justify-center;
   padding: 5px 10px;
-
 }
 .dapp-bg {
   background-image: url("./assets/Glass.png");

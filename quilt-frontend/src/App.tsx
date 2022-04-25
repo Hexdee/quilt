@@ -1,8 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { NavBar } from "./components/NavBar";
 
 import { Mainpage } from "./components/pages/Mainpage";
-import { NavBar } from "./components/NavBar";
+import { Messages } from "./components/pages/Messages";
+import { AddFriends } from "./components/pages/Addfriends";
+import { Settings } from "./components/pages/Settings";
+
 import "react-toastify/dist/ReactToastify.css";
 
 import { useStoredFriendsList } from "./hooks/useStoredFriendsList";
@@ -14,6 +18,7 @@ function App() {
 
   return (
     <>
+    <NavBar/>
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -25,9 +30,12 @@ function App() {
         draggable
         pauseOnHover
       />
-      <NavBar />
       <Routes>
         <Route path="/" element={<Mainpage />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path='/addfriends' element={<AddFriends />} />
+        <Route path='/settings' element={<Settings />} />
+
       </Routes>
     </>
   );
