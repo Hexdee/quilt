@@ -1,4 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from "react-router-dom";
 import { IoPersonAdd } from "react-icons/io5";
 import { toast } from "react-toastify";
 import BN from "bn.js";
@@ -19,6 +24,10 @@ import { RequestListItem } from "../RequestListItem";
 import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
+import { Messages } from "./Messages";
+// import { Addfriends } from "./Addfriends";
+import { Settings } from "./Settings";
+
 
 interface MainpageProps {}
 
@@ -61,8 +70,10 @@ export const Mainpage: React.FC<MainpageProps> = () => {
 
 
   return (
+
     <div className="flex dapp-bg flex-row justify-start h-[82vh] relative">
         <NavMenu/>
+
 
       <div className="w-2/3 ml-10">
         {isGunLogged ? (
@@ -71,6 +82,6 @@ export const Mainpage: React.FC<MainpageProps> = () => {
           <Auth />
         )}
       </div>
-    </div>
+      </div>
   );
 };

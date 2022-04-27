@@ -1,7 +1,12 @@
-import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { NavBar } from "./components/NavBar";
-
+import React, { Component } from "react";
+import {
+  Route,
+  Routes,
+  NavLink,
+  HashRouter
+} from "react-router-dom";
 import { Mainpage } from "./components/pages/Mainpage";
 import { Messages } from "./components/pages/Messages";
 import { AddFriends } from "./components/pages/Addfriends";
@@ -30,13 +35,12 @@ function App() {
         draggable
         pauseOnHover
       />
-      <Routes>
+        <Routes>
         <Route path="/" element={<Mainpage />} />
-        <Route path="/messages" element={<Messages />} />
+        {/* <Route path="/messages" element={<Messages />} /> */}
         <Route path='/addfriends' element={<AddFriends />} />
         <Route path='/settings' element={<Settings />} />
-
-      </Routes>
+        </Routes>
     </>
   );
 }
