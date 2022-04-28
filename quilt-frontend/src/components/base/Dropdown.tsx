@@ -17,14 +17,14 @@ function Dropdown() {
 
   return (
     <>
-    <nav className='navbar'>
+    <nav className='side-menu sub-menu'>
     
               <ul className={dropdown ? "services-submenu clicked" : "services-submenu" } onClick={() => setDropdown(!dropdown)}>
-                <li className="side-menu-toggle">
+                {/* <li className="side-menu-toggle">
                     <Link to="#" className='menu-bars'>
                         <FaIcons.FaTimes />
                     </Link>
-                </li>
+                </li> */}
                 {dropdownData.map((item, index) => {
 
                     return (

@@ -5,6 +5,8 @@
 :root {
   --main-green: #00E467;
   --main-black: #212121;
+  --screen-size-lg: var(1920px);
+  --color-grey: rgba(242, 242, 242, 0.5);
 }
 body {
   background-color: var(--main-black);
@@ -38,21 +40,94 @@ body {
 .side-menu {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  color: var(--color-grey);
   margin: 0 15px;
+  width: 1000px;
 }
 .side-menu img {
-  width: 65px;
-  height: 65px;
+  width: 50px;
+  height: 50px;
 }
 .side-menu li {
   list-style: none;
-  padding: 50px 0px;
+  padding: 15px 0px;
 }
-.side-menu li :active {
+.side-menu-items img {
   list-style: none;
   padding: 10px 0px;
 }
+.side-menu-items img:hover {
+  list-style: none;
+  padding: 10px 0px;
+  border-left: 5px solid #00E467;
+  border-radius: 6px;
+}
+.side-menu-items img:active {
+  list-style: none;
+  padding: 10px 0px;
+  border-left: 5px solid #00E467;
+  border-radius: 6px;
+}
+.submenu {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: var(--color-grey);
+  font-size: 20px;
+  margin: 0 15px;
+  /* display: block; */
+  height: auto;
+  /* overflow: hidden; */
+  width: 400px;
+}
+.services-submenu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  left: 200px;
+  top:0;
+  right: 100%;
+}
+/* .services-submenu li {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+} */
+.services-submenu li a span:hover {
+list-style: none;
+border-left: 5px solid #00E467;
+border-radius: 6px;
+}
+.services-submenu li a span {
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  width: 400px;
+}
+/* .side-menu > .submenu .services-submenu li {
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  left: 500px;
+  right: 100%;
+}
+.sub-menu .services-submenu li:active {
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  left: 500px;
+  right: 100%;
+}
+.sub-menu .services-submenu li:hover {
+  display: flex;
+  position: absolute;
+  right: 100%;
+  left: 500px;
+  flex-direction: row;
+} */
 .messages-btn, .addfriend-btn, .settings-btn, .group-btn {
 
 }

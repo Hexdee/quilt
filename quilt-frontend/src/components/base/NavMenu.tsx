@@ -34,7 +34,7 @@ function NavMenu() {
         </div> */}
 
         {/* <nav className={sidebar ? 'side-menu active' : 'side-menu'}> */}
-    <nav className='navbar'>
+    <nav className='side-menu'>
     
         {/* <ul className="header">
             <li><NavLink to="/">Home</NavLink></li>
@@ -46,17 +46,18 @@ function NavMenu() {
 
     
              { <ul className='side-menu-items'>
-                <li className="side-menu-toggle">
+                {/* <li className="side-menu-toggle">
                     <Link to="#" className='menu-bars'>
                         <FaIcons.FaTimes />
                     </Link>
-                </li>
+                </li> */}
                 {SidebarData.map((item, index) => {
                     if(item.dropdown == true) {
                         return (
                             <li key={index} className={item.cName}>
                             <Link to={item.path} 
-                            onClick={() => setDropdown(true)}
+                            onClick={() => setDropdown(true)} 
+                            onMouseEnter={() => setDropdown(true)}
                             >
                                 {item.icon}
                                 <span>{item.title}</span>
@@ -71,7 +72,7 @@ function NavMenu() {
                                 {item.icon}
                                 <span>{item.title}</span>
                             </Link>
-                            {dropdown && <Dropdown />}
+                            {/* {dropdown && <Dropdown />} */}
                         </li>
                     )
 
