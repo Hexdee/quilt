@@ -38,8 +38,8 @@ function App() {
         <Routes>
         <Route path="/" element={<Mainpage />} />
         {/* <Route path="/messages" element={<Messages />} /> */}
-        <Route path='/addfriends' element={<AddFriends />} />
-        <Route path='/settings' element={<Settings />} />
+        <Route path='/' element={<AddFriends />} />
+        <Route path='/' element={<Settings />} />
         </Routes>
     </>
   );

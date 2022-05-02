@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SidebarData } from './NavMenuData';
-import Dropdown from './Dropdown';
+import Dropdown from './DropdownSettings';
+import { AddFriends } from '../pages/Addfriends';
 
  
 function NavMenu() {
@@ -46,13 +47,15 @@ function NavMenu() {
                         <FaIcons.FaTimes />
                     </Link>
                 </li> */}
-                {SidebarData.map((item, index) => {
+                {SidebarData.map((item) => {
+              
                     if(item.dropdown == true) {
                         return (
-                            <li key={index} className={item.cName}>
+                            <li key={item.id} className={item.cName}>
                             <Link to={item.path} 
                             onClick={() => setDropdown(true)} 
                             onMouseEnter={() => setDropdown(true)}
+                            onMouseLeave={() => setDropdown(false)}
                             >
                                 <span>{item.title} {item.icon}</span>
                             </Link>
@@ -61,11 +64,13 @@ function NavMenu() {
                         )
                     }
                     return (
-                        <li key={index} className={item.cName}>
-                            <Link to={item.path}>
+                        <li key={item.id} className={item.cName}>
+                            <Link to={item.path}
+                            onMouseEnter={() => setDropdown(true)}
+                            onMouseLeave={() => setDropdown(false)}
+                            >
                                 <span>{item.title} {item.icon} </span>
                             </Link>
-                            {/* {dropdown && <Dropdown />} */}
                         </li>
                     )
 

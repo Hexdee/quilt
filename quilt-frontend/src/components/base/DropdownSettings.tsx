@@ -26,7 +26,6 @@ function Dropdown() {
                     </Link>
                 </li> */}
                 {dropdownData.map((item, index) => {
-
                     return (
                         <li key={index} className={item.cName}>
                             <Link to={item.path} onClick={() => setDropdown(false)}> 

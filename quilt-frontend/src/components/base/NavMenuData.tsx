@@ -11,31 +11,25 @@ import SwitchTheme from './SwitchTheme';
 
 export const SidebarData = [
     {
-        // id: 1,
+        id: 1,
         title: '',
         path: '/',
         icon: <img src={Messages} />,
         cName: 'nav-text',
         dropdown: false
     },
-    // {
-    //     title: 'Messages',
-    //     path: '/messages',
-    //     icon: <img src={Messages} />,
-    //     cName: 'nav-text'
-    // },
     {
-        // id: 2,
+        id: 2,
         title: '',
-        path: '/addfriends',
+        path: './addfriends',
         icon: <img src={Group} />,
         cName: 'nav-text',
         dropdown: false
     },
     {
-        // id: 3,
+        id: 3,
         title: '',
-        path: '/settings',
+        path: '/',
         icon: <img src={Settings} />,
         cName: 'nav-text',
         dropdown: true
@@ -44,35 +38,35 @@ export const SidebarData = [
 
 export const dropdownData = [
     {
-        // id: 1,
+        id: 1,
         title: "Profile",
         path: "./profile",
         icon: '',
         cName: "submenu-item"
     },
     {
-        // id: 2,
+        id: 2,
         title: "Generate Private Key",
         path: "./",
         icon: '',
         cName: "submenu-item"
     },
     {
-        // id: 3,
+        id: 3,
         title: "My Wallet Address",
         path: "./",
         icon: '',
         cName: "submenu-item"
     },
     {
-        // id: 4,
+        id: 4,
         title: "Switch to Light Mode",
         path: "./",
         icon: <img src={Toggle} />,
         cName: "submenu-item toggle-mode"
     },
     {
-        // id: 5,
+        id: 5,
         title: <IsLoggedCheck />,
         path: "./",
         icon: <img src={Connection} />,

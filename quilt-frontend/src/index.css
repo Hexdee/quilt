@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Livvic:wght@400;500;600;700&display=swap');
+
 :root {
   --main-green: #00E467;
   --main-black: #212121;
@@ -10,6 +13,8 @@
 }
 body {
   background-color: var(--main-black);
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 16px;
 }
 .bg-slate-800 {
   background-color: #8ADDB0;
@@ -30,10 +35,20 @@ body {
   background: var(--main-green);
 }
 .secondary-button {
-  border: 1px solid var(--main-green);
+  border: 2px solid var(--main-green);
+  font-size: 22px;
+  justify-content: center;
+  line-height: 27px;
+  display: flex;
+  text-align: center;  
   color: var(--main-green);
-  border-radius: 20px;
+  border-radius: 23.5px;
   padding: 5px 10px;
+}
+.dapp-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .input-friends {
   background: rgba(242, 242, 242, 0.25);

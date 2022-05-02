@@ -11,27 +11,24 @@ import BN from "bn.js";
 import { useGunAccount } from "../../stores/useGunAccount";
 import { useEncryption } from "../../stores/useEncryption";
 import { useContracts } from "../../stores/useContracts";
-import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
-import { useFriendsList } from "../../stores/useFriendsList";
-
-import { storeFriendsList } from "../../modules/storage/storeFriendsList";
-import { FriendListItem } from "../FriendListItem";
 import { Auth } from "../chat/Auth";
 import { Chat } from "../chat/Chat";
-import { useMessagesRequests } from "../../stores/useMessagesRequests";
-import { RequestListItem } from "../RequestListItem";
-import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
-import { Messages } from "./Messages";
-// import { Addfriends } from "./Addfriends";
-import { Settings } from "./Settings";
+import LoadableButton from "../base/LoadableButton";
+import { AddFriends } from "./Addfriends";
+import { Messages } from "./Messages" 
+import SwitchTheme from "../base/SwitchTheme";
+
+
+
 
 
 interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = () => {
+
   const [isGeneratingSharedKey, setIsGeneratingSharedKey] =
     useState<boolean>(false);
   const provider = useProvider((state) => state.provider);
@@ -72,15 +69,18 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   return (
 
     <div className="flex dapp-bg flex-row justify-start h-[82vh] relative">
+      <div className="w-1/3">
         <NavMenu/>
+      </div>
 
-
-      <div className="w-2/3 ml-10">
-        {isGunLogged ? (
+      <div className="w-2/3 dapp-content">
+      {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (
           <Auth />
         )}
+        
+
       </div>
       </div>
   );

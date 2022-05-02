@@ -113,7 +113,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
   }
 
   return (
-    <div className="w-2/3 border-x border-gray-700 overflow-hidden h-[88vh] relative px-10 flex flex-col">
+    <div className="border-x border-gray-700 overflow-hidden h-[88vh] relative px-10 flex flex-col">
       <div className="text-base text-gray-400 pt-6">Chatting with:</div>
       <div className="text-2xl text-white font-bold">{recieverAddress}</div>
       {isGeneratingSharedKey ? (

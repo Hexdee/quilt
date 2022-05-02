@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SidebarData } from './NavMenuData';
-import Dropdown from './Dropdown';
 import Toggle from '../../assets/toggle.svg';
+import Dropdown from './DropdownSettings';
 
  
 function SwitchTheme() {
 
   return (
+    <>
 
-<img src={Toggle} />
+{/* <img src={Toggle} /> */}
 
+
+    </>
   )
 }
 

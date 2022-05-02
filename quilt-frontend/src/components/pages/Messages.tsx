@@ -144,9 +144,8 @@ export const Messages: React.FC<MessagesProps> = () => {
   }, [friends, initializedFriendsList]);
 
   return (
-    <div className="flex dapp-bg flex-row justify-start h-[82vh] relative">
-        <NavMenu/>
-      <div className="w-1/4 px-5 flex flex-col">
+    <div className="flex flex-row justify-start h-[82vh] relative">
+      <div className=" px-5 flex flex-col">
         {/* <div className="text-2xl text-white mb-2 pt-6">Friends</div> */}
         <div className="text-2xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
 
@@ -165,7 +164,7 @@ export const Messages: React.FC<MessagesProps> = () => {
 
           <button
             onClick={() => handleAddFriend()}
-            className="secondary-button p-4 items-center  flex-1 ali ml-2 mt-4 "
+            className="secondary-button p-4 items-center flex-1 ali ml-2 mt-4 "
           >
           Add Friend
           </button>
