@@ -6,8 +6,8 @@ import Group from '../../assets/group.svg';
 import Settings from '../../assets/settings.svg';
 import Toggle from '../../assets/toggle.svg';
 import Connection from '../../assets/connection.svg';
-
-
+import { IsLoggedCheck } from './IsLoggedCheck';
+import SwitchTheme from './SwitchTheme';
 
 export const SidebarData = [
     {
@@ -53,28 +53,28 @@ export const dropdownData = [
     {
         // id: 2,
         title: "Generate Private Key",
-        path: "./generateKey",
+        path: "./",
         icon: '',
         cName: "submenu-item"
     },
     {
         // id: 3,
         title: "My Wallet Address",
-        path: "./walletAdress",
+        path: "./",
         icon: '',
         cName: "submenu-item"
     },
     {
         // id: 4,
         title: "Switch to Light Mode",
-        path: "./switch-to-light",
+        path: "./",
         icon: <img src={Toggle} />,
-        cName: "submenu-item"
+        cName: "submenu-item toggle-mode"
     },
     {
         // id: 5,
-        title: "Connect Wallet",
-        path: "./connect",
+        title: <IsLoggedCheck />,
+        path: "./",
         icon: <img src={Connection} />,
         cName: "submenu-item"
     },  

@@ -81,13 +81,17 @@ body {
   /* overflow: hidden; */
   width: 400px;
 }
+.toggle-mode li {
+  display: flex;
+  flex-direction: row-reverse;
+}
 .services-submenu {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   position: absolute;
-  left: 200px;
+  left: 400px;
   top:0;
   right: 100%;
 }
@@ -96,6 +100,10 @@ body {
   flex-direction: row;
   width: auto;
 } */
+.services-submenu li a {
+  display: flex;
+  flex-direction: row-reverse;
+  }
 .services-submenu li a span:hover {
 list-style: none;
 border-left: 5px solid #00E467;
@@ -103,7 +111,6 @@ border-radius: 6px;
 }
 .services-submenu li a span {
   display: flex;
-  position: absolute;
   flex-direction: row;
   width: 400px;
 }

@@ -9,9 +9,9 @@ import { dropdownData } from './NavMenuData'
 
  
 function Dropdown() {
-    // const[sidebar, setSidebar] = useState(false)
+    const[sidebar, setSidebar] = useState(false)
 
-    // const showSidebar = () => setSidebar(!sidebar)
+    const showSidebar = () => setSidebar(!sidebar)
 
     const [dropdown, setDropdown] = useState(false);
 

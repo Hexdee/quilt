@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import * as FaIcons from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Messages from '../../assets/messages.svg';
-import AddFriend from '../../assets/addFriend.svg'
-import Group from '../../assets/group.svg'
-import Settings from '../../assets/settings.svg'
 import { SidebarData } from './NavMenuData';
 import Dropdown from './Dropdown';
 
@@ -59,8 +54,7 @@ function NavMenu() {
                             onClick={() => setDropdown(true)} 
                             onMouseEnter={() => setDropdown(true)}
                             >
-                                {item.icon}
-                                <span>{item.title}</span>
+                                <span>{item.title} {item.icon}</span>
                             </Link>
                             {dropdown && <Dropdown />}
                         </li> 
@@ -69,8 +63,7 @@ function NavMenu() {
                     return (
                         <li key={index} className={item.cName}>
                             <Link to={item.path}>
-                                {item.icon}
-                                <span>{item.title}</span>
+                                <span>{item.title} {item.icon} </span>
                             </Link>
                             {/* {dropdown && <Dropdown />} */}
                         </li>
@@ -78,6 +71,7 @@ function NavMenu() {
 
                 }
                 )}
+
             </ul> }
         </nav> 
     </>
