@@ -26,6 +26,9 @@ body {
 .dapp-bg {
   background-image: url("./assets/Glass.png");
 }
+.btn-send {
+  background: var(--main-green);
+}
 .secondary-button {
   border: 1px solid var(--main-green);
   color: var(--main-green);
@@ -80,7 +83,8 @@ body {
   height: auto;
   /* overflow: hidden; */
   width: 400px;
-}
+  position: relative;
+  }
 .toggle-mode li {
   display: flex;
   flex-direction: row-reverse;
