@@ -11,7 +11,7 @@ function Dropdown() {
      {/* <nav className='side-menu'> */}
 
         {/* <ul className='side-menu-items'> */}
-             <NavLink to="/settings/profile">
+             <NavLink to="./profile">
                 <li>Profile</li>
             </NavLink>
             <NavLink to="/Generate Private Key">
@@ -21,14 +21,14 @@ function Dropdown() {
             <NavLink to="/settings">
                <li>My Wallet Address</li> 
             </NavLink> 
-            <NavLink to="/settings">
+            {/* <NavLink to="/settings">
                <li>Switch to Light Mode</li> 
                <img src={Toggle} />
             </NavLink> 
             <NavLink to="/settings">
                <li><IsLoggedCheck/></li> 
                <img src={Connection} />
-            </NavLink> 
+            </NavLink>  */}
         {/* </ul> */}
 
      {/* </nav> */}

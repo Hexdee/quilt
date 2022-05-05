@@ -199,7 +199,7 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
       </div>
 </div>
 
-      <div className="w-full dapp-content">
+      <div className="w-full dapp-bg dapp-content">
       {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (

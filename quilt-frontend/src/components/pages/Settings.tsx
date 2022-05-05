@@ -149,9 +149,7 @@ export const Settings: React.FC<SettingsProps> = () => {
     <div className="flex flex-row justify-center h-[82vh] relative">
 <Sidebar/>
 <div className="w-1/3 submenu-bg ml-10">
-
   <Dropdown/>
-
 </div>
 
       <div className="w-full dapp-bg dapp-content">

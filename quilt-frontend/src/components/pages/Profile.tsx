@@ -12,8 +12,6 @@ import { useFriendsList } from "../../stores/useFriendsList";
 
 import { storeFriendsList } from "../../modules/storage/storeFriendsList";
 import { FriendListItem } from "../FriendListItem";
-import { Auth } from "../chat/Auth";
-import { Chat } from "../chat/Chat";
 import { useMessagesRequests } from "../../stores/useMessagesRequests";
 import { RequestListItem } from "../RequestListItem";
 import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
