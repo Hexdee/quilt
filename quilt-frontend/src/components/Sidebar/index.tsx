@@ -4,7 +4,6 @@ import Group from '../../assets/group.svg';
 import Settings from '../../assets/settings.svg';
 import Toggle from '../../assets/toggle.svg';
 import Connection from '../../assets/connection.svg';
-import DropdownSettings from "../base/DropdownSettings";
 import Bell from "../../assets/Bell.svg";
 
 

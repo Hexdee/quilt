@@ -69,7 +69,7 @@ export const Mainpage: React.FC<MainpageProps> = () => {
 
   return (
 
-    <div className="flex flex-row justify-start h-[82vh] relative">
+    <div className="flex flex-row justify-start relative">
         <Sidebar />
       
       <div className="w-full dapp-content dapp-bg">

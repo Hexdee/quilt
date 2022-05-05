@@ -10,7 +10,7 @@ function SwitchTheme() {
   return (
     <>
 
-{/* <img src={Toggle} /> */}
+<img src={Toggle} />
 
 
     </>

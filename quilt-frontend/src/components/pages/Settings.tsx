@@ -20,7 +20,7 @@ import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
 import Sidebar from "../Sidebar";
-import Dropdown from "../base/DropdownSettings";
+import { Dropdown } from '../Dropdown'
 
 interface SettingsProps {}
 
@@ -148,11 +148,11 @@ export const Settings: React.FC<SettingsProps> = () => {
   return (
     <div className="flex flex-row justify-center h-[82vh] relative">
 <Sidebar/>
-<div className="w-1/3 submenu-bg ml-10">
+<div className="w-1/5 text-xl submenu-bg">
   <Dropdown/>
 </div>
 
-      <div className="w-full dapp-bg dapp-content">
+      <div className="w-full dapp-bg dapp-content h-[89vh]">
       {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (

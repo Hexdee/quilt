@@ -13,8 +13,11 @@
 }
 body {
   background-color: var(--main-black);
+  overflow-y: hidden;
+  overflow-x: hidden;
   font-family: 'Poppins', sans-serif !important;
   font-size: 16px;
+  height: 100vh;
 }
 .bg-slate-800 {
   background-color: #8ADDB0;
@@ -30,10 +33,14 @@ body {
 }
 .dapp-bg {
   background-image: url("./assets/Glass.png");
+box-shadow: inset -5px -5px 250px rgba(255, 255, 255, 0.02);
+backdrop-filter: blur(42px);
 }
 .submenu-bg {
-  background-image: url("./assets/submenu-bg.svg");
+  background-image: url("./assets/Glass1.png");
+  height: 89vh;
 }
+
 .profile-change {
   display: flex;
   flex-direction: column;
@@ -81,7 +88,9 @@ body {
   transform: translateX(-110%);
   transition: all var(--speed) ease;
 }
-
+.sub-menu {
+  height: 100vh;
+}
 .sub-menu-enter {
   transform: translateX(-110%);
 }
@@ -102,6 +111,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 89vh;
 }
 .chat-layout {
   width: 70vw;
@@ -117,7 +127,6 @@ body {
   justify-content: flex-start;
   color: var(--color-grey);
   margin: 0 15px;
-  /* width: 1000px; */
 }
 .side-menu img {
   width: 50px;
@@ -125,10 +134,8 @@ body {
 }
 .side-menu li {
   list-style: none;
-  padding: 15px 0px;
-}
-.side-menu-items img {
-  list-style: none;
+  display: flex;
+  justify-content: space-between;
   padding: 10px 0px;
 }
 .side-menu-items li:hover {
@@ -166,10 +173,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  position: absolute;
-  left: 400px;
-  top:0;
-  right: 100%;
+  text-align:left;
 }
 /* .services-submenu li {
   display: flex;
@@ -178,7 +182,9 @@ body {
 } */
 .services-submenu li a {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   }
 .services-submenu li a span:hover {
 list-style: none;

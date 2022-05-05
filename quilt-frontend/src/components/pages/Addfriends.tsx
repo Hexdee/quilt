@@ -148,7 +148,7 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
   return (
     <div className="flex flex-row justify-center h-[82vh] relative">
 <Sidebar/>
-<div className="w-1/4 ml-10">
+<div className="w-1/4 ml-10 submenu-bg">
 
               <div className="px-5 flex flex-col">
         <div className="text-2xl text-white mb-2 pt-6">Friends</div>
