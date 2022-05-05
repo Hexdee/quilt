@@ -9,7 +9,8 @@ import { useContracts } from "../../stores/useContracts";
 import { useMessages } from "../../stores/useMessages";
 import { useProvider } from "../../stores/useProvider";
 import { useFriendsList } from "../../stores/useFriendsList";
-
+import { Auth } from "../chat/Auth";
+import { Chat } from "../chat/Chat";
 import { storeFriendsList } from "../../modules/storage/storeFriendsList";
 import { FriendListItem } from "../FriendListItem";
 import { useMessagesRequests } from "../../stores/useMessagesRequests";
@@ -17,6 +18,9 @@ import { RequestListItem } from "../RequestListItem";
 import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
+import Sidebar from "../Sidebar";
+import { Mainpage } from "./Mainpage";
+import { Messages } from "./Messages";
 
 interface AddFriendsProps {}
 
@@ -142,9 +146,12 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
   }, [friends, initializedFriendsList]);
 
   return (
-    <div className="flex flex-row justify-start h-[82vh] relative">
-      <div className="px-5 flex flex-col">
-        {/* <div className="text-2xl text-white mb-2 pt-6">Friends</div> */}
+    <div className="flex flex-row justify-center h-[82vh] relative">
+<Sidebar/>
+<div className="w-1/4 ml-10">
+
+              <div className="px-5 flex flex-col">
+        <div className="text-2xl text-white mb-2 pt-6">Friends</div>
         <div className="text-2xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
 
         <div className="flex-column items-center mb-4 items-center justify-center">
@@ -190,6 +197,15 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
             ))}
         </div>
       </div>
+</div>
+
+      <div className="w-full dapp-content">
+      {isGunLogged ? (
+          <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
+        ) : (
+          <Auth />
+        )}
+        </div>
 
     </div>
   );

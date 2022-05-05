@@ -53,9 +53,9 @@ function NavMenu() {
                         return (
                             <li key={item.id} className={item.cName}>
                             <Link to={item.path} 
-                            onClick={() => setDropdown(true)} 
+                            onClick={() => setDropdown(true)}
                             onMouseEnter={() => setDropdown(true)}
-                            onMouseLeave={() => setDropdown(false)}
+                            // onMouseLeave={() => setDropdown(false)}
                             >
                                 <span>{item.title} {item.icon}</span>
                             </Link>
@@ -63,11 +63,20 @@ function NavMenu() {
                         </li> 
                         )
                     }
+                    if(item.id === 2) {
+                        return(
+                            <li>
+                                <Link to={item.path}
+>
+                                </Link>
+                            </li>
+                        )
+                    }
                     return (
+          
                         <li key={item.id} className={item.cName}>
                             <Link to={item.path}
-                            onMouseEnter={() => setDropdown(true)}
-                            onMouseLeave={() => setDropdown(false)}
+                            // onMouseEnter={() => setDropdown(true)}
                             >
                                 <span>{item.title} {item.icon} </span>
                             </Link>

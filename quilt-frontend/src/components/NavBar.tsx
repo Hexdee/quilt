@@ -33,7 +33,7 @@ export const NavBar: React.FC<NavBarProps> = () => {
                 isLoading={false}
                 description={trimEthereumAddress(address, 16)}
                 className="connectWallet-btn p-4 m-2 text-xl hover:scale-95 transition-all duration-75"
-                navigate="/profile"
+                navigate="/settings/profile"
               />
               <LoadableButton
                 isLoading={false}

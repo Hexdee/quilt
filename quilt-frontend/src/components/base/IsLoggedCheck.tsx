@@ -22,6 +22,7 @@ export const IsLoggedCheck: React.FC<IsLoggedCheckProps> = () => {
 
   return (
     <div className="h-[11vh] w-full flex flex-row justify-center">
+      <div className="w-5/6  flex flex-row justify-between align-middle items-center">
 
         <div className="flex flex-row">
           {isLogged ? (
@@ -45,10 +46,11 @@ export const IsLoggedCheck: React.FC<IsLoggedCheckProps> = () => {
               isLoading={isConnecting}
               description="connect wallet"
               handleClick={connectWallet}
-              className="connectWallet-btn p-4 items-center justify-center m-2 mr-4"
+              className="connectWallet-btn p-4 items-center justify-center  m-2 mr-4"
             />
           )}
         </div>
+      </div>
     </div>
   );
 };

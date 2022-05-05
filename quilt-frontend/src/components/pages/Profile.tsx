@@ -20,11 +20,11 @@ import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
 import Sidebar from "../Sidebar";
-import Dropdown from "../base/DropdownSettings";
+import Avatar from "../../assets/avatar.png";
 
-interface SettingsProps {}
+interface ProfileProps {}
 
-export const Settings: React.FC<SettingsProps> = () => {
+export const Profile: React.FC<ProfileProps> = () => {
   const [friendInput, setFriendInput] = useState<string>("");
   const [isGeneratingSharedKey, setIsGeneratingSharedKey] =
     useState<boolean>(false);
@@ -148,20 +148,47 @@ export const Settings: React.FC<SettingsProps> = () => {
   return (
     <div className="flex flex-row justify-center h-[82vh] relative">
 <Sidebar/>
-<div className="w-1/3 submenu-bg ml-10">
-
-  <Dropdown/>
-
-</div>
 
       <div className="w-full dapp-bg dapp-content">
-      {isGunLogged ? (
-          <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
-        ) : (
-          <Auth />
-        )}
+        
+      <div className="flex-column items-center mb-4 items-center justify-center">
+
+        <div className="profile-change">
+
+<div className="avatar p-20">
+  <div className="avatar-img">
+    <img src={Avatar} />
+  </div>
+<div className="edit-avatar">
+    <span className="">Edit Avatar</span>
+</div>
+</div>
+
+
+        <span>Nickname</span>
+          <input
+            id="friend"
+            onChange={(e) => {
+              setFriendInput(e.target.value);
+            }}
+            placeholder=""
+            name="nickname"
+            value={friendInput}
+            className="p-5 w-4/5 input-friends"
+          />
+          <br />
+
+          <span>Bio</span>
+
+          <textarea
+            className="p-5 w-4/5 m-10 input-friends"
+          >
+          
+          </textarea>
+          </div>
         </div>
 
+    </div>
     </div>
   );
 };

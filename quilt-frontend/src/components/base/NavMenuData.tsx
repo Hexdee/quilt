@@ -1,12 +1,11 @@
 import React from 'react'
 import * as FaIcons from 'react-icons/fa';
 import Messages from '../../assets/messages.svg';
-import AddFriend from '../../assets/addFriend.svg';
 import Group from '../../assets/group.svg';
 import Settings from '../../assets/settings.svg';
 import Toggle from '../../assets/toggle.svg';
 import Connection from '../../assets/connection.svg';
-import { IsLoggedCheck } from './IsLoggedCheck';
+// import IsLoggedCheck from './isLoggedCheck.tsx';
 import SwitchTheme from './SwitchTheme';
 
 export const SidebarData = [
@@ -67,7 +66,7 @@ export const dropdownData = [
     },
     {
         id: 5,
-        title: <IsLoggedCheck />,
+        // title: <IsLoggedCheck />,
         path: "./",
         icon: <img src={Connection} />,
         cName: "submenu-item"

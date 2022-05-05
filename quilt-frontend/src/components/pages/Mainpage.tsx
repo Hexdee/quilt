@@ -20,6 +20,7 @@ import LoadableButton from "../base/LoadableButton";
 import { AddFriends } from "./Addfriends";
 import { Messages } from "./Messages" 
 import SwitchTheme from "../base/SwitchTheme";
+import Sidebar from "../Sidebar";
 
 
 
@@ -68,20 +69,16 @@ export const Mainpage: React.FC<MainpageProps> = () => {
 
   return (
 
-    <div className="flex dapp-bg flex-row justify-start h-[82vh] relative">
-      <div className="w-1/3">
-        <NavMenu/>
-      </div>
-
-      <div className="w-2/3 dapp-content">
-      {isGunLogged ? (
+    <div className="flex flex-row justify-start h-[82vh] relative">
+        <Sidebar />
+      
+      <div className="w-full dapp-content dapp-bg">
+        {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (
           <Auth />
         )}
-        
-
       </div>
-      </div>
+    </div>
   );
 };

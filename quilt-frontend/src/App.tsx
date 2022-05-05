@@ -11,6 +11,8 @@ import { Mainpage } from "./components/pages/Mainpage";
 import { Messages } from "./components/pages/Messages";
 import { AddFriends } from "./components/pages/Addfriends";
 import { Settings } from "./components/pages/Settings";
+import { Profile } from "./components/pages/Profile";
+
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -38,8 +40,10 @@ function App() {
         <Routes>
         <Route path="/" element={<Mainpage />} />
         {/* <Route path="/messages" element={<Messages />} /> */}
-        <Route path='/' element={<AddFriends />} />
-        <Route path='/' element={<Settings />} />
+        <Route path='/addfriends' element={<AddFriends />} />
+        <Route path='/settings' element={<Settings />} />
+        <Route path='/settings/profile' element={<Profile />} />
+
         </Routes>
     </>
   );

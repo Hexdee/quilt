@@ -145,60 +145,13 @@ export const Messages: React.FC<MessagesProps> = () => {
 
   return (
     <div className="flex flex-row justify-start h-[82vh] relative">
-      <div className=" px-5 flex flex-col">
-        {/* <div className="text-2xl text-white mb-2 pt-6">Friends</div> */}
-        <div className="text-2xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
-
-        <div className="flex-column items-center mb-4 items-center justify-center">
-          <input
-            id="friend"
-            onChange={(e) => {
-              setFriendInput(e.target.value);
-            }}
-            placeholder="Receiver address"
-            name="address"
-            value={friendInput}
-            className="p-5 w-4/5 input-friends"
-          />
-          <br />
-
-          <button
-            onClick={() => handleAddFriend()}
-            className="secondary-button p-4 items-center flex-1 ali ml-2 mt-4 "
-          >
-          Add Friend
-          </button>
-        </div>
-        <div>
-          {friends &&
-            Object.keys(friends).map((element) => (
-              <FriendListItem
-                key={element}
-                address={element}
-                handleRemoveFriend={handleRemoveFriend}
-                handleSetFriend={handleSetFriend}
-              ></FriendListItem>
-            ))}
-        </div>
-        <div className="text-2xl text-white mb-2 pt-6">Requests</div>
-        <div className="overflow-y-scroll scrollbar-hide flex-1">
-          {requests &&
-            Array.from(requests).map((element) => (
-              <RequestListItem
-                key={element}
-                address={element}
-                handleSetFriend={handleSetFriend}
-              ></RequestListItem>
-            ))}
-        </div>
-      </div>
-      <div className="w-2/3 ml-10">
-        {isGunLogged ? (
+{isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (
           <Auth />
-        )}
+        )}  
+        
+
       </div>
-    </div>
   );
 };
