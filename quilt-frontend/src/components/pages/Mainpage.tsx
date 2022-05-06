@@ -20,7 +20,6 @@ import LoadableButton from "../base/LoadableButton";
 import { Messages } from "./Messages" 
 import SwitchTheme from "../base/SwitchTheme";
 import Sidebar from "../Sidebar";
-import { AddFriends } from "./AddFriends";
 
 
 

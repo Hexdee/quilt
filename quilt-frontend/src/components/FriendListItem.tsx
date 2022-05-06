@@ -1,7 +1,8 @@
 import React, { memo } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { trimEthereumAddress } from "../helpers/trimEthereumAddress";
-import Claire from "../assets/claire.svg"
+import Claire from "../assets/claire.svg";
+import DeleteUser from "../assets/delete_user.svg";
 
 interface FriendListItemProps {
   handleSetFriend: (address: string) => void;
@@ -30,9 +31,9 @@ export const FriendListItem: React.FC<FriendListItemProps> = memo(
         <div>
           <button
             onClick={() => handleRemoveFriend(address)}
-            className="bg-red-500 w-12 h-12 rounded-md font-bold text-sm flex items-center justify-center"
+            className="font-bold text-sm flex items-center justify-center"
           >
-            <FaRegTrashAlt></FaRegTrashAlt>
+            <img src={DeleteUser} width={40} height={40} />
           </button>
         </div>
       </div>

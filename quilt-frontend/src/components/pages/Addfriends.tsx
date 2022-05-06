@@ -170,7 +170,17 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
           Add Friend
           </button>
         <div className="text-xl text-white mb-2 pt-6">Friends</div>
-
+        <div>
+          {friends &&
+            Object.keys(friends).map((element) => (
+              <FriendListItem
+                key={element}
+                address={element}
+                handleRemoveFriend={handleRemoveFriend}
+                handleSetFriend={handleSetFriend}
+              ></FriendListItem>
+            ))}
+        </div>
         <div className="text-xl text-white mb-2 pt-6">Requests</div>
         <div className="overflow-y-scroll scrollbar-hide flex-1">
           {requests &&

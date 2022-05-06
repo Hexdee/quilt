@@ -9,7 +9,7 @@ import Bell from "../../assets/Bell.svg";
 
 function Sidebar() {
     return (
-        <div className="w-100">
+        <div className="w-150 h-100 main-menu">
      <nav className='side-menu'>
 
         <ul className='side-menu-items'>
@@ -21,11 +21,6 @@ function Sidebar() {
         <li>
             <NavLink to="/addfriends">
                 <img src={Group} />
-            </NavLink>
-        </li>
-        <li>
-            <NavLink to="#">
-                <img src={Bell} />
             </NavLink>
         </li>
         <li>

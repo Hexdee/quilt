@@ -40,8 +40,9 @@ export const Dropdown: React.FC<DropdownProps> = () => {
       </li>
       <li className="text-xl hover:scale-95 transition-all duration-75 " onClick={() => navigator.clipboard.writeText(address)}>
         My wallet address
-        <img src={Copy} className="ml-1 copy-btn" />
-
+        <div className="copy-btn ml-7">
+        <img src={Copy}  />
+</div>
       </li>
       <li onClick={() => <SwitchTheme/>}>
         <NavLink to="#">

@@ -12,6 +12,9 @@
   --color-grey: rgba(242, 242, 242, 0.5);
 }
 body {
+  background-image: url("./assets/Glass.png");
+  backdrop-filter: blur(42px);
+  background-size: cover;
   background-color: var(--main-black);
   overflow-y: hidden;
   overflow-x: hidden;
@@ -35,36 +38,64 @@ body {
   width: 35px !important;
   height: 35px !important;
 }
-.copy-btn {
+.copy-btn img {
+  display: flex;
+  justify-content: start;
   width: 35px !important;
   height: 35px !important;
 }
 .dapp-bg {
-  background-image: url("./assets/Glass.png");
-box-shadow: inset -5px -5px 250px rgba(255, 255, 255, 0.02);
-backdrop-filter: blur(42px);
-background-size: cover;
+  /* background-image: url("./assets/Glass.png"); */
+  box-shadow: inset -5px -5px 250px rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(42px);
+   background-size: cover;
 }
 .submenu-bg {
-  background-image: url("./assets/Glass1.png");
+  background: radial-gradient(100% 100% at 0% 0%, rgba(33, 33, 33, 0.3) 0%, rgba(99, 99, 99, 0.25) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  box-shadow: inset -5px -5px 250px rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(42px);
   height: 89vh;
+  box-shadow: inset -5px -5px 250px rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(42px);
+  background-size: cover;
+  background: rgba(33, 33, 33, 0.5);
 }
-
-.profile-change {
+.profile-change span { 
+  font-size: 30px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+justify-content: space-around;
+align-items: flex-start;
+margin-right: 20px;
+}
+.profile-change {
+font-weight: 300;
+  display: flex;
+  flex-direction: column;
   color: #F2F2F2 0.25;
 }
 .profile-change input {
   background: #F2F2F2 0.25;
+  display: flex;
+  align-items: flex-start;
 }
 .profile-change textarea {
   background: #F2F2F2 0.25;
+  display: flex;
+  align-items: flex-end;
 }
 .profile-change::placeholder {
   
+}
+.username {
+  display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.bio-desc {
+  display: flex;
+justify-content: space-between;
+align-items: center;
 }
 .btn-send {
   background: var(--main-green);
@@ -114,8 +145,18 @@ background-size: cover;
   transform: translateX(110%);
   transition: all var(--speed) ease;
 }
-
-
+.edit-avatar {
+  color: var(--color-grey);
+}
+.profile-change {
+}
+.profile-change span {
+  color: var(--color-grey);
+}
+.main-menu {
+  background: var(--main-black);
+  height: 100vw ;
+}
 .dapp-content {
   display: flex;
   justify-content: center;
@@ -125,9 +166,19 @@ background-size: cover;
 .chat-layout {
   width: 70vw;
 }
+.input-username {
+  background: rgba(242, 242, 242, 0.25);
+  border-radius: 10px;
+  padding: 5px 10px;
+}
 .input-friends {
   background: rgba(242, 242, 242, 0.25);
-  border-radius: 22px;
+  border-radius: 60px;
+  padding: 5px 10px;
+}
+.input-profile {
+  background: rgba(242, 242, 242, 0.25);
+  border-radius: 10px;
   padding: 5px 10px;
 }
 .side-menu {
@@ -144,7 +195,6 @@ background-size: cover;
 .side-menu li {
   list-style: none;
   display: flex;
-  justify-content: space-between;
   padding: 10px 0px;
   width: 100%;
 }
@@ -206,10 +256,12 @@ border-radius: 6px;
   flex-direction: row;
   width: 20vw;
 }
+
 .avatar {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .avatar img {
     width: 133.63px;
@@ -274,6 +326,20 @@ border-radius: 6px;
 }
 
 @media only screen and (max-width: 1280px) {
+  .secondary-button {
+    border: 2px solid var(--main-green);
+    font-size: 16px;
+    justify-content: center;
+    line-height: 17px;
+    display: flex;
+    text-align: center;  
+    color: var(--main-green);
+    border-radius: 23.5px;
+    padding: 5px 10px;
+  }
+}
+
+@media only screen and (mix-width: 580px) {
   .secondary-button {
     border: 2px solid var(--main-green);
     font-size: 16px;

@@ -149,7 +149,7 @@ export const Profile: React.FC<ProfileProps> = () => {
 
       <div className="w-full dapp-bg dapp-content">
         
-      <div className="flex-column items-center mb-4 items-center justify-center">
+      <div className="flex-column w-4/8 items-center mb-4 items-center justify-center">
 
         <div className="profile-change">
 
@@ -157,32 +157,34 @@ export const Profile: React.FC<ProfileProps> = () => {
   <div className="avatar-img">
     <img src={Avatar} />
   </div>
-<div className="edit-avatar">
+<div className="edit-avatar ml-10">
     <span className="">Edit Avatar</span>
 </div>
 </div>
 
-
+<div className="username">
         <span>Nickname</span>
           <input
-            id="friend"
+            id="nickname"
             onChange={(e) => {
               setFriendInput(e.target.value);
             }}
             placeholder=""
             name="nickname"
-            value={friendInput}
-            className="p-5 w-4/5 input-friends"
+            // value={nickname}
+            className="w-4/5 input-username"
           />
-          <br />
+</div>
 
+          <div className="bio-desc mt-10">
           <span>Bio</span>
 
           <textarea
-            className="p-5 w-4/5 m-10 input-friends"
+            className="w-4/5 input-profile"
           >
           
           </textarea>
+          </div>
           </div>
         </div>
 
