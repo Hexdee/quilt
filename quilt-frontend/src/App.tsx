@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import { Mainpage } from "./components/pages/Mainpage";
 import { Messages } from "./components/pages/Messages";
-import { AddFriends } from "./components/pages/Addfriends";
 import { Settings } from "./components/pages/Settings";
 import { Profile } from "./components/pages/Profile";
 
@@ -18,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useStoredFriendsList } from "./hooks/useStoredFriendsList";
 import { useInitializeModules } from "./hooks/useInitializeModules";
+import { AddFriends } from "./components/pages/AddFriends";
 
 function App() {
   useStoredFriendsList();

@@ -150,12 +150,8 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
 <Sidebar/>
 <div className="w-1/5 submenu-bg">
 
-              <div className="px-5 flex flex-col">
-        <div className="text-xl text-white mb-2 pt-6">Friends</div>
-        <div className="text-xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
-
-        <div className="flex-column items-center mb-4 items-center justify-center">
-          <input
+              <div className="px-5 mt-10 flex flex-col">
+              <input
             id="friend"
             onChange={(e) => {
               setFriendInput(e.target.value);
@@ -169,22 +165,12 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
 
           <button
             onClick={() => handleAddFriend()}
-            className="secondary-button p-4 items-center  flex-1 ali ml-2 mt-4 "
+            className="secondary-button p-4 items-center flex-1 ali ml-2 mt-4 "
           >
           Add Friend
           </button>
-        </div>
-        <div>
-          {friends &&
-            Object.keys(friends).map((element) => (
-              <FriendListItem
-                key={element}
-                address={element}
-                handleRemoveFriend={handleRemoveFriend}
-                handleSetFriend={handleSetFriend}
-              ></FriendListItem>
-            ))}
-        </div>
+        <div className="text-xl text-white mb-2 pt-6">Friends</div>
+
         <div className="text-xl text-white mb-2 pt-6">Requests</div>
         <div className="overflow-y-scroll scrollbar-hide flex-1">
           {requests &&

@@ -17,10 +17,10 @@ import { Chat } from "../chat/Chat";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
 import LoadableButton from "../base/LoadableButton";
-import { AddFriends } from "./Addfriends";
 import { Messages } from "./Messages" 
 import SwitchTheme from "../base/SwitchTheme";
 import Sidebar from "../Sidebar";
+import { AddFriends } from "./AddFriends";
 
 
 
@@ -70,8 +70,7 @@ export const Mainpage: React.FC<MainpageProps> = () => {
   return (
 
     <div className="flex flex-row justify-start relative">
-        <Sidebar />
-      
+          <Sidebar />
       <div className="w-full dapp-content dapp-bg">
         {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />

@@ -103,7 +103,7 @@ export const KeyGen: React.FC<KeyGenProps> = () => {
     return (
       <button
         onClick={() => generateKeyPair()}
-        className="w-full block"
+        className="w-full"
       >
         Generate New Private Key
       </button>
