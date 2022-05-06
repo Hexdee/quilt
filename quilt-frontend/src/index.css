@@ -267,7 +267,11 @@ border-radius: 6px;
 .group-btn:hover {
   background: url("./assets/group2.svg") no-repeat center center;
 }
-
+.btn-gray {
+  background: #6C6C6C;
+  opacity: 0.35;
+  color: #fff;
+}
 
 @media only screen and (max-width: 1280px) {
   .secondary-button {

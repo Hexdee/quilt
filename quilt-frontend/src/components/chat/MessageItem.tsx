@@ -21,8 +21,8 @@ export const MessageItem: React.FC<MessageItemProps> = memo(
       // received message
       return (
         <div className="flex flex-col items-start mt-2">
-          <div className="max-w-[320px] min-w-[40px] mb-1 btn-send mt-3 rounded-3xl rounded-bl-none">
-            <div className="text-base px-6 py-3 text-gray-200">
+          <div className="max-w-[320px] min-w-[40px] btn-gray mb-1 btn-send mt-3 rounded-3xl rounded-bl-none">
+            <div className="text-base px-6 py-3 text-white">
               {decryptedMessage}
             </div>
           </div>
