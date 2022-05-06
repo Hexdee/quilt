@@ -38,14 +38,14 @@ export const Dropdown: React.FC<DropdownProps> = () => {
           <KeyGen />
         </NavLink>
       </li>
-      <li className="p-4 m-2 text-xl hover:scale-95 transition-all duration-75" onClick={() => navigator.clipboard.writeText(address)}>
+      <li className="text-xl hover:scale-95 transition-all duration-75 " onClick={() => navigator.clipboard.writeText(address)}>
         My wallet address
-        <img src={Copy} className="ml-5" />
+        <img src={Copy} className="ml-1 copy-btn" />
 
       </li>
       <li onClick={() => <SwitchTheme/>}>
-        <NavLink to="/">
-          Switch to Light Mode <img src={Toggle} alt="" className="ml-5" />
+        <NavLink to="#">
+          Switch to Light Mode <img src={Toggle} alt="" className="ml-1 toggle-btn" />
         </NavLink>
       </li>
      

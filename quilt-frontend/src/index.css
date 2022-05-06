@@ -31,10 +31,19 @@ body {
   justify-content: justify-center;
   padding: 5px 10px;
 }
+.toggle-btn {
+  width: 35px !important;
+  height: 35px !important;
+}
+.copy-btn {
+  width: 35px !important;
+  height: 35px !important;
+}
 .dapp-bg {
   background-image: url("./assets/Glass.png");
 box-shadow: inset -5px -5px 250px rgba(255, 255, 255, 0.02);
 backdrop-filter: blur(42px);
+background-size: cover;
 }
 .submenu-bg {
   background-image: url("./assets/Glass1.png");
@@ -137,6 +146,7 @@ backdrop-filter: blur(42px);
   display: flex;
   justify-content: space-between;
   padding: 10px 0px;
+  width: 100%;
 }
 .side-menu-items li:hover {
   list-style: none;
@@ -257,3 +267,19 @@ border-radius: 6px;
 .group-btn:hover {
   background: url("./assets/group2.svg") no-repeat center center;
 }
+
+
+@media only screen and (max-width: 1280px) {
+  .secondary-button {
+    border: 2px solid var(--main-green);
+    font-size: 16px;
+    justify-content: center;
+    line-height: 17px;
+    display: flex;
+    text-align: center;  
+    color: var(--main-green);
+    border-radius: 23.5px;
+    padding: 5px 10px;
+  }
+}
+

@@ -148,11 +148,11 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
   return (
     <div className="flex flex-row justify-center h-[82vh] relative">
 <Sidebar/>
-<div className="w-1/4 ml-10 submenu-bg">
+<div className="w-1/5 submenu-bg">
 
               <div className="px-5 flex flex-col">
-        <div className="text-2xl text-white mb-2 pt-6">Friends</div>
-        <div className="text-2xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
+        <div className="text-xl text-white mb-2 pt-6">Friends</div>
+        <div className="text-xl text-white mb-2 pt-6">Fill in your friend's wallet address</div>
 
         <div className="flex-column items-center mb-4 items-center justify-center">
           <input
@@ -185,7 +185,7 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
               ></FriendListItem>
             ))}
         </div>
-        <div className="text-2xl text-white mb-2 pt-6">Requests</div>
+        <div className="text-xl text-white mb-2 pt-6">Requests</div>
         <div className="overflow-y-scroll scrollbar-hide flex-1">
           {requests &&
             Array.from(requests).map((element) => (

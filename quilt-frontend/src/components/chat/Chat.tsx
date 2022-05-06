@@ -105,7 +105,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
     return (
       <button
         onClick={() => generateKeyPair()}
-        className="secondary-button w-1/3 block mt-16"
+        className="secondary-button w-1/3 block"
       >
         Generate New Private Key
       </button>
