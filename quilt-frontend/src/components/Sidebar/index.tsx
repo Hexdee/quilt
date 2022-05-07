@@ -9,7 +9,7 @@ import Bell from "../../assets/Bell.svg";
 
 function Sidebar() {
     return (
-        <div className="w-150 h-100 main-menu">
+        <div className="w-150 main-menu">
      <nav className='side-menu'>
 
         <ul className='side-menu-items'>
