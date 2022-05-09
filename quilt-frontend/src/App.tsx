@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useStoredFriendsList } from "./hooks/useStoredFriendsList";
 import { useInitializeModules } from "./hooks/useInitializeModules";
-import { AddFriends } from "./components/pages/AddFriends";
+import { AddFriends } from "./components/pages/Addfriends";
 
 function App() {
   useStoredFriendsList();

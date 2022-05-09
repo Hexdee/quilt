@@ -31,7 +31,7 @@ body {
   color: var(--color-black);
   text-align: center;
   align-items: center;
-  justify-content: justify-center;
+  justify-content: center;
   padding: 5px 10px;
 }
 .toggle-btn {
@@ -338,6 +338,20 @@ border-radius: 6px;
     padding: 5px 10px;
   }
 }
+/* 
+@media only screen and (max-width: 780px) {
+  .secondary-button {
+    border: 2px solid var(--main-green);
+    font-size: 16px;
+    justify-content: center;
+    line-height: 17px;
+    display: flex;
+    text-align: center;  
+    color: var(--main-green);
+    border-radius: 23.5px;
+    padding: 5px 10px;
+  }
+} */
 
 @media only screen and (mix-width: 580px) {
   .secondary-button {
@@ -350,6 +364,9 @@ border-radius: 6px;
     color: var(--main-green);
     border-radius: 23.5px;
     padding: 5px 10px;
+  }
+  body {
+    display: none !important;
   }
 }
 
