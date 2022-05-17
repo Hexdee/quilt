@@ -21,22 +21,21 @@ export const IsLoggedCheck: React.FC<IsLoggedCheckProps> = () => {
   }, [connectWallet]);
 
   return (
-    <div className="h-[11vh] w-full flex flex-row justify-center">
-      <div className="w-5/6  flex flex-row justify-between align-middle items-center">
-
+    <div className="flex h-[11vh] w-full flex-row justify-center">
+      <div className="flex  w-5/6 flex-row items-center justify-between align-middle">
         <div className="flex flex-row">
           {isLogged ? (
             <>
               <LoadableButton
                 isLoading={false}
                 description={trimEthereumAddress(address, 16)}
-                className="connectWallet-btn p-4 m-2 text-xl hover:scale-95 transition-all duration-75"
+                className="connectWallet-btn m-2 p-4 text-xl transition-all duration-75 hover:scale-95"
                 navigate="/settings/profile"
               />
               <LoadableButton
                 isLoading={false}
                 handleClick={disconnectWallet}
-                className="connectWallet-btn p-4 m-2 text-lg mr-4 items-center justify-center"
+                className="connectWallet-btn m-2 mr-4 items-center justify-center p-4 text-lg"
               >
                 <RiLogoutBoxLine />
               </LoadableButton>
@@ -46,7 +45,7 @@ export const IsLoggedCheck: React.FC<IsLoggedCheckProps> = () => {
               isLoading={isConnecting}
               description="connect wallet"
               handleClick={connectWallet}
-              className="connectWallet-btn p-4 items-center justify-center  m-2 mr-4"
+              className="connectWallet-btn m-2 mr-4 items-center  justify-center p-4"
             />
           )}
         </div>

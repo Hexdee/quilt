@@ -144,51 +144,43 @@ export const Profile: React.FC<ProfileProps> = () => {
   }, [friends, initializedFriendsList]);
 
   return (
-    <div className="flex flex-row justify-center h-[82vh] relative">
-<Sidebar/>
+    <div className="relative flex h-[82vh] flex-row justify-center">
+      <Sidebar />
 
-      <div className="w-full dapp-bg dapp-content">
-        
-      <div className="flex-column w-4/8 items-center mb-4 items-center justify-center">
+      <div className="dapp-bg dapp-content w-full">
+        <div className="flex-column w-4/8 mb-4 items-center items-center justify-center">
+          <div className="profile-change">
+            <div className="avatar p-20">
+              <div className="avatar-img">
+                <img src={Avatar} />
+              </div>
+              <div className="edit-avatar ml-10">
+                <span className="">Edit Avatar</span>
+              </div>
+            </div>
 
-        <div className="profile-change">
+            <div className="username">
+              <span>Nickname</span>
+              <input
+                id="nickname"
+                onChange={(e) => {
+                  setFriendInput(e.target.value);
+                }}
+                placeholder=""
+                name="nickname"
+                // value={nickname}
+                className="input-username w-4/5"
+              />
+            </div>
 
-<div className="avatar p-20">
-  <div className="avatar-img">
-    <img src={Avatar} />
-  </div>
-<div className="edit-avatar ml-10">
-    <span className="">Edit Avatar</span>
-</div>
-</div>
+            <div className="bio-desc mt-10">
+              <span>Bio</span>
 
-<div className="username">
-        <span>Nickname</span>
-          <input
-            id="nickname"
-            onChange={(e) => {
-              setFriendInput(e.target.value);
-            }}
-            placeholder=""
-            name="nickname"
-            // value={nickname}
-            className="w-4/5 input-username"
-          />
-</div>
-
-          <div className="bio-desc mt-10">
-          <span>Bio</span>
-
-          <textarea
-            className="w-4/5 input-profile"
-          >
-          
-          </textarea>
-          </div>
+              <textarea className="input-profile w-4/5"></textarea>
+            </div>
           </div>
         </div>
-
-    </div>
+      </div>
     </div>
   );
 };

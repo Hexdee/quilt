@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { IoPersonAdd } from "react-icons/io5";
 import { toast } from "react-toastify";
 import BN from "bn.js";
@@ -17,18 +13,13 @@ import { Chat } from "../chat/Chat";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
 import LoadableButton from "../base/LoadableButton";
-import { Messages } from "./Messages" 
+import { Messages } from "./Messages";
 import SwitchTheme from "../base/SwitchTheme";
 import Sidebar from "../Sidebar";
-
-
-
-
 
 interface MainpageProps {}
 
 export const Mainpage: React.FC<MainpageProps> = () => {
-
   const [isGeneratingSharedKey, setIsGeneratingSharedKey] =
     useState<boolean>(false);
   const provider = useProvider((state) => state.provider);
@@ -64,13 +55,10 @@ export const Mainpage: React.FC<MainpageProps> = () => {
     [curve, privateKey]
   );
 
-
-
   return (
-
-    <div className="flex flex-row justify-start relative">
-          <Sidebar />
-      <div className="w-full dapp-content dapp-bg">
+    <div className="relative flex flex-row justify-start">
+      <Sidebar />
+      <div className="dapp-content dapp-bg w-full">
         {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (

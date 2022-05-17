@@ -144,14 +144,12 @@ export const Messages: React.FC<MessagesProps> = () => {
   }, [friends, initializedFriendsList]);
 
   return (
-    <div className="flex flex-row justify-start h-[82vh] relative">
-{isGunLogged ? (
-          <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
-        ) : (
-          <Auth />
-        )}  
-        
-
-      </div>
+    <div className="relative flex h-[82vh] flex-row justify-start">
+      {isGunLogged ? (
+        <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
+      ) : (
+        <Auth />
+      )}
+    </div>
   );
 };

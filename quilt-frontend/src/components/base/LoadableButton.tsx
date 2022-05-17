@@ -42,7 +42,7 @@ export const LoadableButton: React.FC<LoadableButtonProps> = ({ ...props }) => {
         className={
           className
             ? className
-            : `cursor-pointer relative w-48 h-14 bg-blue-600 transform hover:bg-blue-500 hover:scale-105 transition-all duration-75 rounded-lg text-white flex justify-center flex-col text-xl border-blue-800 border-r-4 border-b-4`
+            : `relative flex h-14 w-48 transform cursor-pointer flex-col justify-center rounded-lg border-r-4 border-b-4 border-blue-800 bg-blue-600 text-xl text-white transition-all duration-75 hover:scale-105 hover:bg-blue-500`
         }
         onClick={() => handleClick()}
         type={type}

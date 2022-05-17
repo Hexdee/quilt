@@ -14,7 +14,7 @@ export const FriendListItem: React.FC<FriendListItemProps> = memo(
   ({ handleSetFriend, handleRemoveFriend, address }) => {
     return (
       <div
-        className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-105"
+        className="my-2 flex h-20 w-full cursor-pointer flex-row items-center justify-between rounded-lg px-4 text-xl text-white hover:scale-105"
         onClick={() => handleSetFriend(address)}
       >
         {/* <div className="claire rounded-full">
@@ -24,14 +24,14 @@ export const FriendListItem: React.FC<FriendListItemProps> = memo(
           Claire
         </div> */}
         <div className="h-12 w-12 rounded-full bg-slate-800"></div>
-        
+
         <div className="overflow-hidden">
           {trimEthereumAddress(address, 22)}
         </div>
         <div>
           <button
             onClick={() => handleRemoveFriend(address)}
-            className="font-bold text-sm flex items-center justify-center"
+            className="flex items-center justify-center text-sm font-bold"
           >
             <img src={DeleteUser} width={40} height={40} />
           </button>

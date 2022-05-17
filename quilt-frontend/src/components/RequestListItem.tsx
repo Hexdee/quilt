@@ -12,11 +12,11 @@ export const RequestListItem: React.FC<RequestListItemProps> = memo(
   ({ handleSetFriend, address }) => {
     return (
       <div
-        className="w-full rounded-lg h-20 text-white flex flex-row justify-between items-center text-xl my-2 px-4 cursor-pointer hover:scale-95"
+        className="my-2 flex h-20 w-full cursor-pointer flex-row items-center justify-between rounded-lg px-4 text-xl text-white hover:scale-95"
         onClick={() => handleSetFriend(address)}
       >
         <div className="h-12 w-12 rounded-full bg-slate-800"></div>
-        <div className="overflow-hidden w-40">
+        <div className="w-40 overflow-hidden">
           {trimEthereumAddress(address, 22)}
         </div>
         <div>
@@ -24,7 +24,7 @@ export const RequestListItem: React.FC<RequestListItemProps> = memo(
             onClick={() => {
               useFriendsList.getState().addFriend(address, { username: "" });
             }}
-            className="w-25 h-25 font-bold text-sm flex items-center justify-center"
+            className="w-25 h-25 flex items-center justify-center text-sm font-bold"
           >
             <img src={AddAccount} width={40} height={40} />
           </button>

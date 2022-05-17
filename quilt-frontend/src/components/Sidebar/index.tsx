@@ -1,39 +1,35 @@
 import { Link, NavLink } from "react-router-dom";
-import Messages from '../../assets/messages.svg';
-import Group from '../../assets/group.svg';
-import Settings from '../../assets/settings.svg';
-import Toggle from '../../assets/toggle.svg';
-import Connection from '../../assets/connection.svg';
+import Messages from "../../assets/messages.svg";
+import Group from "../../assets/group.svg";
+import Settings from "../../assets/settings.svg";
+import Toggle from "../../assets/toggle.svg";
+import Connection from "../../assets/connection.svg";
 import Bell from "../../assets/Bell.svg";
 
-
 function Sidebar() {
-    return (
-        <div className="w-150 main-menu">
-     <nav className='side-menu'>
-
-        <ul className='side-menu-items'>
-        <li>
-             <NavLink to="/">
-                <img src={Messages} />
+  return (
+    <div className="w-150 main-menu">
+      <nav className="side-menu">
+        <ul className="side-menu-items">
+          <li>
+            <NavLink to="/">
+              <img src={Messages} />
             </NavLink>
-        </li>
-        <li>
+          </li>
+          <li>
             <NavLink to="/addfriends">
-                <img src={Group} />
+              <img src={Group} />
             </NavLink>
-        </li>
-        <li>
+          </li>
+          <li>
             <NavLink to="/settings">
-                <img src={Settings} />
+              <img src={Settings} />
             </NavLink>
-        </li>
+          </li>
         </ul>
-
-     </nav>
-     </div>
-    );
+      </nav>
+    </div>
+  );
 }
 
-
-export default Sidebar
+export default Sidebar;

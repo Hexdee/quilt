@@ -146,12 +146,11 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
   }, [friends, initializedFriendsList]);
 
   return (
-    <div className="flex flex-row justify-center h-[82vh] relative">
-<Sidebar/>
-<div className="w-1/5 submenu-bg">
-
-              <div className="px-5 mt-10 flex flex-col">
-              <input
+    <div className="relative flex h-[82vh] flex-row justify-center">
+      <Sidebar />
+      <div className="submenu-bg w-1/5">
+        <div className="mt-10 flex flex-col px-5">
+          <input
             id="friend"
             onChange={(e) => {
               setFriendInput(e.target.value);
@@ -159,50 +158,49 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
             placeholder="Receiver address"
             name="address"
             value={friendInput}
-            className="p-5 w-4/5 input-friends"
+            className="input-friends w-4/5 p-5"
           />
           <br />
 
           <button
             onClick={() => handleAddFriend()}
-            className="secondary-button p-4 items-center flex-1 ali ml-2 mt-4 "
+            className="secondary-button ali ml-2 mt-4 flex-1 items-center p-4 "
           >
-          Add Friend
+            Add Friend
           </button>
-        <div className="text-xl text-white mb-2 pt-6">Friends</div>
-        <div>
-          {friends &&
-            Object.keys(friends).map((element) => (
-              <FriendListItem
-                key={element}
-                address={element}
-                handleRemoveFriend={handleRemoveFriend}
-                handleSetFriend={handleSetFriend}
-              ></FriendListItem>
-            ))}
-        </div>
-        <div className="text-xl text-white mb-2 pt-6">Requests</div>
-        <div className="overflow-y-scroll scrollbar-hide flex-1">
-          {requests &&
-            Array.from(requests).map((element) => (
-              <RequestListItem
-                key={element}
-                address={element}
-                handleSetFriend={handleSetFriend}
-              ></RequestListItem>
-            ))}
+          <div className="mb-2 pt-6 text-xl text-white">Friends</div>
+          <div>
+            {friends &&
+              Object.keys(friends).map((element) => (
+                <FriendListItem
+                  key={element}
+                  address={element}
+                  handleRemoveFriend={handleRemoveFriend}
+                  handleSetFriend={handleSetFriend}
+                ></FriendListItem>
+              ))}
+          </div>
+          <div className="mb-2 pt-6 text-xl text-white">Requests</div>
+          <div className="flex-1 overflow-y-scroll scrollbar-hide">
+            {requests &&
+              Array.from(requests).map((element) => (
+                <RequestListItem
+                  key={element}
+                  address={element}
+                  handleSetFriend={handleSetFriend}
+                ></RequestListItem>
+              ))}
+          </div>
         </div>
       </div>
-</div>
 
-      <div className="w-full dapp-bg dapp-content">
-      {isGunLogged ? (
+      <div className="dapp-bg dapp-content w-full">
+        {isGunLogged ? (
           <Chat isGeneratingSharedKey={isGeneratingSharedKey} />
         ) : (
           <Auth />
         )}
-        </div>
-
+      </div>
     </div>
   );
 };

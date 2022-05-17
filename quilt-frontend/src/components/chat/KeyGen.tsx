@@ -101,18 +101,11 @@ export const KeyGen: React.FC<KeyGenProps> = () => {
 
   if (!privateKey) {
     return (
-      <button
-        onClick={() => generateKeyPair()}
-        className="w-full"
-      >
+      <button onClick={() => generateKeyPair()} className="w-full">
         Generate New Private Key
       </button>
     );
   }
 
-  return (
-    <div>
-     
-    </div>
-  );
+  return <div></div>;
 };

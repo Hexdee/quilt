@@ -106,7 +106,7 @@ export const Auth: React.FC<AuthProps> = memo(() => {
 
   return (
     <form>
-      <div className="form-group flex flex-col items-center justify-center mt-12">
+      <div className="form-group mt-12 flex flex-col items-center justify-center">
         <div className="mb-10">Connecting...</div>
         <HashLoader color="white"></HashLoader>
       </div>

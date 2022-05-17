@@ -105,7 +105,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
     return (
       <button
         onClick={() => generateKeyPair()}
-        className="secondary-button w-1/3 block"
+        className="secondary-button block w-1/3"
       >
         Generate New Private Key
       </button>
@@ -113,16 +113,16 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
   }
 
   return (
-    <div className="overflow-hidden h-[88vh] relative chat-layout px-10 flex flex-col">
-      <div className="text-base text-gray-400 pt-6">Chatting with:</div>
-      <div className="text-2xl text-white font-bold">{recieverAddress}</div>
+    <div className="chat-layout relative flex h-[88vh] flex-col overflow-hidden px-10">
+      <div className="pt-6 text-base text-gray-400">Chatting with:</div>
+      <div className="text-2xl font-bold text-white">{recieverAddress}</div>
       {isGeneratingSharedKey ? (
-        <div className="mx-auto h-auto mt-28">
+        <div className="mx-auto mt-28 h-auto">
           <HashLoader color="white" />
         </div>
       ) : (
         <>
-          <div className="mt-4 overflow-y-scroll scrollbar-hide flex flex-col-reverse h-[65vh]">
+          <div className="mt-4 flex h-[65vh] flex-col-reverse overflow-y-scroll scrollbar-hide">
             {messagesStoreUser?.map((message, index) => (
               <MessageItem
                 key={index}
@@ -131,10 +131,10 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
               />
             ))}
           </div>
-          <div className="mt-4 flex flex-row items-stretch absolute bottom-5 w-[90%]">
+          <div className="absolute bottom-5 mt-4 flex w-[90%] flex-row items-stretch">
             <input
               id="message"
-              className="p-5 text-gray-200 rounded-2xl h-[70px] flex-1 mr-4 bg-transparent border border-gray-600"
+              className="mr-4 h-[70px] flex-1 rounded-2xl border border-gray-600 bg-transparent p-5 text-gray-200"
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
@@ -145,7 +145,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
             <button
               type="button"
               onClick={() => saveMessage()}
-              className="connectWallet-btn text-white p-4 rounded-xl w-24 h-[70px] text-lg flex items-center justify-center transition-all hover:border-4 duration-200"
+              className="connectWallet-btn flex h-[70px] w-24 items-center justify-center rounded-xl p-4 text-lg text-white transition-all duration-200 hover:border-4"
             >
               <IoSend />
             </button>
