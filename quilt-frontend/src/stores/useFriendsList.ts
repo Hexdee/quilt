@@ -14,6 +14,7 @@ interface useFriendsListStore {
   addFriend: (address: string, details: FriendDetails) => void;
   removeFriend: (address: string) => void;
   setFriends: (newFriends: FriendsList) => void;
+  setUsername: (address: string, username: string) => void;
 }
 
 export const useFriendsList = create<useFriendsListStore>((set) => ({

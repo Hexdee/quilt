@@ -14,6 +14,7 @@ import { useMessagingChannel } from "../../hooks/useMessagingChannel";
 import { useGunConnection } from "../../stores/useGunConnection";
 import { HashLoader } from "react-spinners";
 import { MessageItem } from "./MessageItem";
+import { useFriendsList } from "../../stores/useFriendsList";
 
 interface ChatProps {
   isGeneratingSharedKey: boolean;
@@ -35,6 +36,9 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
   const setPrivateKey = useEncryption((state) => state.setPrivateKey);
   const gun = useGunConnection((state) => state.gun);
   const user = useGunConnection((state) => state.gunUser);
+
+  const username = useFriendsList.getState().friends[recieverAddress].username;
+  const setUsername = useFriendsList((state) => state.setUsername);
 
   useMessagingChannel(recieverAddress);
 
@@ -115,7 +119,12 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
   return (
     <div className="chat-layout relative flex h-[88vh] flex-col overflow-hidden px-10">
       <div className="pt-6 text-base text-gray-400">Chatting with:</div>
-      <div className="text-2xl font-bold text-white">{recieverAddress}</div>
+      <div className="text-2xl font-bold text-white">
+        <input
+          value={username ?? recieverAddress}
+          onChange={(event) => setUsername(recieverAddress, event.target.value)}
+        ></input>
+      </div>
       {isGeneratingSharedKey ? (
         <div className="mx-auto mt-28 h-auto">
           <HashLoader color="white" />
