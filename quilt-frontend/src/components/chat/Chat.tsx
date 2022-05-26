@@ -37,8 +37,8 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
   const gun = useGunConnection((state) => state.gun);
   const user = useGunConnection((state) => state.gunUser);
 
-  const username = useFriendsList.getState().friends[recieverAddress].username;
   const setUsername = useFriendsList((state) => state.setUsername);
+  const recieverDetails = useFriendsList.getState().friends[recieverAddress];
 
   useMessagingChannel(recieverAddress);
 
@@ -116,12 +116,24 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
     );
   }
 
+  console.log(
+    recieverDetails?.username ? recieverDetails.username : recieverAddress
+  );
+  console.log(
+    recieverDetails?.username ? recieverDetails.username : recieverAddress
+  );
+
   return (
     <div className="chat-layout relative flex h-[88vh] flex-col overflow-hidden px-10">
       <div className="pt-6 text-base text-gray-400">Chatting with:</div>
       <div className="text-2xl font-bold text-white">
         <input
-          value={username ?? recieverAddress}
+          className="w-full bg-transparent"
+          value={
+            recieverDetails?.username
+              ? recieverDetails.username
+              : recieverAddress
+          }
           onChange={(event) => setUsername(recieverAddress, event.target.value)}
         ></input>
       </div>
