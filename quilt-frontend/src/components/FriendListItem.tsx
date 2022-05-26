@@ -8,10 +8,11 @@ interface FriendListItemProps {
   handleSetFriend: (address: string) => void;
   handleRemoveFriend: (address: string) => void;
   address: string;
+  username: string;
 }
 
 export const FriendListItem: React.FC<FriendListItemProps> = memo(
-  ({ handleSetFriend, handleRemoveFriend, address }) => {
+  ({ handleSetFriend, handleRemoveFriend, address, username }) => {
     return (
       <div
         className="my-2 flex h-20 w-full cursor-pointer flex-row items-center justify-between rounded-lg px-4 text-xl text-white hover:scale-105"
@@ -26,7 +27,7 @@ export const FriendListItem: React.FC<FriendListItemProps> = memo(
         <div className="h-12 w-12 rounded-full bg-slate-800"></div>
 
         <div className="overflow-hidden">
-          {trimEthereumAddress(address, 22)}
+          {username ? username : trimEthereumAddress(address, 18)}
         </div>
         <div>
           <button

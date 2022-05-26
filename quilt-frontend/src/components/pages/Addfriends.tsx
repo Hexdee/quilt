@@ -175,6 +175,7 @@ export const AddFriends: React.FC<AddFriendsProps> = () => {
                 <FriendListItem
                   key={element}
                   address={element}
+                  username={friends[element]?.username}
                   handleRemoveFriend={handleRemoveFriend}
                   handleSetFriend={handleSetFriend}
                 ></FriendListItem>
