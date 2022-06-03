@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IoSend } from "react-icons/io5";
+import { IoSend, IoSwapHorizontal } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { BigNumber } from "ethers";
 
@@ -14,12 +14,14 @@ import { useMessagingChannel } from "../../hooks/useMessagingChannel";
 import { useGunConnection } from "../../stores/useGunConnection";
 import { HashLoader } from "react-spinners";
 import { MessageItem } from "./MessageItem";
+import Trade from "../Trade";
 
 interface ChatProps {
   isGeneratingSharedKey: boolean;
 }
 
 export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
+  const [trading, setTrading] = useState(false)
   const [message, setMessage] = useState("");
   const addMessage = useMessages((state) => state.addMessage);
   const recieverAddress = useMessages((state) => state.recieverAddress);
@@ -112,6 +114,10 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
     );
   }
 
+  const toggleTrading = () => {
+    setTrading(!trading);
+  }
+
   return (
     <div className="chat-layout relative flex h-[88vh] flex-col overflow-hidden px-10">
       <div className="pt-6 text-base text-gray-400">Chatting with:</div>
@@ -149,6 +155,14 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
             >
               <IoSend />
             </button>
+            <button
+              type="button"
+              onClick={() => toggleTrading()}
+              className="connectWallet-btn escrow-btn flex h-[70px] w-24 items-center justify-center rounded-xl p-4 text-lg text-white transition-all duration-200 hover:border-4"
+            >
+              <IoSwapHorizontal/>
+            </button>
+            {trading && <Trade/>}
           </div>
         </>
       )}
