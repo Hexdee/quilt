@@ -162,7 +162,7 @@ export const Chat: React.FC<ChatProps> = ({ isGeneratingSharedKey }) => {
             >
               <IoSwapHorizontal/>
             </button>
-            {trading && <Trade/>}
+            {trading && <Trade handleClose={toggleTrading}/>}
           </div>
         </>
       )}
