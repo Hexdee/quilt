@@ -5,6 +5,7 @@ import Settings from "../../assets/settings.svg";
 import Toggle from "../../assets/toggle.svg";
 import Connection from "../../assets/connection.svg";
 import Bell from "../../assets/Bell.svg";
+import Escrow from "../../assets/Escrow.png";
 
 function Sidebar() {
   return (
@@ -24,6 +25,11 @@ function Sidebar() {
           <li>
             <NavLink to="/settings">
               <img src={Settings} />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/escrow">
+              <img src={Escrow} width="16px"/>
             </NavLink>
           </li>
         </ul>

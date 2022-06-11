@@ -11,6 +11,7 @@ import { Mainpage } from "./components/pages/Mainpage";
 import { Messages } from "./components/pages/Messages";
 import { Settings } from "./components/pages/Settings";
 import { Profile } from "./components/pages/Profile";
+import { Escrow } from "./components/pages/Escrow";
 
 
 import "react-toastify/dist/ReactToastify.css";
@@ -43,7 +44,7 @@ function App() {
         <Route path='/addfriends' element={<AddFriends />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/settings/profile' element={<Profile />} />
-
+        <Route path="/escrow" element={<Escrow/>}/>
         </Routes>
     </>
   );

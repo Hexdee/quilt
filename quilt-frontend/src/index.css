@@ -412,6 +412,18 @@ border-radius: 6px;
   font-size: 20px;
 } */
 
+.escrow-form_heading {
+  display: flex;
+  justify-content: space-between;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.escrow-form_heading p {
+  color: red;
+  cursor: pointer;
+}
+
 .escrow-form {
   display: flex;
   max-width: 500px;
@@ -419,7 +431,7 @@ border-radius: 6px;
   justify-content: center;
   gap: 16px;
   background: #fff;
-  padding: 16px;
+  padding: 32px;
   border: 1px solid #999;
   border-radius: 8px;
 }
@@ -436,5 +448,10 @@ border-radius: 6px;
   margin: auto;
   padding: 8px 16px;
   border-radius: 4px;
+  cursor: pointer;
   background-color: #00E467;
+}
+
+.escrow-button:hover {
+  background-color: rgb(27, 170, 27);
 }
