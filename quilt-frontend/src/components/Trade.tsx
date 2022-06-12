@@ -54,7 +54,7 @@ const Trade: React.FC<TradeProps> = ({handleClose, buyerAddress}) => {
     const signer = provider.getSigner();
     const escrowContract:Contract = new ethers.Contract(EscrowAddress, NFTEscrow.abi, signer);
 
-    const cancelTradeTx = await escrowContract.accept(tokenID);
+    const cancelTradeTx = await escrowContract.cancelTrade(tokenID);
     await cancelTradeTx.wait();
   }
 
