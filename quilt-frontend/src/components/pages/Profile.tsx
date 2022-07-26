@@ -18,11 +18,16 @@ import { trimEthereumAddress } from "../../helpers/trimEthereumAddress";
 import { KeyStorage } from "../../ABI/typechain/KeyStorage";
 import NavMenu from "../base/NavMenu";
 import Sidebar from "../Sidebar";
-import Avatar from "../../assets/avatar.png";
+import defaultAvatar from "../../assets/avatar.png";
+import {ethers} from "ethers";
 
 interface ProfileProps {}
 
 export const Profile: React.FC<ProfileProps> = () => {
+  const [Avatar, setAvatar] = useState<string>("");
+  const [isEditingAvatar, setIsEditingAvatar] = useState<boolean>(false);
+  const [NFTContract, setNFTContract] = useState<string>("");
+  const [tokenID, setTokenID] = useState<number>(0);
   const [friendInput, setFriendInput] = useState<string>("");
   const [isGeneratingSharedKey, setIsGeneratingSharedKey] =
     useState<boolean>(false);
@@ -106,6 +111,76 @@ export const Profile: React.FC<ProfileProps> = () => {
     setIsGeneratingSharedKey(false);
   };
 
+  const editAvatar = async () => {
+    if (!(NFTContract)) {
+    	toast.error("Enter NFT details!");
+    }
+    try {
+    	const provider = new ethers.providers.Web3Provider(window.ethereum);
+	const nftabi = ["function tokenURI(uint) view returns (string)"];
+	const nftContract = new ethers.Contract(NFTContract, nftabi, provider);
+	let url = await nftContract.tokenURI(tokenID);
+	if (url.slice(0, 4) == "ipfs") {
+	  url = url.slice(7);
+	  url = "https://ipfs.io/ipfs/" + url;
+	}
+	const response = await fetch(url);
+	const metadata: any  = await response.json()
+        let image = metadata.image;
+	if (image.slice(0, 4) == "ipfs") {
+	  image = image.slice(7);
+          image = "https://ipfs.io/ipfs/" + image;
+	}
+	console.log(image);
+	changeAvatar(image);
+	setAvatar(image);
+	console.log(getAvatar());
+	setIsEditingAvatar(false);
+    } catch (error: any) {
+      if (error instanceof Error) {
+        setIsEditingAvatar(true);
+        console.log(error);
+	toast.error("Failed to get token image");
+      }
+    }
+  }
+
+  const changeAvatar = async(url: string) => {
+    try {                                                             const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const profileAddress = "0x7eEa82C6cEEfB6423Afae369dC8A2e612f9AD1F4";
+        const profileABI = ["function setProfile(address, string)"];
+        const profile = new ethers.Contract(profileAddress, profileABI, signer);
+        await profile.setProfile(signer.getAddress(), url);
+    } catch (error: any) {
+      if (error instanceof Error) {
+	  console.log(error);
+	  toast.error("Failed to set avatar");
+      }
+    }
+  }
+
+  const getAvatar = async() => {
+    try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+	const profileAddress = "0x7eEa82C6cEEfB6423Afae369dC8A2e612f9AD1F4";
+        const profileABI = ["function getProfile(address) view returns(string)"];
+        const profile = new ethers.Contract(profileAddress, profileABI, provider);
+	const image = await profile.getProfile(signer.getAddress());
+	setAvatar(image)
+    } catch (error: any) {
+        if (error instanceof Error) {
+	    console.log(error);
+	    toast.error("Failed to get avatar");
+	}
+    }
+  }
+
+  useEffect(() => {
+    getAvatar();
+    }, [])
+
   useEffect(() => {
     if (!(keyStorage && provider)) {
       return;
@@ -152,13 +227,49 @@ export const Profile: React.FC<ProfileProps> = () => {
           <div className="profile-change">
             <div className="avatar p-20">
               <div className="avatar-img">
-                <img src={Avatar} />
+                <a href={Avatar}>
+		  <img src={Avatar || defaultAvatar} />
+		</a>
               </div>
               <div className="edit-avatar ml-10">
-                <span className="">Edit Avatar</span>
+                <span className="" onClick={()=>setIsEditingAvatar(true)}>Edit Avatar</span>
               </div>
             </div>
-
+	   {isEditingAvatar && <>
+	    <div className="username">
+	      <span>NFT Contract</span>
+	        <input
+	          id="nft-contract"
+	          onChange={(e) => {
+	            setNFTContract(e.target.value);
+	          }}
+	          placeholder=""
+                  name="nft-contract"
+		  className="input-username w-4/5"
+		/>
+            </div>
+	    <div className="username">
+	      <span>Token ID</span>
+	        <input
+		  type="number"
+		  id="token-id"
+		  onChange={(e) => {
+		    setTokenID(Number(e.target.value));
+		  }}
+		  placeholder=""
+		  name="token-id"
+		  className="input-username w-4/5"
+                />
+	    </div>
+	    <button
+	      onClick={editAvatar}
+	      className="secondary-button w-32 mx-auto"
+	    >
+	      Submit
+	    </button>
+	    <br/>
+	    <br/>
+	    </>}
             <div className="username">
               <span>Nickname</span>
               <input
